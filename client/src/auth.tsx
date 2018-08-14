@@ -19,3 +19,7 @@ export const getToken = () => {
 export const getUser = () => {
   return authContext.getCachedUser();
 }
+
+export const logOutUser = () => {
+  authContext.logOut();
+}
