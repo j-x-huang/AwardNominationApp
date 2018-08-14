@@ -1,14 +1,13 @@
 import { AuthenticationContext } from 'react-adal';
 
 const adalConfig = {
-  cacheLocation: 'sessionStorage',
-  clientId: '4be23733-2603-4c29-9296-da5293053cac',
+  clientId: 'f7f39c22-9ee8-4fc8-94d3-b9ddc3ae74df',
   endpoints: {
-    api: 'https://andytest247.onmicrosoft.com/azure-ad-nodejs-test'
+    api: 'https://ignitewards.onmicrosoft.com/Ignition_Awards'
   },
   postLogoutRedirectUri: window.location.origin,
-  redirectUri: 'http://localhost:3000',
-  tenant: 'andytest247.onmicrosoft.com',
+  redirectUri: 'http://localhost:3000/auth/openid/return',
+  tenant: 'ignitewards.onmicrosoft.com',
 };
 
 export const authContext = new AuthenticationContext(adalConfig);
