@@ -1,32 +1,39 @@
 import * as React from 'react';
 import './App.css';
-import { getUser, logOutUser } from './auth';
+import { getUser, isAuthenticated, logInUser, logOutUser } from './auth';
 import logo from './logo.svg';
 
 
-
 class App extends React.Component {
+
   public render() {
+    let button;
+    let appIntro;
     const user = getUser();
-    // tslint:disable-next-line:no-console
-    console.log(user);
+    if(isAuthenticated && user!=null){
+      // tslint:disable-next-line:no-console
+      console.log(user);
+      button = <button onClick={logOutUser} className="continue-button">LogOut of Ignition Awards</button>;
+      appIntro = <p className="App-intro">Welcome {user.profile.name} ({user.profile.unique_name})</p>
+    }else {
+      button = <button onClick={logInUser} className="continue-button">Continue to Office 365 </button>
+      appIntro = <p className="App-intro">Please login with your MYOB account to proceed</p>
+    }
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <p>        
-          Welcome {user.userName}
-        </p>
-
-        <button onClick={logOutUser}>Sign out</button>
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Ignition Awards</h1>
+          </header>
+          <div className="App-user-status">
+            {appIntro}
+            {button}
+          </div>
       </div>
     );
   }
 }
+
+
 
 export default App;

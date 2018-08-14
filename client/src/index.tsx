@@ -6,6 +6,7 @@ import { authContext } from './auth';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
+const DO_NOT_LOGIN = true;
 
 runWithAdal(authContext, () => {
   ReactDOM.render(
@@ -13,4 +14,5 @@ runWithAdal(authContext, () => {
     document.getElementById('root') as HTMLElement
   );
   registerServiceWorker();
-}, false);
+}, DO_NOT_LOGIN);
+  

@@ -20,6 +20,18 @@ export const getUser = () => {
   return authContext.getCachedUser();
 }
 
+export const logInUser = () => {
+  authContext.login();
+}
+
 export const logOutUser = () => {
   authContext.logOut();
+}
+
+export const getAccessToken = () => {
+  return authContext.getCachedToken(adalConfig.clientId);
+}
+
+export const isAuthenticated = () => {
+  return getAccessToken() && getUser();
 }
