@@ -32,6 +32,6 @@ export const getAccessToken = () => {
   return authContext.getCachedToken(adalConfig.clientId);
 }
 
-export const isAuthenticated = () => {
-  return getAccessToken() && getUser();
+export const isAuthenticated = ():boolean => {
+  return getAccessToken() != null && getUser() != null;
 }
