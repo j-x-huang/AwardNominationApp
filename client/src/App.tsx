@@ -3,9 +3,8 @@ import './App.css';
 import { getUser, isAuthenticated } from './auth';
 import AppIntro from './components/AppIntro';
 import LoginButton from './components/LoginButton';
+import NavBar from './components/NavBar';
 import logo from './logo.svg';
-import NavBar from './NavBar';
-
 
 class App extends React.Component<any, any>{
 
@@ -17,7 +16,7 @@ class App extends React.Component<any, any>{
   public render() {
     return (
       <div className="App">  
-          {(isAuthenticated) ? <NavBar /> : null } 
+          {(isAuthenticated()) ? <NavBar /> : null } 
             <header className="App-header">
              <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Ignition Awards</h1>
