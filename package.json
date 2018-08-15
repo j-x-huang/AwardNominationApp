@@ -1,0 +1,23 @@
+{
+  "name": "ignition-awards",
+  "version": "1.0.0",
+  "description": "MYOB",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-client": "cd client && npm install",
+    "install-server": "cd express-backend && npm install",
+    "client": "cd client && npm run start",
+    "server": "cd express-backend && node app.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hbao448/AwardNominationApp.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hbao448/AwardNominationApp/issues"
+  },
+  "homepage": "https://github.com/hbao448/AwardNominationApp#readme"
+}
