@@ -1,12 +1,42 @@
+@font-face {
+  font-family: "NeutroMYOB-Reg";
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.eot");
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.woff2")
+      format("woff2"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.woff")
+      format("woff"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular-WebOnly.ttf")
+      format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeutroMYOB-Med";
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.eot");
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.woff2")
+      format("woff2"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.woff")
+      format("woff"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium-WebOnly.ttf")
+      format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
 .App {
   text-align: center;
   font-weight: 400;
 }
 
 .App-logo {
-/*  animation: App-logo-spin infinite 20s linear;*/
-  padding:1em;
-  padding-top:4em;
+  /*  animation: App-logo-spin infinite 20s linear;*/
+  padding: 1em;
+  padding-top: 4em;
   height: 190px;
 }
 
@@ -19,12 +49,12 @@
 
 .App-title {
   font-size: 1.5em;
-  color:black;
+  color: black;
   padding: 1em;
   text-align: center;
 }
 
-.App-user-status{
+.App-user-status {
   display: inline-block;
   padding-left: 1em;
   padding-right: 1em;
@@ -34,8 +64,8 @@
   max-width: 500px;
   border: 1px solid transparent;
   border-color: #515e6d;
-  border-radius: .25em;
-  border-width: .125em;
+  border-radius: 0.25em;
+  border-width: 0.125em;
 }
 
 .App-intro {
@@ -46,11 +76,11 @@
 .continue-button {
   display: inline-block;
   text-align: center;
-  padding: .5em 1.625em;
+  padding: 0.5em 1.625em;
   border: 1px solid transparent;
-  border-radius: .25em;
-  border-color: rgba(46,62,79,.6);
-  border-width: .125em;
+  border-radius: 0.25em;
+  border-color: rgba(46, 62, 79, 0.6);
+  border-width: 0.125em;
   background-color: white;
   color: #8241aa;
   font-size: 100%;
@@ -62,6 +92,10 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
