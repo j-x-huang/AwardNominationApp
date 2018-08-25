@@ -35,29 +35,29 @@ class NominationPage extends React.Component<any, any> {
     return (
       <div id="nominationPage">
 
+        <MuiThemeProvider theme={theme}>
+          <Stepper
+            className="stepper"
+            activeStep={activeStep}
+            alternativeLabel={true}
+          >
+            {steps.map(label => {
+              return (
+                <Step className="step" key={label}>
+                  <StepLabel className="stepLabel">{label}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </MuiThemeProvider>
+
         {completed ?
           <NominationComplete
             category={this.state.category}
             nominee={this.state.nominee}
           />
-          
           :
-
-          <MuiThemeProvider theme={theme}>
-            <Stepper
-              className="stepper"
-              activeStep={activeStep}
-              alternativeLabel={true}
-            >
-              {steps.map(label => {
-                return (
-                  <Step className="step" key={label}>
-                    <StepLabel className="stepLabel">{label}</StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
-
+          <div>
             <NominationJustification
               category={this.state.category}
               nominee={this.state.nominee}
@@ -77,7 +77,6 @@ class NominationPage extends React.Component<any, any> {
               >
                 Back
           </button>
-
               <button
                 type="button"
                 className="btn btn-primary buttonRight"
@@ -86,8 +85,7 @@ class NominationPage extends React.Component<any, any> {
                 {activeStep === steps.length - 1 ? "Nominate" : "Next"}
               </button>
             </div>
-
-          </MuiThemeProvider>
+          </div>
         }
       </div>
     );
