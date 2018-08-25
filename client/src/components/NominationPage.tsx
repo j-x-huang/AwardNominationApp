@@ -5,6 +5,8 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 
+// import {Link} from 'react-router-dom';
+
 function getSteps(): string[] {
   return ["Category", "Nominee", "Justification"];
 }
@@ -82,7 +84,8 @@ class NominationPage extends React.Component<any, any> {
   private handleNext = () => {
     const { activeStep } = this.state;
     if (activeStep === getSteps().length - 1) {
-      alert("I am supposed to go to the Thank You page");
+      // alert("I am supposed to go to the Thank You page");
+      window.location.replace("/nominationscomplete");
     } else {
       this.setState({
         activeStep: activeStep + 1
