@@ -7,7 +7,9 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { authContext } from "./auth";
 import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
-import Card from "./components/Card";
+// import Card from "./components/Card";
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
 
 const DO_NOT_LOGIN = true;
 
@@ -24,7 +26,13 @@ firebase.initializeApp(config);
 runWithAdal(
   authContext,
   () => {
-    ReactDOM.render(<Card />, document.getElementById("root") as HTMLElement);
+    ReactDOM.render(
+      (
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      ), 
+      document.getElementById("root") as HTMLElement);
     registerServiceWorker();
   },
   DO_NOT_LOGIN
