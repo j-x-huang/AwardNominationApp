@@ -53,14 +53,38 @@ a:active {
   color: #8241aa;
 }
 
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #8241aa !important;
+  border-color: #a476c1 !important;
+  box-shadow: none !important;
+}
+
 .form-control:focus {
   border-color: #a476c1;
   box-shadow: none;
 }
 
+.buttonBlock {
+  overflow: hidden;
+}
+
+#nominationPage,
+#nominationPage div {
+  text-align: center;
+}
+
+#nominationPage button {
+  float: right;
+}
+
 #nominationJustification {
-  width: 45%;
-  align: center;
+  display: inline-block;
+  width: 40%;
+  text-align: center;
 }
 
 .justificationInfo span:first-child {
@@ -70,6 +94,12 @@ a:active {
 
 .justificationInfo:nth-child(2) {
   margin-bottom: 1em;
+}
+
+#nominationComplete {
+  display: inline-block;
+  width: 90%;
+  text-align: center;
 }
 
 #nominationCompleteImage {

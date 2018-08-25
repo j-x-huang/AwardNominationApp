@@ -1,7 +1,17 @@
 import * as React from "react";
 
-class NominationComplete extends React.Component<any, any> {
+export interface INominationCompleteProps {
+  category: string;
+  nominee: string;
+}
+
+class NominationComplete extends React.Component<
+  INominationCompleteProps,
+  any
+> {
   public render() {
+    const { category, nominee } = this.props;
+
     return (
       <div id="nominationComplete">
         <img
@@ -11,8 +21,7 @@ class NominationComplete extends React.Component<any, any> {
         />
         <div>Nomination Complete</div>
         <div>
-          You have nominated <span>Boruto's Dad</span> for{" "}
-          <span>Feeling Purple</span>.
+          You have nominated <span>{nominee}</span> for <span>{category}</span>.
         </div>
         <div>
           <a href="https://pa1.narvii.com/6175/9fcc08177a8c7886db798902b258152e0a219f1f_hq.gif">

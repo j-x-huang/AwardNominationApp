@@ -1,16 +1,27 @@
 import * as React from "react";
 
-class NominationJustification extends React.Component<any, any> {
+export interface INominationJustificationProps {
+  category: string;
+  nominee: string;
+  justification: string;
+}
+
+class NominationJustification extends React.Component<
+  INominationJustificationProps,
+  any
+> {
   public render() {
+    const { category, nominee, justification } = this.props;
+
     return (
       <div id="nominationJustification">
         <div className="justificationInfo">
           <span>Category: </span>
-          <span>Being Purple</span>
+          <span>{category}</span>
         </div>
         <div className="justificationInfo">
           <span>Employee: </span>
-          <span>Uzumaki Naruto</span>
+          <span>{nominee}</span>
         </div>
         <div className="form-group">
           <label htmlFor="justificationBox">
@@ -21,8 +32,13 @@ class NominationJustification extends React.Component<any, any> {
             id="justificationBox"
             className="form-control"
             rows={6}
-            defaultValue={""}
+            defaultValue={justification}
           />
+        </div>
+        <div className="buttonBlock">
+          <button type="button" className="btn btn-primary">
+            Nominate
+          </button>
         </div>
       </div>
     );
