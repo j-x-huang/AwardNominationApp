@@ -1,12 +1,13 @@
-import * as firebase from 'firebase';
-import * as React from 'react';
-import { runWithAdal } from 'react-adal';
-import * as ReactDOM from 'react-dom';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
-import { authContext } from './auth';
-import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+import * as firebase from "firebase";
+import * as React from "react";
+import { runWithAdal } from "react-adal";
+import * as ReactDOM from "react-dom";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+import { authContext } from "./auth";
+import "./index.css";
+import registerServiceWorker from "./registerServiceWorker";
+import Card from "./components/Card";
 
 const DO_NOT_LOGIN = true;
 
@@ -16,15 +17,15 @@ const config = {
   databaseURL: "https://finalfrontierapp-77.firebaseio.com",
   messagingSenderId: "392104679550",
   projectId: "finalfrontierapp-77",
-  storageBucket: "finalfrontierapp-77.appspot.com",
+  storageBucket: "finalfrontierapp-77.appspot.com"
 };
 firebase.initializeApp(config);
 
-runWithAdal(authContext, () => {
-  ReactDOM.render(
-    <App />,
-    document.getElementById('root') as HTMLElement
-  );
-  registerServiceWorker();
-}, DO_NOT_LOGIN);
-  
+runWithAdal(
+  authContext,
+  () => {
+    ReactDOM.render(<Card />, document.getElementById("root") as HTMLElement);
+    registerServiceWorker();
+  },
+  DO_NOT_LOGIN
+);
