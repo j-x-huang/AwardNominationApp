@@ -35,11 +35,6 @@ class NominationJustification extends React.Component<
             defaultValue={justification}
           />
         </div>
-        <div className="buttonBlock">
-          <button type="button" className="btn btn-primary">
-            Nominate
-          </button>
-        </div>
       </div>
     );
   }

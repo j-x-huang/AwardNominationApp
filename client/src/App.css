@@ -72,13 +72,25 @@ a:active {
   overflow: hidden;
 }
 
+.buttonLeft {
+  float: left;
+  margin-left: 30%;
+}
+
+.buttonRight {
+  float: right;
+  margin-right: 30%;
+}
+
 #nominationPage,
 #nominationPage div {
   text-align: center;
 }
 
-#nominationPage button {
-  float: right;
+#nominationPage .stepper {
+  margin-left: 20%;
+  width: 60%;
+  margin-right: 20%;
 }
 
 #nominationJustification {
@@ -87,9 +99,13 @@ a:active {
   text-align: center;
 }
 
+.justificationInfo label {
+  font-family: NeutroMYOB-Med;
+}
+
 .justificationInfo span:first-child {
   font-family: NeutroMYOB-Med;
-  font-weight: 1000;
+  font-weight: 700;
 }
 
 .justificationInfo:nth-child(2) {
