@@ -1,5 +1,6 @@
 import * as React from "react";
 import "./../App.css";
+import ButtonBase from "@material-ui/core/ButtonBase";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import createStyles from "@material-ui/core/styles/createStyles";
@@ -13,15 +14,20 @@ const styles = (theme: Theme) =>
   createStyles({
     card: {
       display: "flex",
-      height: 275,
-      width: 450
+      height: 250,
+      width: 350
+    },
+    cardButton: {
+      display: "flex",
+      textAlign: "initial"
     },
     content: {
       flex: "1 0 auto"
     },
     cover: {
       borderBottom: "3px solid #A476C1 ",
-      width: 210
+      height: "100%",
+      width: "45%"
     },
     description: {
       color: "#687480 ",
@@ -30,7 +36,7 @@ const styles = (theme: Theme) =>
     details: {
       display: "flex",
       flexDirection: "column",
-      maxWidth: 240
+      maxWidth: "55%"
     },
     divider: {
       backgroundColor: "#A476C1 ",
@@ -50,32 +56,45 @@ export interface ICardProps extends WithStyles<typeof styles> {
 
 class Card extends React.Component<ICardProps> {
   // state = { :  }
+
+  public handleClick = () => {
+    console.log("this is:", this);
+  };
+
   public render() {
+    const { classes } = this.props;
+
     return (
       <div>
-        <MaterialCard className={this.props.classes.card}>
-          <CardMedia
-            className={this.props.classes.cover}
-            image="https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg"
-            title=""
-          />
-          <div className={this.props.classes.details}>
-            <CardContent className={this.props.classes.content}>
-              <Typography gutterBottom={true} variant="headline" component="h4">
-                Suzuha Amane
-              </Typography>
-              <Divider className={this.props.classes.divider} />
-              <Typography
-                component="p"
-                className={this.props.classes.description}
+        <MaterialCard className={classes.card}>
+          <ButtonBase className={classes.cardButton} onClick={this.handleClick}>
+            <CardMedia
+              className={classes.cover}
+              image="http://sf.co.ua/14/05/wallpaper-1199440.jpg"
+              title=""
+            />
+            <div className={classes.details}>
+              <CardContent
+                className={classes.content}
+                onClick={this.handleClick}
               >
-                I failed. I failed. I failed. I failed. I failed. I failed. I
-                failed. I failed. I failed. I failed. I failed. I failed. I
-                failed. I failed. I failed. I failed. I failed. I failed. I
-                failed. I failed. I failed. I failed.
-              </Typography>
-            </CardContent>
-          </div>
+                <Typography
+                  gutterBottom={true}
+                  variant="subheading"
+                  component="h6"
+                >
+                  Suzuha Amane
+                </Typography>
+                <Divider className={classes.divider} />
+                <Typography component="p" className={classes.description}>
+                  I failed. I failed. I failed. I failed. I failed. I failed. I
+                  failed. I failed. I failed. I failed. I failed. I failed. I
+                  failed. I failed. I failed. I failed. I failed. I failed. I
+                  failed. I failed. I failed. I failed.
+                </Typography>
+              </CardContent>
+            </div>
+          </ButtonBase>
         </MaterialCard>
       </div>
     );
