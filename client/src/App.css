@@ -28,6 +28,29 @@
   font-style: normal;
 }
 
+* {
+  font-family: NeutroMYOB-Reg;
+}
+
+.form-control:focus {
+  border-color: #a476c1;
+  box-shadow: none;
+}
+
+#nominationJustification {
+  width: 45%;
+  align: center;
+}
+
+.justificationInfo span:first-child {
+  font-family: NeutroMYOB-Med;
+  font-weight: 1000;
+}
+
+.justificationInfo:nth-child(2) {
+  margin-bottom: 1em;
+}
+
 .App {
   text-align: center;
   font-weight: 400;
