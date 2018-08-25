@@ -5,15 +5,48 @@ import AppIntro from './components/AppIntro';
 import LoginButton from './components/LoginButton';
 import NavBar from './components/NavBar';
 import logo from './logo.svg';
+import { getUsersDetails } from './MicrosoftGraphClient';
 
 class App extends React.Component<any, any>{
+
+  public state = {
+    usersDetails: new Array<any>(),
+  }
 
   constructor(props: any){
     super(props);
             
   }
 
+  /**
+   * Retrieves the user's details when this component has mounted
+   */
+  public componentWillMount() {
+    getUsersDetails((err, usersDetails) => {
+      if (err) {
+        // handle it lol
+      } else {
+        this.setState({
+          usersDetails
+        });
+      }
+    });
+  }
+
   public render() {
+    const usersDetails = this.state.usersDetails;
+
+    // This is an example of rendering the users details
+    const usersDetailsBox = usersDetails.map((userDetails) => {
+      return(
+        // tslint:disable-next-line:jsx-key
+        <div>
+          {userDetails.displayName}
+          {userDetails.email}
+          <img src={userDetails.profilePic} />
+        </div>
+      );
+    })
     return (
       <div className="App">  
           {(isAuthenticated()) ? <NavBar /> : null } 
@@ -25,6 +58,7 @@ class App extends React.Component<any, any>{
             <AppIntro isLoggedIn={isAuthenticated()} user={getUser()} />
             <LoginButton isLoggedIn={isAuthenticated()} />
           </div>
+          {usersDetailsBox}
       </div>
     );
   }
