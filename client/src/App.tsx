@@ -5,7 +5,7 @@ import AppIntro from './components/AppIntro';
 import LoginButton from './components/LoginButton';
 import NavBar from './components/NavBar';
 import logo from './logo.svg';
-import { getUsersDetails } from './MicrosoftGraphClient';
+import { getAllUserDetails } from './MicrosoftGraphClient';
 
 class App extends React.Component<any, any>{
 
@@ -19,10 +19,10 @@ class App extends React.Component<any, any>{
   }
 
   /**
-   * Retrieves the user's details when this component has mounted
+   * Retrieves all user details when this component has mounted
    */
   public componentWillMount() {
-    getUsersDetails((err, usersDetails) => {
+    getAllUserDetails((err, usersDetails) => {
       if (err) {
         // handle it lol
       } else {

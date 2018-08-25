@@ -6,7 +6,7 @@ import { acquireToken } from './auth';
  * Retrieves the details of all users in the Azure AD
  * @param callback 
  */
-export const getUsersDetails = (callback: (err: any, usersDetails: any) => void) => {
+export const getAllUserDetails = (callback: (err: any, usersDetails: any) => void) => {
   acquireToken((error, token) => {
 
     if (error) {
