@@ -28,6 +28,67 @@
   font-style: normal;
 }
 
+* {
+  font-family: NeutroMYOB-Reg;
+}
+
+.myob-coloured-text {
+  color: #8241aa;
+}
+
+a:link {
+  color: #8241aa;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #8241aa;
+}
+
+a:visited {
+  color: #a476c1;
+}
+
+a:active {
+  color: #8241aa;
+}
+
+.form-control:focus {
+  border-color: #a476c1;
+  box-shadow: none;
+}
+
+#nominationJustification {
+  width: 45%;
+  align: center;
+}
+
+.justificationInfo span:first-child {
+  font-family: NeutroMYOB-Med;
+  font-weight: 1000;
+}
+
+.justificationInfo:nth-child(2) {
+  margin-bottom: 1em;
+}
+
+#nominationCompleteImage {
+  width: 25%;
+}
+
+#nominationComplete div {
+  margin: 0.5em;
+}
+
+#nominationComplete div:first-of-type {
+  font-size: 1.3em;
+  font-family: NeutroMYOB-Med;
+}
+
+#nominationComplete div:nth-of-type(2) span {
+  font-family: NeutroMYOB-Med;
+}
+
 .App {
   text-align: center;
   font-weight: 400;
