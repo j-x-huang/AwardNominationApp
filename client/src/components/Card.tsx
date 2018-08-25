@@ -20,51 +20,31 @@ const styles = (theme: Theme) =>
       flex: "1 0 auto"
     },
     cover: {
+      borderBottom: "3px solid #A476C1 ",
       width: 210
+    },
+    description: {
+      color: "#687480 ",
+      paddingTop: theme.spacing.unit
     },
     details: {
       display: "flex",
       flexDirection: "column",
       maxWidth: 240
+    },
+    divider: {
+      backgroundColor: "#A476C1 ",
+      height: "2px",
+      width: "25%"
     }
   });
 
 export interface ICardProps extends WithStyles<typeof styles> {
-  img: string;
+  /* img: string;
   title: string;
   description: string;
-  link: Function;
+  link: Function; */
 }
-
-/* const styles = ({ palette, spacing }: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexDirection: "column",
-      padding: spacing.unit,
-      backgroundColor: palette.background.default,
-      color: palette.primary.main
-    }
-  });
-
-const styles = theme => ({
-  card: {
-    display: "flex",
-    width: 450,
-    height: 275
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-    maxWidth: 240
-  },
-  content: {
-    flex: "1 0 auto"
-  },
-  cover: {
-    width: 210
-  }
-}); */
 
 // export interface ICardState {}
 
@@ -77,15 +57,18 @@ class Card extends React.Component<ICardProps> {
           <CardMedia
             className={this.props.classes.cover}
             image="https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg"
-            title="Live from space album cover"
+            title=""
           />
           <div className={this.props.classes.details}>
             <CardContent className={this.props.classes.content}>
               <Typography gutterBottom={true} variant="headline" component="h4">
                 Suzuha Amane
               </Typography>
-              <Divider />
-              <Typography component="p">
+              <Divider className={this.props.classes.divider} />
+              <Typography
+                component="p"
+                className={this.props.classes.description}
+              >
                 I failed. I failed. I failed. I failed. I failed. I failed. I
                 failed. I failed. I failed. I failed. I failed. I failed. I
                 failed. I failed. I failed. I failed. I failed. I failed. I
