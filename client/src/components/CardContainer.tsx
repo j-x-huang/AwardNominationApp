@@ -46,7 +46,7 @@ class CardContainer extends React.Component<
       <Grid
         container={true}
         className={classes.root}
-        spacing={16}
+        spacing={32}
         // alignItems="flex-start"
         // justify="flex-start"
       >
@@ -55,7 +55,7 @@ class CardContainer extends React.Component<
             container={true}
             className={classes.demo}
             justify="flex-start"
-            spacing={16}
+            spacing={32}
           >
             {this.state.cards.map(card => (
               <Grid key={card.id} item={true}>
