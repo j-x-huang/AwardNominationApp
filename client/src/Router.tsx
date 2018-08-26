@@ -5,7 +5,7 @@ import Nominations from "./components/NominationPage";
 import Home from "./components/Home";
 import NominationComplete from "./components/NominationComplete";
 
-class Main extends React.Component {
+class Router extends React.Component {
   public render() {
     return (
       <div>
@@ -19,4 +19,4 @@ class Main extends React.Component {
     );
   }
 }
-export default Main;
+export default Router;
