@@ -24,15 +24,17 @@ class App extends React.Component<any, any>{
    */
   public componentWillMount() {
 
-    getMyImage((pic, err) => {
-      if (err) {
+    getMyImage((pic, errr) => {
+      if (errr) {
           // something
+          this.setState({
+            profilePic: 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg'
+          })
       } else {
       this.setState({
         profilePic: pic
       })
     }
-    })
 
     getAllUserDetails((err, usersDetails) => {
       if (err) {
@@ -44,7 +46,7 @@ class App extends React.Component<any, any>{
       }
     });
 
-  
+    })
 
   }
 
