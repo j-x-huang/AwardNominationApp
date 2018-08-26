@@ -1,6 +1,7 @@
 import * as MicrosoftGraph from "@microsoft/microsoft-graph-client";
 import * as MicrosoftGraphTypes from "@microsoft/microsoft-graph-types";
 import { acquireToken } from './auth';
+// import { constants } from "zlib";
 
 /**
  * Retrieves the details of all users in the Azure AD
@@ -74,6 +75,43 @@ export const getAllUserDetails = (callback: (err: any, usersDetails: any) => voi
               });
           }
       });
+  })
+}
+
+export const getMyImage = (callback: (profilePic: any, err: any) => void) => {
+  acquireToken((error, token) => {
+    const defaultPic = 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg'
+    if (error) {
+      callback(defaultPic, null);
+    }
+
+
+    const client = MicrosoftGraph.Client.init({
+      authProvider: (done) => {
+          done(null, token);
+      }
+    });
+
+
+    client
+      .api('/me/photo/$value')
+      .version('beta')
+      .responseType(MicrosoftGraph.ResponseType.BLOB)
+      .get()
+      .then((blob) => {
+        const url = window.URL;
+        const imageUrl = url.createObjectURL(blob);
+
+
+        const profilePic = ( imageUrl === '' ? defaultPic : imageUrl); 
+
+        callback(profilePic, null)
+      }).catch((err) => {
+
+        callback(null, err);
+        return;
+      })
+
   })
 }
 

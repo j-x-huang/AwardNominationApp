@@ -5,12 +5,13 @@ import AppIntro from './components/AppIntro';
 import LoginButton from './components/LoginButton';
 import NavBar from './components/NavBar';
 import logo from './logo.svg';
-import { getAllUserDetails } from './MicrosoftGraphClient';
+import { getAllUserDetails, getMyImage } from './MicrosoftGraphClient';
 
 class App extends React.Component<any, any>{
 
   public state = {
-    usersDetails: new Array<any>(),
+    profilePic: '',
+    usersDetails: new Array<any>()
   }
 
   constructor(props: any){
@@ -22,6 +23,17 @@ class App extends React.Component<any, any>{
    * Retrieves all user details when this component has mounted
    */
   public componentWillMount() {
+
+    getMyImage((pic, err) => {
+      if (err) {
+          // something
+      } else {
+      this.setState({
+        profilePic: pic
+      })
+    }
+    })
+
     getAllUserDetails((err, usersDetails) => {
       if (err) {
         // handle it lol
@@ -31,6 +43,9 @@ class App extends React.Component<any, any>{
         });
       }
     });
+
+  
+
   }
 
   public render() {
@@ -61,6 +76,9 @@ class App extends React.Component<any, any>{
           <div className="App-user-status">
             <AppIntro isLoggedIn={isAuthenticated()} user={getUser()} />
             <LoginButton isLoggedIn={isAuthenticated()} />
+          </div>
+          <div>
+          <img width='48px' height='auto' src={this.state.profilePic} />
           </div>
           {usersDetailsBox}
       </div>
