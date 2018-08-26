@@ -70,8 +70,8 @@ class Card extends React.Component<ICardProps> {
           <ButtonBase className={classes.cardButton} onClick={this.handleClick}>
             <CardMedia
               className={classes.cover}
-              image="http://sf.co.ua/14/05/wallpaper-1199440.jpg"
-              title=""
+              image="https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg"
+              title="Suzuha Amane"
             />
             <div className={classes.details}>
               <CardContent

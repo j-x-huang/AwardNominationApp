@@ -10,7 +10,7 @@ import { authContext } from "./auth";
 import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import Awards from "./components/Awards";
 
 const DO_NOT_LOGIN = true;
 
@@ -29,7 +29,7 @@ runWithAdal(
   () => {
     ReactDOM.render(
       <BrowserRouter>
-        <App />
+        <Awards />
       </BrowserRouter>,
       document.getElementById("root") as HTMLElement
     );
