@@ -25,7 +25,19 @@ class NominationPage extends React.Component<any, any> {
     const steps = getSteps();
     const { activeStep, completed } = this.state;
 
-    const theme = createMuiTheme({
+    const stepperTheme = createMuiTheme({
+      overrides: {
+        MuiStepper: {
+          root: {
+            "background-color": "#f9f9f9"
+          }
+        },
+        MuiStepLabel: {
+          label: {
+            "margin-top": "0.55em !important"
+          }
+        }
+      },
       typography: {
         fontFamily: "NeutroMYOB-Reg"
       },
@@ -36,8 +48,7 @@ class NominationPage extends React.Component<any, any> {
 
     return (
       <div id="nominationPage">
-
-        <MuiThemeProvider theme={theme}>
+        <MuiThemeProvider theme={stepperTheme}>
           <Stepper
             className="stepper"
             activeStep={activeStep}
