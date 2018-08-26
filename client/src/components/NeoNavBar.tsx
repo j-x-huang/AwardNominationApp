@@ -1,11 +1,21 @@
 import * as React from "react";
 import logo1 from "../images/logo1.png";
+import { getUser, logOutUser } from "../auth";
+
 export interface INavBarProps {
   selection: number;
 }
 
 class NavBar extends React.Component<INavBarProps, any> {
   public render() {
+    const user = getUser();
+    const profileName = user.profile.name
+      .split(" ")
+      .slice(0, -1)
+      .join(" ");
+    const profilePicUrl =
+      "https://i.pinimg.com/originals/01/e7/e2/01e7e206ff9a0b29fb4bac269140dda6.jpg";
+
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <a className="navbar-brand" href="#">
@@ -46,9 +56,26 @@ class NavBar extends React.Component<INavBarProps, any> {
             </li>
           </ul>
           <ul className="nav navbar-nav ml-auto">
-            <li>
-              <div className="inset">
-                <img src="https://i.pinimg.com/originals/01/e7/e2/01e7e206ff9a0b29fb4bac269140dda6.jpg" />
+            <li className="dropdown links nav-item">
+              <a
+                className="nav-link"
+                id="dropdownMenuLink"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img id="profilePic" src={profilePicUrl} />
+                <span id="profileName">{profileName}</span>
+              </a>
+
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a
+                  className="dropdown-item profileDropdownItem"
+                  onClick={logOutUser}
+                >
+                  Sign Out
+                </a>
               </div>
             </li>
           </ul>
@@ -59,9 +86,6 @@ class NavBar extends React.Component<INavBarProps, any> {
 
   private getLinkClass(position: number) {
     let classes = "";
-    console.info("Query " + position);
-    console.info("Actual " + this.props.selection);
-
     classes += this.props.selection === position ? "activeSpan" : "justASpan";
     return classes;
   }

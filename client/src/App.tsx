@@ -2,6 +2,7 @@ import * as React from "react";
 import { isAuthenticated } from "./auth";
 import NavBar from "./components/NeoNavBar";
 import Main from "./Main";
+import LoginPage from "./components/LoginPage";
 
 class App extends React.Component<any, any> {
   public state = {
@@ -19,8 +20,14 @@ class App extends React.Component<any, any> {
   public render() {
     return (
       <div>
-        {isAuthenticated() ? <NavBar selection={this.state.selection} /> : null}
-        <Main />
+        {isAuthenticated() ? (
+          <React.Fragment>
+            <NavBar selection={this.state.selection} />
+            <Main />
+          </React.Fragment>
+        ) : (
+          <LoginPage />
+        )}
       </div>
     );
   }

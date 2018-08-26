@@ -36,6 +36,10 @@ body {
   background-color: #f9f9f9;
 }
 
+.links {
+  cursor: pointer;
+}
+
 .myob-coloured-text {
   color: #8241aa;
 }
@@ -60,8 +64,7 @@ a:active {
 .btn-primary,
 .btn-primary:hover,
 .btn-primary:focus,
-.btn-primary:active,
-.btn-primary.active {
+.btn-primary:active {
   background-color: #8241aa !important;
   border-color: #a476c1 !important;
   box-shadow: none !important;
@@ -124,24 +127,41 @@ a:active {
   color: black !important;
 }
 
-.inset {
-  width: 42px;
-  height: 42px;
+#profilePic {
+  border-radius: inherit;
+  object-fit: cover;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6),
     0 1px 1px rgba(0, 0, 0, 0.1);
-  background-color: transparent !important;
-  z-index: 999;
-}
-
-.inset img {
-  border-radius: inherit;
-  object-fit: cover;
-  width: inherit;
-  height: inherit;
-  display: block;
+  display: inline-block;
   position: relative;
   z-index: 998;
+  margin: 10px;
+}
+
+#profileName {
+  font-size: 14.5px;
+  font-family: NeutroMYOB-Reg;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: black;
+}
+
+#profileName:hover {
+  color: #8241aa;
+}
+
+.profileDropdownItem {
+  font-size: 0.95em;
+  color: black !important;
+  text-decoration: none !important;
+}
+
+.profileDropdownItem:active {
+  background: #8241aa;
+  color: white !important;
 }
 
 #nominationPage,
