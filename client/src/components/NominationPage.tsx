@@ -1,10 +1,12 @@
 import * as React from "react";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import NominationJustification from "./NominationJustification";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
+
+import NominationJustification from "./NominationJustification";
 import NominationComplete from "./NominationComplete";
+import SelectCategory from './SelectCategory';
 
 function getSteps(): string[] {
   return ["Category", "Nominee", "Justification"];
@@ -58,11 +60,28 @@ class NominationPage extends React.Component<any, any> {
           />
           :
           <div>
-            <NominationJustification
-              category={this.state.category}
-              nominee={this.state.nominee}
-              justification={this.state.justification}
-            />
+
+            {(() => {
+              switch (this.state.activeStep) {
+
+                case 0:
+                  return <SelectCategory />
+                  // break;
+
+                case 1:
+                  return <NominationJustification
+                    category={this.state.category}
+                    nominee={this.state.nominee}
+                    justification={this.state.justification}
+                  />
+                  // break;
+
+                default:
+                  return <SelectCategory />
+                  // break;
+
+              }
+            })()}
 
             <div className="buttonBlock">
               <button
