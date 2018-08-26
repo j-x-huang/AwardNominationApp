@@ -115,5 +115,59 @@ export const getMyImage = (callback: (profilePic: any, err: any) => void) => {
   })
 }
 
+/**
+ * Retrieves a specific user from Azure AD
+ * @param id the object-id of the user
+ * @param callback 
+ */
+export const getUserDetails = (id: string, callback: (err: any, userDetails: any) => void) => {
+  acquireToken((error, token) => {
 
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    // Initialises the Microsoft Graph Client using our acquired token
+    const client = MicrosoftGraph.Client.init({
+      authProvider: (done) => {
+          done(null, token);
+      }
+    });
+
+    // Makes an API call to Microsoft Graph to fetch the user in the Azure AD
+    client
+      .api(`/users/${id}`)
+      .get((err, res) => {
+          if (err) {
+              callback(err, null)
+              return;
+          }
+          
+          const user:MicrosoftGraphTypes.User = res;
+
+          const condensedUserDetails = {
+            email: user.mail ? user.mail : '',
+            id: user.id,
+            name: user.displayName ? user.displayName : '',
+            profilePic: '',
+          };
+
+          client
+            .api(`/users/${user.id}/photos/48x48/$value`)
+            .version('beta')
+            .responseType(MicrosoftGraph.ResponseType.BLOB)
+            .get()
+            .then((picBlob) => {
+                const url = window.URL;
+                const imageUrl = url.createObjectURL(picBlob);
+
+                condensedUserDetails.profilePic = imageUrl;
+            })
+            .finally(() => {
+              callback(null, condensedUserDetails);
+            });
+      });
+  })
+}
 
