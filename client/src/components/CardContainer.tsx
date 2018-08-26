@@ -8,10 +8,11 @@ import Card from "./Card";
 const styles = (theme: Theme) =>
   createStyles({
     demo: {
-      height: 240
+      height: "100%"
     },
     root: {
-      flexGrow: 1
+      flexGrow: 1,
+      paddingTop: "20px"
     }
   });
 
