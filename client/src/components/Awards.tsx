@@ -3,7 +3,6 @@ import "./../App.css";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-// import Typography from "@material-ui/core/Typography";
 import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
@@ -22,18 +21,6 @@ const styles = (theme: Theme) =>
   });
 
 export interface IAwardsProps extends WithStyles<typeof styles> {}
-
-/* export interface IAwardsState {
-  awards: any;
-} */
-
-/* function TabContainer(props: any) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-} */
 
 class Awards extends React.Component<IAwardsProps> {
   public state = {
@@ -216,6 +203,10 @@ class Awards extends React.Component<IAwardsProps> {
     this.setState({ value });
   };
 
+  private handleSelect = (id: number, name: string) => {
+    alert("ID: " + id + " Name: " + name);
+  };
+
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
@@ -243,7 +234,13 @@ class Awards extends React.Component<IAwardsProps> {
         </AppBar>
         {awards.map(
           (award, i) =>
-            value === i && <CardContainer key={i} cards={award.nominations} />
+            value === i && (
+              <CardContainer
+                key={i}
+                cards={award.nominations}
+                onSelect={this.handleSelect}
+              />
+            )
         )}
         {/* {value === 0 && <CardContainer />}
         {value === 1 && <CardContainer />}

@@ -27,11 +27,12 @@ export interface ICardContent {
 
 export interface ICardContainerProps extends WithStyles<typeof styles> {
   cards: ICardContent[];
+  onSelect: (...args: any[]) => void;
 }
 
 class CardContainer extends React.Component<ICardContainerProps> {
   public render() {
-    const { classes, cards } = this.props;
+    const { classes, cards, onSelect } = this.props;
 
     return (
       <Grid
@@ -55,6 +56,7 @@ class CardContainer extends React.Component<ICardContainerProps> {
                   img={card.img}
                   title={card.title}
                   description={card.description}
+                  onSelect={onSelect}
                 />
               </Grid>
             ))}

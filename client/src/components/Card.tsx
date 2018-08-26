@@ -50,30 +50,23 @@ export interface ICardProps extends WithStyles<typeof styles> {
   img: string;
   title: string;
   description: string;
+  onSelect: (...args: any[]) => void;
 }
 
 // export interface ICardState {}
 
 class Card extends React.Component<ICardProps> {
-  // state = { :  }
-
-  public handleClick = () => {
-    console.log("this is:", this);
-  };
-
   public render() {
-    const { classes, id, img, title, description } = this.props;
+    const { classes, id, img, title, description, onSelect } = this.props;
+    const handleSelect = () => onSelect(id, title);
 
     return (
       <div>
         <MaterialCard className={classes.card} key={id}>
-          <ButtonBase className={classes.cardButton} onClick={this.handleClick}>
+          <ButtonBase className={classes.cardButton} onClick={handleSelect}>
             <CardMedia className={classes.cover} image={img} title={title} />
             <div className={classes.details}>
-              <CardContent
-                className={classes.content}
-                onClick={this.handleClick}
-              >
+              <CardContent className={classes.content}>
                 <Typography
                   gutterBottom={true}
                   variant="subheading"
