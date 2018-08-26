@@ -7,41 +7,31 @@ import Card from "./Card";
 
 const styles = (theme: Theme) =>
   createStyles({
-    demo: {
+    grid: {
       height: "100%"
     },
     root: {
       flexGrow: 1,
-      paddingTop: "20px"
+      paddingTop: "20px",
+      paddingLeft: "1%",
+      paddingRight: "1%"
     }
   });
 
-export interface ICardContainerProps extends WithStyles<typeof styles> {}
-
-export interface ICardContainerState {
-  cards: any;
+export interface ICardContent {
+  id: number;
+  img: string;
+  title: string;
+  description: string;
 }
 
-class CardContainer extends React.Component<
-  ICardContainerProps,
-  ICardContainerState
-> {
-  public state = {
-    cards: [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 },
-      { id: 4 },
-      { id: 5 },
-      { id: 6 },
-      { id: 7 },
-      { id: 8 },
-      { id: 9 }
-    ]
-  };
+export interface ICardContainerProps extends WithStyles<typeof styles> {
+  cards: ICardContent[];
+}
 
+class CardContainer extends React.Component<ICardContainerProps> {
   public render() {
-    const { classes } = this.props;
+    const { classes, cards } = this.props;
 
     return (
       <Grid
@@ -54,13 +44,18 @@ class CardContainer extends React.Component<
         <Grid item={true} xs={12}>
           <Grid
             container={true}
-            className={classes.demo}
+            className={classes.grid}
             justify="flex-start"
             spacing={32}
           >
-            {this.state.cards.map(card => (
+            {cards.map((card, i) => (
               <Grid key={card.id} item={true}>
-                <Card />
+                <Card
+                  id={card.id}
+                  img={card.img}
+                  title={card.title}
+                  description={card.description}
+                />
               </Grid>
             ))}
           </Grid>

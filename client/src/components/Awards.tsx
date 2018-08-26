@@ -3,7 +3,7 @@ import "./../App.css";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
+// import Typography from "@material-ui/core/Typography";
 import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
@@ -27,23 +27,185 @@ export interface IAwardsProps extends WithStyles<typeof styles> {}
   awards: any;
 } */
 
-function TabContainer(props: any) {
+/* function TabContainer(props: any) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
       {props.children}
     </Typography>
   );
-}
+} */
 
 class Awards extends React.Component<IAwardsProps> {
   public state = {
     value: 0,
     awards: [
-      { id: 1, name: "Suzuha Amane" },
-      { id: 2, name: "Suzuha Amane" },
-      { id: 3, name: "Suzuha Amane" },
-      { id: 4, name: "Suzuha Amane" },
-      { id: 5, name: "Suzuha Amane" }
+      {
+        award: "All",
+        nominations: [
+          {
+            id: 1,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          },
+          {
+            id: 2,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          },
+          {
+            id: 3,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          },
+          {
+            id: 4,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          },
+          {
+            id: 5,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          },
+          {
+            id: 6,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          }
+        ]
+      },
+      {
+        award: "One Small Step",
+        nominations: [
+          {
+            id: 1,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          },
+          {
+            id: 2,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          },
+          {
+            id: 3,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          },
+          {
+            id: 4,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          }
+        ]
+      },
+      {
+        award: "New Horizon",
+        nominations: [
+          {
+            id: 1,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          }
+        ]
+      },
+      {
+        award: "Sky High",
+        nominations: [
+          {
+            id: 1,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          },
+          {
+            id: 2,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          }
+        ]
+      },
+      {
+        award: "Star Crew",
+        nominations: [
+          {
+            id: 1,
+            img:
+              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+            title: "Suzuha Amane",
+            description:
+              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed. I failed. I failed. I" +
+              "failed. I failed. I failed. I failed."
+          }
+        ]
+      }
     ]
   };
 
@@ -56,7 +218,7 @@ class Awards extends React.Component<IAwardsProps> {
 
   public render() {
     const { classes } = this.props;
-    const { value } = this.state;
+    const { value, awards } = this.state;
 
     return (
       <div className={classes.root}>
@@ -69,20 +231,25 @@ class Awards extends React.Component<IAwardsProps> {
             scrollable={true}
             scrollButtons="auto"
           >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-            <Tab label="Item Four" />
-            <Tab label="Item Five" />
-            <Tab label="Item Six" />
+            {awards.map((award, i) => (
+              <Tab key={i} label={award.award} />
+            ))}
+            {/* <Tab label="All" />
+            <Tab label="One Small Step" />
+            <Tab label="New Horizon" />
+            <Tab label="Sky High" />
+            <Tab label="Star Crew" /> */}
           </Tabs>
         </AppBar>
-        {value === 0 && <CardContainer />}
+        {awards.map(
+          (award, i) =>
+            value === i && <CardContainer key={i} cards={award.nominations} />
+        )}
+        {/* {value === 0 && <CardContainer />}
         {value === 1 && <CardContainer />}
         {value === 2 && <CardContainer />}
         {value === 3 && <CardContainer />}
-        {value === 4 && <CardContainer />}
-        {value === 5 && <TabContainer>Hello World</TabContainer>}
+        {value === 4 && <TabContainer>Hello World</TabContainer>} */}
       </div>
     );
   }

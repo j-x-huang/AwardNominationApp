@@ -46,10 +46,10 @@ const styles = (theme: Theme) =>
   });
 
 export interface ICardProps extends WithStyles<typeof styles> {
-  /* img: string;
+  id: number;
+  img: string;
   title: string;
   description: string;
-  link: Function; */
 }
 
 // export interface ICardState {}
@@ -62,17 +62,13 @@ class Card extends React.Component<ICardProps> {
   };
 
   public render() {
-    const { classes } = this.props;
+    const { classes, id, img, title, description } = this.props;
 
     return (
       <div>
-        <MaterialCard className={classes.card}>
+        <MaterialCard className={classes.card} key={id}>
           <ButtonBase className={classes.cardButton} onClick={this.handleClick}>
-            <CardMedia
-              className={classes.cover}
-              image="https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg"
-              title="Suzuha Amane"
-            />
+            <CardMedia className={classes.cover} image={img} title={title} />
             <div className={classes.details}>
               <CardContent
                 className={classes.content}
@@ -87,10 +83,7 @@ class Card extends React.Component<ICardProps> {
                 </Typography>
                 <Divider className={classes.divider} />
                 <Typography component="p" className={classes.description}>
-                  I failed. I failed. I failed. I failed. I failed. I failed. I
-                  failed. I failed. I failed. I failed. I failed. I failed. I
-                  failed. I failed. I failed. I failed. I failed. I failed. I
-                  failed. I failed. I failed. I failed.
+                  {description}
                 </Typography>
               </CardContent>
             </div>
