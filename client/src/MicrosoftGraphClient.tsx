@@ -39,14 +39,21 @@ export const getAllUserDetails = (callback: (err: any, usersDetails: any) => voi
           // tslint:disable-next-line:forin
           for (const user of users) {
             const condensedUserDetails = {
-              displayName: String(user.displayName),
-              email: String(user.mail),
+              email: user.mail ? user.mail : '',
+              id: user.id,
+              name: user.displayName ? user.displayName : '',
               profilePic: '',
             };
 
             // Retrieves the specific user's profile picture
+            /* NOTE: This causes the fetch to be very slow as an individual api call is needed
+                for every user to fetch their photo.
+                Possibly move this onto another function and have whatever component (i.e. Card?) is 
+                responsible to rendering the details to fetch the image themselves. 
+                Another option is to preload the images in Firebase and fetch it from there
+            */
             client
-              .api(`/users/${user.id}/photo/$value`)
+              .api(`/users/${user.id}/photos/48x48/$value`)
               .version('beta')
               .responseType(MicrosoftGraph.ResponseType.BLOB)
               .get()
