@@ -127,6 +127,10 @@ a:active {
   color: black !important;
 }
 
+#dropdownMenuLink {
+  padding: 0 !important;
+}
+
 #profilePic {
   border-radius: inherit;
   object-fit: cover;
@@ -154,7 +158,7 @@ a:active {
 }
 
 .profileDropdownItem {
-  font-size: 0.95em;
+  font-size: 0.9em;
   color: black !important;
   text-decoration: none !important;
 }
@@ -257,25 +261,6 @@ a:active {
   border-width: 0.125em;
 }
 
-.App-intro {
-  font-size: large;
-  padding-bottom: 1em;
-}
-
-.continue-button {
-  display: inline-block;
-  text-align: center;
-  padding: 0.5em 1.625em;
-  border: 1px solid transparent;
-  border-radius: 0.25em;
-  border-color: rgba(46, 62, 79, 0.6);
-  border-width: 0.125em;
-  background-color: white;
-  color: #8241aa;
-  font-size: 100%;
-  font-weight: 400;
-}
-
 .category-button {
   display: inline-block;
   text-align: center;
@@ -288,11 +273,7 @@ a:active {
   color: #8241aa;
   font-size: 100%;
   font-weight: 400;
-  width : 300px;
-}
-
-.continue-button:hover {
-  border-color: #515e6d;
+  width: 300px;
 }
 
 @keyframes App-logo-spin {
@@ -302,4 +283,44 @@ a:active {
   to {
     transform: rotate(360deg);
   }
+}
+
+#loginPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+  display: inline-block;
+  text-align: center;
+  width: 60%;
+  height: 50%;
+}
+
+#loginLogo {
+  width: 36%;
+  margin: 20px;
+}
+
+#loginBg {
+  background-color: #f3ffff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#loginBgPic {
+  height: 100%;
+  float: right;
+}
+
+#loginDesc {
+  font-family: NeutroMYOB-Med;
+  font-size: 1.05em;
+}
+
+#loginButton {
+  padding-left: 2em;
+  padding-right: 2em;
 }
