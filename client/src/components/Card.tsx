@@ -26,7 +26,7 @@ const styles = (theme: Theme) =>
     },
     cover: {
       borderBottom: "3px solid #A476C1 ",
-      height: "100%",
+      height: 250,
       width: "45%"
     },
     description: {
@@ -40,7 +40,7 @@ const styles = (theme: Theme) =>
     },
     divider: {
       backgroundColor: "#A476C1 ",
-      height: "2px",
+      height: 2,
       width: "25%"
     }
   });
