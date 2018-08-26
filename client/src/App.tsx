@@ -37,13 +37,17 @@ class App extends React.Component<any, any>{
     const usersDetails = this.state.usersDetails;
 
     // This is an example of rendering the users details
+    const styles = {
+      border: '1px gray solid',
+      maxWidth: 300,
+    }
     const usersDetailsBox = usersDetails.map((userDetails) => {
       return(
         // tslint:disable-next-line:jsx-key
-        <div>
-          {userDetails.displayName}
-          {userDetails.email}
-          <img src={userDetails.profilePic} />
+        <div key={userDetails.id} style={styles}>
+          <p>{userDetails.name}</p>
+          <p>{userDetails.email}</p>
+          <img width='48px' height='auto' src={userDetails.profilePic !== '' ? userDetails.profilePic : 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg'} />
         </div>
       );
     })
