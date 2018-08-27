@@ -37,7 +37,8 @@ const styles = (theme: Theme) =>
     details: {
       display: "flex",
       flexDirection: "column",
-      maxWidth: "55%"
+      height: 250,
+      width: "55%"
     },
     divider: {
       backgroundColor: "#A476C1 ",
@@ -73,7 +74,7 @@ class Card extends React.Component<ICardProps> {
                   variant="subheading"
                   component="h6"
                 >
-                  Suzuha Amane
+                  {title}
                 </Typography>
                 <Divider className={classes.divider} />
                 <Typography component="p" className={classes.description}>
