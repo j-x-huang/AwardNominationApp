@@ -18,3 +18,7 @@ This is a proof-of-concept application that will be used for employee awards cer
 * David Qi (yqi955@aucklanduni.ac.nz)
 * Yao Jian Yap (yyap601@aucklanduni.ac.nz)
 * Alex Yoo (syu680@aucklanduni.ac.nz)
+
+## Final Frontier Wiki
+
+The Sprint Review and Retrospective details can be viewed in the [wiki page](https://github.com/hbao448/AwardNominationApp/wiki).
