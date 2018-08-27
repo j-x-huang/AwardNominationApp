@@ -3,10 +3,11 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-
+import * as firebase from "firebase";
 import NominationJustification from "./NominationJustification";
 import NominationComplete from "./NominationComplete";
 import SelectCategory from './SelectCategory';
+import { getUser } from "../auth";
 
 function getSteps(): string[] {
   return ["Category", "Nominee", "Justification"];
@@ -19,6 +20,14 @@ class NominationPage extends React.Component<any, any> {
     justification: "He achieved his dream of becoming Hokage.",
     activeStep: 0,
     completed: false
+  };
+
+  private nominationDetails = {
+    category: "Being Purple",
+    justification: "He achieved his dream of becoming Ho",
+    nominator: "u",
+    nominee: "Boruto's Dad",
+    score: 1
   };
 
   public render() {
@@ -121,13 +130,86 @@ class NominationPage extends React.Component<any, any> {
     );
   }
 
+  private makeNomination = () => {
+    const defaultDatabase = firebase.database();
+
+    // Get a key for a new Post.
+    const newPostKey = defaultDatabase.ref().child('nominations').push().key;
+
+    const user = getUser();
+    const userid = user.profile.oid;
+    // const nomineeid = ;
+
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    const updates = {};
+    updates['/nominations/' + newPostKey] = this.nominationDetails;
+    updates['/nominators/' + userid + "/" + newPostKey] = {nomination_id: newPostKey, nominee: this.nominationDetails.nominee};
+    // updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: user.profile.name};
+
+    return defaultDatabase.ref().update(updates);
+  }
+
+  // move this function later to comment page
+ /*  private makeComment = () => {
+    const defaultDatabase = firebase.database();
+
+    const newPostKey = defaultDatabase.ref().child('/nominations/' + '-LKt6HFSC0KasTNDjXb1' + '/comments/').push().key;
+
+    const nominationid = '-LKt6HFSC0KasTNDjXb1';
+    const user = getUser();
+
+    const comment = {
+      comment: "hello",
+      commenter: user.profile.oid
+    }
+    const updates = {};
+    updates['/nominations/' + nominationid + '/comments/' + newPostKey] = comment; 
+
+    return defaultDatabase.ref().update(updates);
+  } */
+
+  // move this function later to comment page
+ /*  private makeUpvote = () => {
+    const defaultDatabase = firebase.database();
+
+    const nominationid = '-LKt6HFSC0KasTNDjXb1';
+    const user = getUser();
+    const uid = user.profile.oid;
+
+    const upvoter = {
+      [uid]: true
+    };
+
+    const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/');
+
+    return upvoterPath.update(upvoter);
+  } */
+
+  // move this function later to comment page
+    /* private removeUpvote = () => {
+    const defaultDatabase = firebase.database();
+
+    const nominationid = '-LKt6HFSC0KasTNDjXb1';
+    const user = getUser();
+    const uid = user.profile.oid;
+
+    const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/' + uid);
+
+    return upvoterPath.remove();
+  } */ 
+ 
   private handleNext = () => {
     const { activeStep } = this.state;
     if (activeStep === getSteps().length - 1) {
+      this.makeNomination();
       this.setState({
         completed: true
-      });
+      })
     } else {
+      // remove these btw
+      // this.makeComment();
+      // this.makeUpvote();
+      // this.removeUpvote();
       this.setState({
         activeStep: activeStep + 1
       });
