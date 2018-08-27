@@ -14,8 +14,6 @@ const styles = (theme: Theme) =>
     root: {
       flexGrow: 1,
       paddingTop: "20px",
-      paddingLeft: "1%",
-      paddingRight: "1%",
       backgroundColor: "#f9f9f9"
     }
   });

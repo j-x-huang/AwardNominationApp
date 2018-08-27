@@ -12,11 +12,11 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      width: "60%",
+      width: "90%",
       backgroundColor: theme.palette.background.paper,
-      marginLeft: "20%",
-      marginRight: "20%",
-      marginTop: "3%"
+      marginLeft: "5%",
+      marginRight: "5%",
+      marginTop: "2%"
     },
     tabBar: {
       boxShadow: "none",
@@ -98,6 +98,38 @@ class Awards extends React.Component<IAwardsProps> {
               "failed. I failed. I failed. I failed. I failed. I failed. I" +
               "failed. I failed. I failed. I failed. I failed. I failed. I" +
               "failed. I failed. I failed. I failed."
+          }
+        ]
+      },
+      {
+        award: "Being Purple",
+        nominations: [
+          {
+            id: 1,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          },
+          {
+            id: 2,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
+          },
+          {
+            id: 3,
+            img:
+              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
+            title: "Anri Sonohara",
+            description:
+              "I love you. I love you.  I love you.  I love you.  I love you. " +
+              "I love you.  I love you.  I love you.  I love you.  I love you. "
           }
         ]
       },
@@ -223,8 +255,7 @@ class Awards extends React.Component<IAwardsProps> {
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            scrollable={true}
-            scrollButtons="auto"
+            centered={true}
           >
             {awards.map((award, i) => (
               <Tab key={i} label={award.award} />
