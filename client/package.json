@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
+    "@microsoft/microsoft-graph-client": "^1.2.0",
     "@types/react-adal": "^0.4.1",
     "@types/react-bootstrap": "^0.32.11",
     "@types/react-router-dom": "^4.3.0",
@@ -25,6 +26,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@microsoft/microsoft-graph-types": "^1.4.0",
     "@types/jest": "^23.3.1",
     "@types/node": "^10.5.8",
     "@types/react": "^16.4.9",
