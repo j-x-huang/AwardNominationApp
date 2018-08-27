@@ -17,6 +17,10 @@ const styles = (theme: Theme) =>
       marginLeft: "20%",
       marginRight: "20%",
       marginTop: "3%"
+    },
+    tabBar: {
+      boxShadow: "none",
+      backgroundColor: "#f9f9f9"
     }
   });
 
@@ -213,7 +217,7 @@ class Awards extends React.Component<IAwardsProps> {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" color="default" className={classes.tabBar}>
           <Tabs
             value={value}
             onChange={this.handleChange}

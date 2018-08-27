@@ -8,13 +8,15 @@ import Card from "./Card";
 const styles = (theme: Theme) =>
   createStyles({
     grid: {
-      height: "100%"
+      height: "100%",
+      backgroundColor: "#f9f9f9"
     },
     root: {
       flexGrow: 1,
       paddingTop: "20px",
       paddingLeft: "1%",
-      paddingRight: "1%"
+      paddingRight: "1%",
+      backgroundColor: "#f9f9f9"
     }
   });
 

@@ -15,7 +15,8 @@ const styles = (theme: Theme) =>
     card: {
       display: "flex",
       height: 250,
-      width: 350
+      width: 350,
+      boxShadow: "none"
     },
     cardButton: {
       display: "flex",
