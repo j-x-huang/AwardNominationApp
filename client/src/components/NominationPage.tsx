@@ -73,33 +73,32 @@ class NominationPage extends React.Component<any, any> {
           </Stepper>
         </MuiThemeProvider>
 
-        {completed ?
+        {completed ? (
           <NominationComplete
             category={this.state.category}
             nominee={this.state.nominee}
           />
-          :
+        ) : (
           <div>
-
             {(() => {
               switch (this.state.activeStep) {
-
                 case 0:
-                  return <SelectCategory />
-                  // break;
+                  return <SelectCategory />;
+                // break;
 
                 case 1:
-                  return <NominationJustification
-                    category={this.state.category}
-                    nominee={this.state.nominee}
-                    justification={this.state.justification}
-                  />
-                  // break;
+                  return (
+                    <NominationJustification
+                      category={this.state.category}
+                      nominee={this.state.nominee}
+                      justification={this.state.justification}
+                    />
+                  );
+                // break;
 
                 default:
-                  return <SelectCategory />
-                  // break;
-
+                  return <SelectCategory />;
+                // break;
               }
             })()}
 
@@ -115,7 +114,7 @@ class NominationPage extends React.Component<any, any> {
                 }
               >
                 Back
-          </button>
+              </button>
               <button
                 type="button"
                 className="btn btn-primary buttonRight"
@@ -125,7 +124,7 @@ class NominationPage extends React.Component<any, any> {
               </button>
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
