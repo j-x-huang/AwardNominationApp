@@ -6,7 +6,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import * as firebase from "firebase";
 import NominationJustification from "./NominationJustification";
 import NominationComplete from "./NominationComplete";
-import SelectCategory from './SelectCategory';
+import SelectCategory from "./SelectCategory";
 import { getUser } from "../auth";
 
 function getSteps(): string[] {
@@ -20,14 +20,6 @@ class NominationPage extends React.Component<any, any> {
     justification: "He achieved his dream of becoming Hokage.",
     activeStep: 0,
     completed: false
-  };
-
-  private nominationDetails = {
-    category: "Being Purple",
-    justification: "He achieved his dream of becoming Ho",
-    nominator: "u",
-    nominee: "Boruto's Dad",
-    score: 1
   };
 
   public render() {
@@ -133,7 +125,10 @@ class NominationPage extends React.Component<any, any> {
     const defaultDatabase = firebase.database();
 
     // Get a key for a new Post.
-    const newPostKey = defaultDatabase.ref().child('nominations').push().key;
+    const newPostKey = defaultDatabase
+      .ref()
+      .child("nominations")
+      .push().key;
 
     const user = getUser();
     const userid = user.profile.oid;
@@ -141,15 +136,26 @@ class NominationPage extends React.Component<any, any> {
 
     // Write the new post's data simultaneously in the posts list and the user's post list.
     const updates = {};
-    updates['/nominations/' + newPostKey] = this.nominationDetails;
-    updates['/nominators/' + userid + "/" + newPostKey] = {nomination_id: newPostKey, nominee: this.nominationDetails.nominee};
+    const nominationDetails = {
+      category: this.state.category,
+      justification: this.state.justification,
+      nominator: "u", // TODO oid
+      nominee: this.state.nominee,
+      score: 1
+    };
+
+    updates["/nominations/" + newPostKey] = nominationDetails;
+    updates["/nominators/" + userid + "/" + newPostKey] = {
+      nomination_id: newPostKey,
+      nominee: nominationDetails.nominee
+    };
     // updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: user.profile.name};
 
     return defaultDatabase.ref().update(updates);
-  }
+  };
 
   // move this function later to comment page
- /*  private makeComment = () => {
+  /*  private makeComment = () => {
     const defaultDatabase = firebase.database();
 
     const newPostKey = defaultDatabase.ref().child('/nominations/' + '-LKt6HFSC0KasTNDjXb1' + '/comments/').push().key;
@@ -168,7 +174,7 @@ class NominationPage extends React.Component<any, any> {
   } */
 
   // move this function later to comment page
- /*  private makeUpvote = () => {
+  /*  private makeUpvote = () => {
     const defaultDatabase = firebase.database();
 
     const nominationid = '-LKt6HFSC0KasTNDjXb1';
@@ -185,7 +191,7 @@ class NominationPage extends React.Component<any, any> {
   } */
 
   // move this function later to comment page
-    /* private removeUpvote = () => {
+  /* private removeUpvote = () => {
     const defaultDatabase = firebase.database();
 
     const nominationid = '-LKt6HFSC0KasTNDjXb1';
@@ -195,15 +201,15 @@ class NominationPage extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/' + uid);
 
     return upvoterPath.remove();
-  } */ 
- 
+  } */
+
   private handleNext = () => {
     const { activeStep } = this.state;
     if (activeStep === getSteps().length - 1) {
       this.makeNomination();
       this.setState({
         completed: true
-      })
+      });
     } else {
       // remove these btw
       // this.makeComment();
