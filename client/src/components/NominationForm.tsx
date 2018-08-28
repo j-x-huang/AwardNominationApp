@@ -1,5 +1,6 @@
 import * as React from "react";
-
+import * as firebase from "firebase";
+import { getUser } from "../auth";
 class NominationForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -13,7 +14,7 @@ class NominationForm extends React.Component<any, any> {
     score: 1
   };
 
-  public cateogryChange = (event: any) => {
+  public categoryChange = (event: any) => {
     const cat = event.target.value;
     this.setState({ category: cat });
     this.setState({ nominee: "" });
@@ -32,7 +33,7 @@ class NominationForm extends React.Component<any, any> {
 
     return (
       <form className="feelix-card">
-        <h5> Nominate a good fellow </h5>
+        <h5> Nominate a deserving candidate </h5>
         <hr />
         <div className="form-group">
           <label htmlFor="categorySelect">Select an award category</label>
@@ -40,7 +41,7 @@ class NominationForm extends React.Component<any, any> {
             className="form-control"
             id="categorySelect"
             value={this.state.category}
-            onChange={this.cateogryChange}
+            onChange={this.categoryChange}
           >
             <option />
             <option>Being Purple</option>
@@ -71,12 +72,38 @@ class NominationForm extends React.Component<any, any> {
             onChange={this.justificationChange}
           />
         </div>
-        <button type="button" className="btn btn-primary float-right">
+        <button type="button" className="btn btn-primary float-right" onClick={this.makeNomination}>
           Nominate
         </button>
       </form>
     );
   }
+
+  private makeNomination = () => {
+    const defaultDatabase = firebase.database();
+
+    // Get a key for a new Post.
+    const newPostKey = defaultDatabase
+      .ref()
+      .child("nominations")
+      .push().key;
+
+    const user = getUser();
+    const userid = user.profile.oid;
+    // const nomineeid = ;
+
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    const updates = {};
+
+    updates["/nominations/" + newPostKey] = this.state;
+    updates["/nominators/" + userid + "/" + newPostKey] = {
+      nomination_id: newPostKey,
+      nominee: this.state.nominee
+    };
+    // updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: user.profile.name};
+
+    return defaultDatabase.ref().update(updates);
+  };
 }
 
 export default NominationForm;
