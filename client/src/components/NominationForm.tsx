@@ -1,6 +1,9 @@
 import * as React from "react";
 import * as firebase from "firebase";
+import Select from 'react-select';
 import { getUser } from "../auth";
+import { getAllUserDetails } from "../MicrosoftGraphClient";
+
 class NominationForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -11,7 +14,8 @@ class NominationForm extends React.Component<any, any> {
     justification: "",
     nominator: "u",
     nominee: "",
-    score: 1
+    score: 1,
+    nominees: new Array<any>(),
   };
 
   public categoryChange = (event: any) => {
@@ -20,16 +24,31 @@ class NominationForm extends React.Component<any, any> {
     this.setState({ nominee: "" });
   };
 
-  public nomineeChange = (event: any) => {
-    this.setState({ nominee: event.target.value });
+  public nomineeChange = (nominee: any) => {
+    console.log(nominee);
+    this.setState({ nominee });
   };
 
   public justificationChange = (event: any) => {
     this.setState({ justification: event.target.value });
   };
 
+  public componentDidMount() {
+    getAllUserDetails((err, usersDetails) => {
+      if (err) {
+        // TODO
+      } else {
+        const nominees = usersDetails.map((suggestion: any) => ({
+          value: suggestion.id,
+          label: suggestion.name,
+        }));
+        this.setState({ nominees });
+      }
+    })
+  }
+
   public render() {
-    const { category } = this.state;
+    const { category, nominees } = this.state;
 
     return (
       <form className="feelix-card">
@@ -53,12 +72,12 @@ class NominationForm extends React.Component<any, any> {
         </div>
         <div className="form-group">
           <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-          <input
-            className="form-control"
-            id="nomineeeSelect"
-            disabled={category === ""}
+          <Select
+            isDisabled={category === ""}
+            isSearchable={true}   
+            onChange={this.nomineeChange}       
+            options={nominees}
             value={this.state.nominee}
-            onChange={this.nomineeChange}
           />
         </div>
         <div className="form-group">
