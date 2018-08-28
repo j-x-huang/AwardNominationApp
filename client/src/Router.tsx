@@ -14,6 +14,7 @@ class Router extends React.Component {
           <Route path="/awards" component={Awards} />
           <Route path="/nominate" component={NominationForm} />
           <Route path="/nominationscomplete" component={NominationComplete} />
+          <Route path="/mynominations" component={NominationComplete} />
         </Switch>
       </div>
     );

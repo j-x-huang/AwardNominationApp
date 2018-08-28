@@ -41,6 +41,9 @@ class App extends React.Component<any, any> {
     if (pathname.indexOf("/nominate") !== -1) {
       this.setState({ selection: 2 });
     }
+    if (pathname.indexOf("/mynominations") !== -1) {
+      this.setState({ selection: 3 });
+    }
   };
 }
 

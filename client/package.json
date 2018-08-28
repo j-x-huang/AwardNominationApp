@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@githubprimer/octicons-react": "^8.0.0",
     "@material-ui/core": "latest",
     "@microsoft/microsoft-graph-client": "^1.2.0",
     "@types/react-adal": "^0.4.1",

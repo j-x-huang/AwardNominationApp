@@ -1,17 +1,17 @@
 import * as React from "react";
 import logo1 from "../images/logo1.png";
 import { getUser, logOutUser } from "../auth";
-import {getMyImage} from "../MicrosoftGraphClient"
+import { getMyImage } from "../MicrosoftGraphClient";
 
 export interface INavBarProps {
   selection: number;
 }
 
 class NavBar extends React.Component<INavBarProps, any> {
-
   public state = {
-    profilePic : 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg'
-  }
+    profilePic:
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+  };
 
   public componentDidMount() {
     getMyImage((picUrl, err) => {
@@ -19,11 +19,11 @@ class NavBar extends React.Component<INavBarProps, any> {
         // nothing
       } else {
         this.setState({
-          profilePic : picUrl
-        })
+          profilePic: picUrl
+        });
       }
-      return
-    })
+      return;
+    });
   }
 
   public render() {
@@ -68,7 +68,7 @@ class NavBar extends React.Component<INavBarProps, any> {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/">
+              <a className="nav-link" href="/mynominations">
                 <span className={this.getLinkClass(3)}>MY NOMINATIONS</span>
               </a>
             </li>

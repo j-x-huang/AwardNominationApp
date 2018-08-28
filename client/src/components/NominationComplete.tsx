@@ -1,4 +1,5 @@
 import * as React from "react";
+import Octicon, { Flame } from "@githubprimer/octicons-react";
 
 export interface INominationCompleteProps {
   category: string;
@@ -14,16 +15,19 @@ class NominationComplete extends React.Component<
 
     return (
       <div id="nominationComplete">
-        <img
-          src="https://pa1.narvii.com/6175/9fcc08177a8c7886db798902b258152e0a219f1f_hq.gif"
-          alt="Thank You"
-          id="nominationCompleteImage"
-        />
-        <div>Nomination Complete</div>
-        <div>
-          You have nominated <span>{nominee}</span> for <span>{category}</span>.
-        </div>
-        <div>
+        <h2 className="complete-card-top">
+          <Octicon size="medium" icon={Flame} />
+          <Octicon size="medium" icon={Flame} />
+          <Octicon size="medium" icon={Flame} />
+          <Octicon size="medium" icon={Flame} />
+          <Octicon size="medium" icon={Flame} />
+        </h2>
+        <div className="complete-card-bottom">
+          <h3> Thanks for the ignition </h3>
+          <p>
+            Your nomination of <span>{nominee}</span> for{" "}
+            <span>{category}</span> has been successfully recorded.
+          </p>
           <a href="https://pa1.narvii.com/6175/9fcc08177a8c7886db798902b258152e0a219f1f_hq.gif">
             Click here to view your nomination.
           </a>

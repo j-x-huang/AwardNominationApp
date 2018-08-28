@@ -50,12 +50,9 @@ a:link {
 }
 
 a:hover,
-a:active {
-  color: #8241aa;
-}
-
+a:active,
 a:visited {
-  color: #a476c1;
+  color: #8241aa;
 }
 
 .btn-primary,
@@ -198,29 +195,6 @@ a:visited {
   margin-bottom: 1em;
 }
 
-#nominationComplete {
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-}
-
-#nominationCompleteImage {
-  width: 25%;
-}
-
-#nominationComplete div {
-  margin: 0.5em;
-}
-
-#nominationComplete div:first-of-type {
-  font-size: 1.3em;
-  font-family: NeutroMYOB-Med;
-}
-
-#nominationComplete div:nth-of-type(2) span {
-  font-family: NeutroMYOB-Med;
-}
-
 .App {
   text-align: center;
   font-weight: 400;
@@ -336,4 +310,47 @@ a:visited {
   margin-top: 1em;
   margin-bottom: 1em;
   overflow: hidden;
+}
+
+#nominationComplete {
+  display: inline-block;
+  text-align: center;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  border-radius: 0.4rem;
+  margin-left: 25%;
+  width: 50%;
+  margin-right: 25%;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  overflow: hidden;
+}
+
+.complete-card-top {
+  background-color: #8241aa;
+  color: white;
+  font-family: "Unica One";
+  padding: 1.2em;
+}
+
+.complete-card-bottom {
+  font-family: "Unica One";
+  padding: 1em;
+  padding-bottom: 2.6em;
+}
+
+#nominationComplete p {
+  padding-left: 15%;
+  padding-right: 15%;
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+
+#nominationComplete p span {
+  font-family: NeutroMYOB-Med;
+}
+
+.octicon {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
