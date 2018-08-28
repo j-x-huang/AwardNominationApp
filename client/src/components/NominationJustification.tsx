@@ -9,7 +9,7 @@ export interface INominationJustificationProps {
 class NominationJustification extends React.Component<
   INominationJustificationProps,
   any
-> {
+  > {
   public render() {
     const { category, nominee, justification } = this.props;
 

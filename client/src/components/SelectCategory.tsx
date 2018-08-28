@@ -3,9 +3,9 @@ import "./../App.css";
 
 class SelectCategory extends React.PureComponent<any, any> {
 
-  constructor(props : any) {
+  constructor(props: any) {
     super(props);
-    this.state = {option : ""};
+    this.state = { option: "" };
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -23,16 +23,16 @@ class SelectCategory extends React.PureComponent<any, any> {
         Please select a category for the award nomination.
         {categories.map((c) => (
           <div>
-            <button onClick={this.handleClick} value = {c}
-             className="category-button">{c}</button>
+            <button onClick={this.handleClick} value={c}
+              className="category-button">{c}</button>
           </div>
         ))}
       </div>
     );
   }
 
-  private handleClick = (e : any) => {
-    this.setState({ 
+  private handleClick = (e: any) => {
+    this.setState({
       option: e.target.value
     });
     alert(e.target.value);

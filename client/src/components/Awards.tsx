@@ -25,7 +25,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 class Awards extends React.Component<IAwardsProps> {
   public state = {
@@ -249,7 +249,7 @@ class Awards extends React.Component<IAwardsProps> {
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref('nominations/');
     nomRef.once("value", (snapshot) => {
-    if(snapshot != null) {
+      if (snapshot != null) {
         console.log(snapshot.toJSON());
       }
     });

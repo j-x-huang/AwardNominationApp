@@ -7,7 +7,7 @@ export interface INominationContainerProps {
 class NominationContainer extends React.Component<
   INominationContainerProps,
   any
-> {
+  > {
   /* public state = {
     nominationKey: String,
   }; */
