@@ -144,10 +144,14 @@ class NominationForm extends React.Component<any, any> {
       nomination_id: newPostKey,
       nominee: this.state.nominee.value
     };
+<<<<<<< HEAD
     updates["/nominees/" + nomineeid + "/" + newPostKey] = {
       nomination_id: newPostKey,
       nominator: user.profile.name
     };
+=======
+    updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: userid};
+>>>>>>> 5337696159bc880a9cc13d5759f75f2815033f2f
 
     return defaultDatabase.ref().update(updates);
   };

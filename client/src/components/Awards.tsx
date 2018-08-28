@@ -7,6 +7,7 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
+import * as firebase from "firebase";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -241,7 +242,18 @@ class Awards extends React.Component<IAwardsProps> {
 
   private handleSelect = (id: number, name: string) => {
     alert("ID: " + id + " Name: " + name);
+    this.getNominations();
   };
+
+  public getNominations = () => {
+    const defaultDatabase = firebase.database();
+    const nomRef = defaultDatabase.ref('nominations/');
+    nomRef.once("value", (snapshot) => {
+    if(snapshot != null) {
+        console.log(snapshot.toJSON());
+      }
+    });
+  }
 
   public render() {
     const { classes } = this.props;
