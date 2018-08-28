@@ -13,7 +13,7 @@ class NominationForm extends React.Component<any, any> {
     category: "",
     justification: "",
     nominator: "u",
-    nominee: "",
+    nominee: {value: "", label: ""},
     score: 1,
     nominees: new Array<any>(),
   };
@@ -109,17 +109,21 @@ class NominationForm extends React.Component<any, any> {
 
     const user = getUser();
     const userid = user.profile.oid;
-    // const nomineeid = ;
+    const nomineeid = this.state.nominee.value;
 
     // Write the new post's data simultaneously in the posts list and the user's post list.
     const updates = {};
 
-    updates["/nominations/" + newPostKey] = this.state;
+    updates["/nominations/" + newPostKey] = {category: this.state.category,
+                                              justification: this.state.justification,
+                                              nominator: userid,
+                                              nominee: nomineeid,
+                                              score: 1};
     updates["/nominators/" + userid + "/" + newPostKey] = {
       nomination_id: newPostKey,
-      nominee: this.state.nominee
+      nominee: this.state.nominee.value
     };
-    // updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: user.profile.name};
+    updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: user.profile.name};
 
     return defaultDatabase.ref().update(updates);
   };
