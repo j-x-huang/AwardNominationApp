@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as firebase from "firebase";
-import Select from 'react-select';
+import Select from "react-select";
 import { getUser } from "../auth";
 import { getAllUserDetails } from "../MicrosoftGraphClient";
+import NominationComplete from "./NominationComplete";
 
 class NominationForm extends React.Component<any, any> {
   constructor(props: any) {
@@ -13,9 +14,10 @@ class NominationForm extends React.Component<any, any> {
     category: "",
     justification: "",
     nominator: "u",
-    nominee: {value: "", label: ""},
+    nominee: { value: "", label: "" },
     score: 1,
     nominees: new Array<any>(),
+    completed: false
   };
 
   public categoryChange = (event: any) => {
@@ -40,63 +42,80 @@ class NominationForm extends React.Component<any, any> {
       } else {
         const nominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
-          label: suggestion.name,
+          label: suggestion.name
         }));
         this.setState({ nominees });
       }
-    })
+    });
   }
 
   public render() {
-    const { category, nominees } = this.state;
+    const { category, nominee, nominees, completed } = this.state;
 
     return (
-      <form className="feelix-card">
-        <h5> Nominate a deserving candidate </h5>
-        <hr />
-        <div className="form-group">
-          <label htmlFor="categorySelect">Select an award category</label>
-          <select
-            className="form-control"
-            id="categorySelect"
-            value={this.state.category}
-            onChange={this.categoryChange}
-          >
-            <option />
-            <option>Being Purple</option>
-            <option>One Small Step</option>
-            <option>New Horizon</option>
-            <option>Sky High</option>
-            <option>Star Crew</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-          <Select
-            isDisabled={category === ""}
-            isSearchable={true}   
-            onChange={this.nomineeChange}       
-            options={nominees}
-            value={this.state.nominee}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="justificationSelect">Justify your decision</label>
-          <textarea
-            className="form-control"
-            style={{ resize: "none" }}
-            id="justificationSelect"
-            rows={5}
-            value={this.state.justification}
-            onChange={this.justificationChange}
-          />
-        </div>
-        <button type="button" className="btn btn-primary float-right" onClick={this.makeNomination}>
-          Nominate
-        </button>
-      </form>
+      <div>
+        {completed ? (
+          <NominationComplete category={category} nominee={nominee.label} />
+        ) : (
+          <form className="feelix-card">
+            <h5> Nominate a deserving candidate </h5>
+            <hr />
+            <div className="form-group">
+              <label htmlFor="categorySelect">Select an award category</label>
+              <select
+                className="form-control"
+                id="categorySelect"
+                value={this.state.category}
+                onChange={this.categoryChange}
+              >
+                <option />
+                <option>Being Purple</option>
+                <option>One Small Step</option>
+                <option>New Horizon</option>
+                <option>Sky High</option>
+                <option>Star Crew</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+              <Select
+                isDisabled={category === ""}
+                isSearchable={true}
+                onChange={this.nomineeChange}
+                options={nominees}
+                value={this.state.nominee}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="justificationSelect">Justify your decision</label>
+              <textarea
+                className="form-control"
+                style={{ resize: "none" }}
+                id="justificationSelect"
+                rows={5}
+                value={this.state.justification}
+                onChange={this.justificationChange}
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-primary float-right"
+              onClick={this.handleClick}
+            >
+              Nominate
+            </button>
+          </form>
+        )}
+      </div>
     );
   }
+
+  private handleClick = () => {
+    this.makeNomination();
+    this.setState({
+      completed: true
+    });
+  };
 
   private makeNomination = () => {
     const defaultDatabase = firebase.database();
@@ -114,16 +133,21 @@ class NominationForm extends React.Component<any, any> {
     // Write the new post's data simultaneously in the posts list and the user's post list.
     const updates = {};
 
-    updates["/nominations/" + newPostKey] = {category: this.state.category,
-                                              justification: this.state.justification,
-                                              nominator: userid,
-                                              nominee: nomineeid,
-                                              score: 1};
+    updates["/nominations/" + newPostKey] = {
+      category: this.state.category,
+      justification: this.state.justification,
+      nominator: userid,
+      nominee: nomineeid,
+      score: 1
+    };
     updates["/nominators/" + userid + "/" + newPostKey] = {
       nomination_id: newPostKey,
       nominee: this.state.nominee.value
     };
-    updates['/nominees/' + nomineeid + "/" + newPostKey] = {nomination_id: newPostKey, nominator: user.profile.name};
+    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
+      nomination_id: newPostKey,
+      nominator: user.profile.name
+    };
 
     return defaultDatabase.ref().update(updates);
   };
