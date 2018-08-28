@@ -12,6 +12,10 @@ const adalConfig = {
 
 export const authContext = new AuthenticationContext(adalConfig);
 
+export const acquireToken = (callback: (error: any, res: any) => void) => {
+  authContext.acquireToken("https://graph.microsoft.com", callback);
+}
+
 export const getToken = () => {
   return authContext.getCachedToken(authContext.config.clientId);
 }
