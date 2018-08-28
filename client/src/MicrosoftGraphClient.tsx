@@ -34,7 +34,6 @@ export const getAllUserDetails = (callback: (err: any, usersDetails: any) => voi
           
           const users:[MicrosoftGraphTypes.User] = res.value;
           const usersDetails = new Array<any>();
-          let usersCount = users.length;
 
           // Creates a condensed model of the users as well as retrieving the url for their profile picture
           // tslint:disable-next-line:forin
@@ -46,6 +45,8 @@ export const getAllUserDetails = (callback: (err: any, usersDetails: any) => voi
               profilePic: '',
             };
 
+            usersDetails.push(condensedUserDetails);
+
             // Retrieves the specific user's profile picture
             /* NOTE: This causes the fetch to be very slow as an individual api call is needed
                 for every user to fetch their photo.
@@ -53,27 +54,28 @@ export const getAllUserDetails = (callback: (err: any, usersDetails: any) => voi
                 responsible to rendering the details to fetch the image themselves. 
                 Another option is to preload the images in Firebase and fetch it from there
             */
-            client
-              .api(`/users/${user.id}/photos/48x48/$value`)
-              .version('beta')
-              .responseType(MicrosoftGraph.ResponseType.BLOB)
-              .get()
-              .then((picBlob) => {
-                  const url = window.URL;
-                  const imageUrl = url.createObjectURL(picBlob);
+            // client
+            //   .api(`/users/${user.id}/photos/48x48/$value`)
+            //   .version('beta')
+            //   .responseType(MicrosoftGraph.ResponseType.BLOB)
+            //   .get()
+            //   .then((picBlob) => {
+            //       const url = window.URL;
+            //       const imageUrl = url.createObjectURL(picBlob);
 
-                  condensedUserDetails.profilePic = imageUrl;
-              }).catch()
-                .finally(() => {
-                  usersDetails.push(condensedUserDetails);
+            //       condensedUserDetails.profilePic = imageUrl;
+            //   }).catch()
+            //     .finally(() => {
+            //       usersDetails.push(condensedUserDetails);
 
-                  // ensures that we don't return until all images have been retrieved
-                  usersCount--;
-                  if (usersCount === 0) {
-                    callback(null, usersDetails);
-                  }
-              });
+            //       // ensures that we don't return until all images have been retrieved
+            //       usersCount--;
+            //       if (usersCount === 0) {
+            //         callback(null, usersDetails);
+            //       }
+            //   });
           }
+          callback(null, usersDetails);
       });
   })
 }
