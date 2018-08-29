@@ -2,8 +2,14 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var config = require('./config');
+var auth = require('./auth');
 var cors = require("cors");
-var jwt = require('azure-ad-jwt');  // keys being downloaded every request TODO: cache the certificates!
+var firebase = require('firebase');
+require('firebase/auth');
+require('firebase/database');
+
+// DATABASE
+firebase.initializeApp(config); 
 
 // SERVER CONFIGURATION
 app.use(cors({ origin: true }))
@@ -16,30 +22,8 @@ var router = express.Router();
 // all routes prefixed /api
 app.use('/api', router);
 
-// Verify Token
-router.use(function (req, res, next) {
-    var jwtToken = req.body.token || req.query.token || req.headers['access_token'];
-    if(jwtToken){
-        jwt.verify(jwtToken, null, function(err,result){
-            if(result){
-                req.auth = result;
-                next();
-            } else {
-                console.log('Failed to authenticate token.');
-                return res.status(401).send({ 
-                    success: false, 
-                    message: 'Failed to authenticate token.' 
-                });    
-            }
-        });
-    } else {
-        console.log('No token was provided.');
-        return res.status(403).send({ 
-            success: false, 
-            message: 'No token was provided.' 
-        });
-    }
-});
+// Verify Token every request
+router.use(auth.isAuthenticated);
 
 // ROUTES FOR OUR API
 // ============================================================================================
