@@ -8,6 +8,7 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
+import { getUserDetails} from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -229,7 +230,7 @@ class Awards extends React.Component<IAwardsProps> {
               "failed. I failed. I failed. I failed."
           }
         ]
-      }
+}
     ]
   };
 
@@ -250,10 +251,44 @@ class Awards extends React.Component<IAwardsProps> {
     const nomRef = defaultDatabase.ref();
     nomRef.child('nominations').orderByChild('category').equalTo(str).once("value", (snapshot) => {
       if (snapshot != null) {
-        console.log(snapshot.toJSON());
+        console.log(this.snapshotToArray(snapshot));
       }
     });
   }
+
+  public snapshotToArray(snapshot: firebase.database.DataSnapshot) {
+    const returnArr: object[] = [];
+
+    snapshot.forEach( (childSnapshot) =>  {
+
+        const item = childSnapshot.val();
+        let userName: string;
+        let imgUrl: string;
+        let ret = {
+          img: "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
+          id: childSnapshot.key,
+          description: item.justification,
+          title: 'gg'
+        };
+        getUserDetails(item.nominee, (err, userDetails) => {
+          if (err) {
+            // TODO
+          } else {
+            userName = userDetails.name;
+            imgUrl = userDetails.profilePic;
+            ret = {
+              img: imgUrl,
+              id: childSnapshot.key,
+              description: item.justification,
+              title: userName
+            }
+          }
+        });
+        returnArr.push(ret);
+    });
+
+    return returnArr;
+};
 
   public getAllNominations = () => {
     const defaultDatabase = firebase.database();
