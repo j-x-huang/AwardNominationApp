@@ -2,9 +2,11 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var config = require('./config');
+var cors = require("cors");
 var jwt = require('azure-ad-jwt');  // keys being downloaded every request TODO: cache the certificates!
 
 // SERVER CONFIGURATION
+app.use(cors({ origin: true }))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -23,6 +25,7 @@ router.use(function (req, res, next) {
                 req.auth = result;
                 next();
             } else {
+                console.log('Failed to authenticate token.');
                 return res.status(401).send({ 
                     success: false, 
                     message: 'Failed to authenticate token.' 
@@ -30,6 +33,7 @@ router.use(function (req, res, next) {
             }
         });
     } else {
+        console.log('No token was provided.');
         return res.status(403).send({ 
             success: false, 
             message: 'No token was provided.' 
