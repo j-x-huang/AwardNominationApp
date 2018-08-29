@@ -6,6 +6,20 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 
 class NominationForm extends React.Component<any, any> {
+  public allNominees = [{ value: "", label: "" }];
+  public categories = [
+    "Being Purple",
+    "One Small Step",
+    "New Horizon",
+    "Sky High",
+    "Star Crew"
+  ];
+  public beingPurple = ["ff996d65-c30e-4218-bd35-8a8139fd6d7a"];
+  public oneSmallStep = ["bf90fb40-4b33-4737-ab59-f1cd90c74279"];
+  public newHorizon = ["bc6db365-fbc4-44e2-a653-93ea660bc052"];
+  public skyHigh = ["b5d27201-185a-4533-815b-d40268f9d5f7"];
+  public starCrew = ["f346ec3d-72e5-4cf0-9f58-e86df7b7e299"];
+
   constructor(props: any) {
     super(props);
   }
@@ -20,10 +34,44 @@ class NominationForm extends React.Component<any, any> {
     completed: false
   };
 
+  public updateNomineeList = (category: string) => {
+    let neoNominees = [{ value: "", label: "" }];
+    const selection = this.categories.indexOf(category);
+    console.log(selection);
+    if (selection === 0) {
+      neoNominees = this.allNominees.filter(
+        staff => this.beingPurple.indexOf(staff.value) === -1
+      );
+      console.log(neoNominees);
+    } else if (selection === 1) {
+      neoNominees = this.allNominees.filter(
+        staff => this.oneSmallStep.indexOf(staff.value) === -1
+      );
+      console.log(neoNominees);
+    } else if (selection === 2) {
+      neoNominees = this.allNominees.filter(
+        staff => this.newHorizon.indexOf(staff.value) === -1
+      );
+      console.log(neoNominees);
+    } else if (selection === 3) {
+      neoNominees = this.allNominees.filter(
+        staff => this.skyHigh.indexOf(staff.value) === -1
+      );
+      console.log(neoNominees);
+    } else if (selection === 4) {
+      neoNominees = this.allNominees.filter(
+        staff => this.starCrew.indexOf(staff.value) === -1
+      );
+      console.log(neoNominees);
+    }
+    this.setState({ nominees: neoNominees });
+  };
+
   public categoryChange = (event: any) => {
     const cat = event.target.value;
     this.setState({ category: cat });
     this.setState({ nominee: "" });
+    this.updateNomineeList(cat);
   };
 
   public nomineeChange = (nominee: any) => {
@@ -40,11 +88,12 @@ class NominationForm extends React.Component<any, any> {
       if (err) {
         // TODO
       } else {
-        const nominees = usersDetails.map((suggestion: any) => ({
+        this.allNominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
           label: suggestion.name
         }));
-        this.setState({ nominees });
+        console.log([...this.allNominees]);
+        this.setState({ nominees: [...this.allNominees] });
       }
     });
   }
@@ -57,55 +106,55 @@ class NominationForm extends React.Component<any, any> {
         {completed ? (
           <NominationComplete category={category} nominee={nominee.label} />
         ) : (
-            <form className="feelix-card">
-              <h5> Nominate a deserving candidate </h5>
-              <hr />
-              <div className="form-group">
-                <label htmlFor="categorySelect">Select an award category</label>
-                <select
-                  className="form-control"
-                  id="categorySelect"
-                  value={this.state.category}
-                  onChange={this.categoryChange}
-                >
-                  <option />
-                  <option>Being Purple</option>
-                  <option>One Small Step</option>
-                  <option>New Horizon</option>
-                  <option>Sky High</option>
-                  <option>Star Crew</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-                <Select
-                  isDisabled={category === ""}
-                  isSearchable={true}
-                  onChange={this.nomineeChange}
-                  options={nominees}
-                  value={this.state.nominee}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="justificationSelect">Justify your decision</label>
-                <textarea
-                  className="form-control"
-                  style={{ resize: "none" }}
-                  id="justificationSelect"
-                  rows={5}
-                  value={this.state.justification}
-                  onChange={this.justificationChange}
-                />
-              </div>
-              <button
-                type="button"
-                className="btn btn-primary float-right"
-                onClick={this.handleClick}
+          <form className="feelix-card">
+            <h5> Nominate a deserving candidate </h5>
+            <hr />
+            <div className="form-group">
+              <label htmlFor="categorySelect">Select an award category</label>
+              <select
+                className="form-control"
+                id="categorySelect"
+                value={this.state.category}
+                onChange={this.categoryChange}
               >
-                Nominate
+                <option />
+                <option>{this.categories[0]}</option>
+                <option>{this.categories[1]}</option>
+                <option>{this.categories[2]}</option>
+                <option>{this.categories[3]}</option>
+                <option>{this.categories[4]}</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+              <Select
+                isDisabled={category === ""}
+                isSearchable={true}
+                onChange={this.nomineeChange}
+                options={nominees}
+                value={this.state.nominee}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="justificationSelect">Justify your decision</label>
+              <textarea
+                className="form-control"
+                style={{ resize: "none" }}
+                id="justificationSelect"
+                rows={5}
+                value={this.state.justification}
+                onChange={this.justificationChange}
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-primary float-right"
+              onClick={this.handleClick}
+            >
+              Nominate
             </button>
-            </form>
-          )}
+          </form>
+        )}
       </div>
     );
   }
