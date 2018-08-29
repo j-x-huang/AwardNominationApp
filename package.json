@@ -7,7 +7,7 @@
     "install-client": "cd client && npm install",
     "install-server": "cd express-backend && npm install",
     "client": "cd client && npm run start",
-    "server": "cd express-backend && node app.js"
+    "server": "cd express-backend && node server.js"
   },
   "repository": {
     "type": "git",
