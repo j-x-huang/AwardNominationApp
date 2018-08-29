@@ -242,10 +242,20 @@ class Awards extends React.Component<IAwardsProps> {
 
   private handleSelect = (id: number, name: string) => {
     alert("ID: " + id + " Name: " + name);
-    this.getNominations();
+    this.getCategoryNomination('Star Crew');
   };
 
-  public getNominations = () => {
+  public getCategoryNomination(str: string) {
+    const defaultDatabase = firebase.database();
+    const nomRef = defaultDatabase.ref();
+    nomRef.child('nominations').orderByChild('category').equalTo(str).once("value", (snapshot) => {
+      if (snapshot != null) {
+        console.log(snapshot.toJSON());
+      }
+    });
+  }
+
+  public getAllNominations = () => {
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref('nominations/');
     nomRef.once("value", (snapshot) => {
@@ -253,7 +263,7 @@ class Awards extends React.Component<IAwardsProps> {
         console.log(snapshot.toJSON());
       }
     });
-  }
+}
 
   public render() {
     const { classes } = this.props;
