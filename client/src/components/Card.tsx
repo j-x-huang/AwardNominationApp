@@ -28,7 +28,7 @@ const styles = (theme: Theme) =>
     cover: {
       borderBottom: "3px solid #A476C1 ",
       height: 250,
-      width: "45%"
+      width: 158
     },
     description: {
       color: "#687480 ",
@@ -38,7 +38,7 @@ const styles = (theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       height: 250,
-      width: "55%"
+      width: 192
     },
     divider: {
       backgroundColor: "#A476C1 ",
