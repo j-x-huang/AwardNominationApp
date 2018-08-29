@@ -14,11 +14,11 @@ class NominationForm extends React.Component<any, any> {
     "Sky High",
     "Star Crew"
   ];
-  public beingPurple = ["ff996d65-c30e-4218-bd35-8a8139fd6d7a"];
-  public oneSmallStep = ["bf90fb40-4b33-4737-ab59-f1cd90c74279"];
-  public newHorizon = ["bc6db365-fbc4-44e2-a653-93ea660bc052"];
-  public skyHigh = ["b5d27201-185a-4533-815b-d40268f9d5f7"];
-  public starCrew = ["f346ec3d-72e5-4cf0-9f58-e86df7b7e299"];
+  public beingPurple = [] as any [];
+  public oneSmallStep = [] as any [];
+  public newHorizon = [] as any [];
+  public skyHigh = [] as any [];
+  public starCrew = [] as any [];
 
   constructor(props: any) {
     super(props);
@@ -96,11 +96,11 @@ class NominationForm extends React.Component<any, any> {
         this.setState({ nominees: [...this.allNominees] });
       }
     });
+    this.getNominationByCategory();
   }
 
   public render() {
     const { category, nominee, nominees, completed } = this.state;
-
     return (
       <div>
         {completed ? (
@@ -160,7 +160,6 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private handleClick = () => {
-    this.getNominationByCategory();
     this.makeNomination();
     this.setState({
       completed: true
@@ -176,6 +175,29 @@ class NominationForm extends React.Component<any, any> {
       if (snapshot != null) {
         snapshot.forEach( (childSnapshot) =>  {
           if (childSnapshot != null) {
+            switch(childSnapshot.key){
+              case "Being Purple": Object.keys(childSnapshot.val()).forEach((key) => {
+                                      this.beingPurple.push(key);
+                                    });
+                                    break;
+              case "One Small Step":Object.keys(childSnapshot.val()).forEach((key) => {
+                                      this.oneSmallStep.push(key);
+                                    });
+                                    break;
+              case "New Horizon": Object.keys(childSnapshot.val()).forEach((key) => {
+                                      this.newHorizon.push(key);
+                                    });
+                                    break;
+              case "Sky High": Object.keys(childSnapshot.val()).forEach((key) => {
+                                      this.skyHigh.push(key);
+                                    });
+                                    break;
+              case "Star Crew": Object.keys(childSnapshot.val()).forEach((key) => {
+                                      this.starCrew.push(key);
+                                    });
+                                    break;                                                                                   
+            }
+
             const cat = {
               category: childSnapshot.key,
               nominees: childSnapshot.val()
