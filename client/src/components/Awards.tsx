@@ -8,7 +8,7 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
-import { getUserDetails} from "../MicrosoftGraphClient";
+import { getUserDetails } from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -26,212 +26,17 @@ const styles = (theme: Theme) =>
     }
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> { }
+export interface IAwardsProps extends WithStyles<typeof styles> {}
 
-class Awards extends React.Component<IAwardsProps> {
+export interface IAwardsStates {
+  value: number;
+  awards: any[];
+}
+
+class Awards extends React.Component<IAwardsProps, IAwardsStates> {
   public state = {
     value: 0,
-    awards: [
-      {
-        award: "All",
-        nominations: [
-          {
-            id: 1,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          },
-          {
-            id: 2,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          },
-          {
-            id: 3,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          },
-          {
-            id: 4,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          },
-          {
-            id: 5,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          },
-          {
-            id: 6,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          }
-        ]
-      },
-      {
-        award: "Being Purple",
-        nominations: [
-          {
-            id: 1,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          },
-          {
-            id: 2,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          },
-          {
-            id: 3,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          }
-        ]
-      },
-      {
-        award: "One Small Step",
-        nominations: [
-          {
-            id: 1,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          },
-          {
-            id: 2,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          },
-          {
-            id: 3,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          },
-          {
-            id: 4,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          }
-        ]
-      },
-      {
-        award: "New Horizon",
-        nominations: [
-          {
-            id: 1,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          }
-        ]
-      },
-      {
-        award: "Sky High",
-        nominations: [
-          {
-            id: 1,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          },
-          {
-            id: 2,
-            img:
-              "https://i.pinimg.com/originals/33/f2/b2/33f2b291e7f0d3c1342823a692f9c2b3.jpg",
-            title: "Anri Sonohara",
-            description:
-              "I love you. I love you.  I love you.  I love you.  I love you. " +
-              "I love you.  I love you.  I love you.  I love you.  I love you. "
-          }
-        ]
-      },
-      {
-        award: "Star Crew",
-        nominations: [
-          {
-            id: 1,
-            img:
-              "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-            title: "Suzuha Amane",
-            description:
-              "I failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed. I failed. I failed. I" +
-              "failed. I failed. I failed. I failed."
-          }
-        ]
-}
-    ]
+    awards: [] as any[]
   };
 
   private handleChange = (
@@ -243,62 +48,123 @@ class Awards extends React.Component<IAwardsProps> {
 
   private handleSelect = (id: number, name: string) => {
     alert("ID: " + id + " Name: " + name);
-    this.getCategoryNomination('Star Crew');
+  };
+
+  public componentDidMount() {
+    const awardCategories = [
+      "All",
+      "Being Purple",
+      "One Small Step",
+      "New Horizon",
+      "Sky High",
+      "Star Crew"
+    ];
+
+    this.createAwardCategories(awardCategories);
+
+    awardCategories.forEach(c => {
+      this.getCategoryNomination(c);
+    });
+  }
+
+  public createAwardCategories = (categories: string[]) => {
+    const newAwards = [...this.state.awards];
+
+    let category;
+
+    categories.forEach(c => {
+      category = { award: c, nominations: [] as any[] };
+      newAwards.push(category);
+    });
+
+    this.setState({ awards: newAwards });
   };
 
   public getCategoryNomination(str: string) {
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
-    nomRef.child('nominations').orderByChild('category').equalTo(str).once("value", (snapshot) => {
-      if (snapshot != null) {
-        console.log(this.snapshotToArray(snapshot));
-      }
-    });
-  }
 
-  public snapshotToArray(snapshot: firebase.database.DataSnapshot) {
-    const returnArr: object[] = [];
-
-    snapshot.forEach( (childSnapshot) =>  {
-
-        const item = childSnapshot.val();
-        let userName: string;
-        let imgUrl: string;
-        let ret = {
-          img: "https://myanimelist.cdn-dena.com/images/characters/3/148223.jpg",
-          id: childSnapshot.key,
-          description: item.justification,
-          title: 'gg'
-        };
-        getUserDetails(item.nominee, (err, userDetails) => {
-          if (err) {
-            // TODO
-          } else {
-            userName = userDetails.name;
-            imgUrl = userDetails.profilePic;
-            ret = {
-              img: imgUrl,
-              id: childSnapshot.key,
-              description: item.justification,
-              title: userName
-            }
+    if (str === "All") {
+      nomRef
+        .child("nominations")
+        .orderByChild("category")
+        .once("value", snapshot => {
+          if (snapshot != null) {
+            console.log(this.snapshotToArray(snapshot, str));
           }
         });
-        returnArr.push(ret);
-    });
+    } else {
+      nomRef
+        .child("nominations")
+        .orderByChild("category")
+        .equalTo(str)
+        .once("value", snapshot => {
+          if (snapshot != null) {
+            console.log(this.snapshotToArray(snapshot, str));
+          }
+        });
+    }
+  }
 
+  public snapshotToArray = (
+    snapshot: firebase.database.DataSnapshot,
+    category: string
+  ) => {
+    const returnArr: object[] = [];
+
+    snapshot.forEach(childSnapshot => {
+      const item = childSnapshot.val();
+      let userName: string;
+      let imgUrl: string;
+      let ret;
+      getUserDetails(item.nominee, (err, userDetails) => {
+        if (err) {
+          // TODO
+        } else {
+          userName = userDetails.name;
+          imgUrl = userDetails.profilePic;
+          ret = {
+            img: imgUrl,
+            id: childSnapshot.key,
+            description: item.justification,
+            title: userName
+          };
+          this.updateNomination(category, ret);
+          returnArr.push(ret);
+        }
+      });
+      console.log("Array: " + returnArr);
+    });
     return returnArr;
-};
+  };
 
   public getAllNominations = () => {
     const defaultDatabase = firebase.database();
-    const nomRef = defaultDatabase.ref('nominations/');
-    nomRef.once("value", (snapshot) => {
+    const nomRef = defaultDatabase.ref("nominations/");
+    nomRef.once("value", snapshot => {
       if (snapshot != null) {
         console.log(snapshot.toJSON());
       }
     });
-}
+  };
+
+  private updateNomination = (category: string, nomination: any) => {
+    const newAwards = [...this.state.awards];
+
+    const index = newAwards.findIndex(c => {
+      return c.award === category;
+    });
+
+    console.log("Index: " + index);
+
+    console.log(newAwards[index].nominations);
+
+    newAwards[index].nominations.push(nomination);
+
+    console.log(newAwards[index].nominations);
+
+    this.setState({ awards: newAwards });
+  };
 
   public render() {
     const { classes } = this.props;
@@ -317,11 +183,6 @@ class Awards extends React.Component<IAwardsProps> {
             {awards.map((award, i) => (
               <Tab key={i} label={award.award} />
             ))}
-            {/* <Tab label="All" />
-            <Tab label="One Small Step" />
-            <Tab label="New Horizon" />
-            <Tab label="Sky High" />
-            <Tab label="Star Crew" /> */}
           </Tabs>
         </AppBar>
         {awards.map(
@@ -334,11 +195,6 @@ class Awards extends React.Component<IAwardsProps> {
               />
             )
         )}
-        {/* {value === 0 && <CardContainer />}
-        {value === 1 && <CardContainer />}
-        {value === 2 && <CardContainer />}
-        {value === 3 && <CardContainer />}
-        {value === 4 && <TabContainer>Hello World</TabContainer>} */}
       </div>
     );
   }

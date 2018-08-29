@@ -27,7 +27,7 @@ class NominationForm extends React.Component<any, any> {
   public state = {
     category: "",
     justification: "",
-    nominator: "u",
+    nominator: "",
     nominee: { value: "", label: "" },
     score: 1,
     nominees: new Array<any>(),
@@ -160,11 +160,34 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private handleClick = () => {
+    this.getNominationByCategory();
     this.makeNomination();
     this.setState({
       completed: true
     });
   };
+
+  public getNominationByCategory() {
+    const returnArr: object[] = [];
+
+    const defaultDatabase = firebase.database();
+    const nomRef = defaultDatabase.ref();
+    nomRef.child("categories").once("value", (snapshot) => {
+      if (snapshot != null) {
+        snapshot.forEach( (childSnapshot) =>  {
+          if (childSnapshot != null) {
+            const cat = {
+              category: childSnapshot.key,
+              nominees: childSnapshot.val()
+              }
+            returnArr.push(cat);
+            }
+          });
+          console.log(returnArr);
+        }
+        return returnArr;
+    });
+  }
 
   private makeNomination = () => {
     const defaultDatabase = firebase.database();
@@ -197,6 +220,13 @@ class NominationForm extends React.Component<any, any> {
       nomination_id: newPostKey,
       nominator: userid
     };
+
+    const nomCat = {
+      [nomineeid] : true
+    }
+    const nomCatPath = defaultDatabase.ref("/categories/" + this.state.category);
+
+    nomCatPath.update(nomCat);
 
     return defaultDatabase.ref().update(updates);
   };
