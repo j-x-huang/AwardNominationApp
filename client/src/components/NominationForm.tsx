@@ -146,6 +146,7 @@ class NominationForm extends React.Component<any, any> {
                 onChange={this.justificationChange}
               />
             </div>
+            <div className="overflowHid">
             <button
               type="button"
               className="btn btn-primary float-right"
@@ -153,6 +154,7 @@ class NominationForm extends React.Component<any, any> {
             >
               Nominate
             </button>
+              </div>
           </form>
         )}
       </div>
