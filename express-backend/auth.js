@@ -9,7 +9,6 @@ module.exports = {
                     req.auth = result;
                     next();
                 } else {
-                    console.log('Failed to authenticate token.');
                     return res.status(401).send({ 
                         success: false, 
                         message: 'Failed to authenticate token.' 
@@ -17,7 +16,6 @@ module.exports = {
                 }
             });
         } else {
-            console.log('No token was provided.');
             return res.status(403).send({ 
                 success: false, 
                 message: 'No token was provided.' 

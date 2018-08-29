@@ -5,11 +5,10 @@ var config = require('./config');
 var auth = require('./auth');
 var cors = require("cors");
 var firebase = require('firebase');
-require('firebase/auth');
 require('firebase/database');
 
 // DATABASE
-firebase.initializeApp(config); 
+firebase.initializeApp(config.firebaseConfig); 
 
 // SERVER CONFIGURATION
 app.use(cors({ origin: true }))
@@ -33,6 +32,19 @@ router.get('/test', function(req, res) {
     console.log("Test route");
     console.log(req.auth);
     res.send({ success: true, message: 'This is a test!' });   
+});
+
+router.get('/nominations', function(req, res) {
+    const defaultDatabase = firebase.database();
+    const nomRef = defaultDatabase.ref("nominations/");
+    nomRef.once('value').then(function(snapshot) {
+        if (snapshot != null) {
+            // console.log(snapshot.toJSON());
+            res.status(200).send(snapshot.toJSON());
+        } else {
+            res.status(401).send({ success: false, message: "failed to retrieve nominations" });
+        }
+    });
 });
 
 // START
