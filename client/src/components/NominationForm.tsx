@@ -14,11 +14,11 @@ class NominationForm extends React.Component<any, any> {
     "Sky High",
     "Star Crew"
   ];
-  public beingPurple = [] as any [];
-  public oneSmallStep = [] as any [];
-  public newHorizon = [] as any [];
-  public skyHigh = [] as any [];
-  public starCrew = [] as any [];
+  public beingPurple = [] as any[];
+  public oneSmallStep = [] as any[];
+  public newHorizon = [] as any[];
+  public skyHigh = [] as any[];
+  public starCrew = [] as any[];
 
   constructor(props: any) {
     super(props);
@@ -70,7 +70,7 @@ class NominationForm extends React.Component<any, any> {
   public categoryChange = (event: any) => {
     const cat = event.target.value;
     this.setState({ category: cat });
-    this.setState({ nominee: "" });
+    this.setState({ nominee: { value: "", label: "" } });
     this.updateNomineeList(cat);
   };
 
@@ -147,19 +147,32 @@ class NominationForm extends React.Component<any, any> {
               />
             </div>
             <div className="overflowHid">
-            <button
-              type="button"
-              className="btn btn-primary float-right"
-              onClick={this.handleClick}
-            >
-              Nominate
-            </button>
-              </div>
+              <button
+                type="button"
+                className="btn btn-primary float-right"
+                disabled={this.checkFieldsFilled() ? false : true}
+                onClick={this.handleClick}
+              >
+                Nominate
+              </button>
+            </div>
           </form>
         )}
       </div>
     );
   }
+
+  private checkFieldsFilled = () => {
+    if (
+      this.state.category === "" ||
+      this.state.nominee.value === "" ||
+      this.state.nominee.label === "" ||
+      this.state.justification.trim() === ""
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   private handleClick = () => {
     this.makeNomination();
@@ -173,43 +186,48 @@ class NominationForm extends React.Component<any, any> {
 
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
-    nomRef.child("categories").once("value", (snapshot) => {
+    nomRef.child("categories").once("value", snapshot => {
       if (snapshot != null) {
-        snapshot.forEach( (childSnapshot) =>  {
+        snapshot.forEach(childSnapshot => {
           if (childSnapshot != null) {
-            switch(childSnapshot.key){
-              case "Being Purple": Object.keys(childSnapshot.val()).forEach((key) => {
-                                      this.beingPurple.push(key);
-                                    });
-                                    break;
-              case "One Small Step":Object.keys(childSnapshot.val()).forEach((key) => {
-                                      this.oneSmallStep.push(key);
-                                    });
-                                    break;
-              case "New Horizon": Object.keys(childSnapshot.val()).forEach((key) => {
-                                      this.newHorizon.push(key);
-                                    });
-                                    break;
-              case "Sky High": Object.keys(childSnapshot.val()).forEach((key) => {
-                                      this.skyHigh.push(key);
-                                    });
-                                    break;
-              case "Star Crew": Object.keys(childSnapshot.val()).forEach((key) => {
-                                      this.starCrew.push(key);
-                                    });
-                                    break;                                                                                   
+            switch (childSnapshot.key) {
+              case "Being Purple":
+                Object.keys(childSnapshot.val()).forEach(key => {
+                  this.beingPurple.push(key);
+                });
+                break;
+              case "One Small Step":
+                Object.keys(childSnapshot.val()).forEach(key => {
+                  this.oneSmallStep.push(key);
+                });
+                break;
+              case "New Horizon":
+                Object.keys(childSnapshot.val()).forEach(key => {
+                  this.newHorizon.push(key);
+                });
+                break;
+              case "Sky High":
+                Object.keys(childSnapshot.val()).forEach(key => {
+                  this.skyHigh.push(key);
+                });
+                break;
+              case "Star Crew":
+                Object.keys(childSnapshot.val()).forEach(key => {
+                  this.starCrew.push(key);
+                });
+                break;
             }
 
             const cat = {
               category: childSnapshot.key,
               nominees: childSnapshot.val()
-              }
+            };
             returnArr.push(cat);
-            }
-          });
-          console.log(returnArr);
-        }
-        return returnArr;
+          }
+        });
+        console.log(returnArr);
+      }
+      return returnArr;
     });
   }
 
@@ -246,9 +264,11 @@ class NominationForm extends React.Component<any, any> {
     };
 
     const nomCat = {
-      [nomineeid] : true
-    }
-    const nomCatPath = defaultDatabase.ref("/categories/" + this.state.category);
+      [nomineeid]: true
+    };
+    const nomCatPath = defaultDatabase.ref(
+      "/categories/" + this.state.category
+    );
 
     nomCatPath.update(nomCat);
 
