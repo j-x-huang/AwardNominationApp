@@ -1,12 +1,209 @@
+@font-face {
+  font-family: "NeutroMYOB-Reg";
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.eot");
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.woff2")
+      format("woff2"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular.woff")
+      format("woff"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Regular-WebOnly.ttf")
+      format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeutroMYOB-Med";
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.eot");
+  src: url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.woff2")
+      format("woff2"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium.woff")
+      format("woff"),
+    url("https://d2d7guzy1ki9ro.cloudfront.net/fonts/neutro/NeutroMYOB-Medium-WebOnly.ttf")
+      format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+* {
+  font-family: NeutroMYOB-Reg;
+}
+
+body {
+  background-color: #f9f9f9;
+}
+
+.links {
+  cursor: pointer;
+}
+
+.myob-coloured-text {
+  color: #8241aa;
+}
+
+a:link {
+  color: #8241aa;
+  text-decoration: underline;
+}
+
+a:hover,
+a:active,
+a:visited {
+  color: #8241aa;
+}
+
+.btn-primary,
+.btn-primary:focus {
+  background-color: #8241aa !important;
+  border-color: #a476c1 !important;
+  box-shadow: none !important;
+}
+
+.btn-primary:hover,
+.btn-primary:active {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #8241aa !important;
+}
+
+.form-purple:focus {
+  border-color: #8241aa;
+  box-shadow: none;
+}
+
+.buttonBlock {
+  overflow: hidden;
+}
+
+.buttonLeft {
+  float: left;
+  margin-left: 30%;
+}
+
+.buttonRight {
+  float: right;
+  margin-right: 30%;
+}
+
+.navbar {
+  background-color: white !important;
+  height: 80px;
+  border-bottom: 2px solid #eeeeee;
+  padding-top: 10px;
+  padding-left: 8%;
+  padding-right: 8%;
+}
+
+.navbar-brand {
+  margin-right: 5%;
+}
+
+.nav-link,
+.nav-link:visited {
+  font-size: 14.5px;
+  font-family: NeutroMYOB-Reg;
+  padding-top: 8px !important;
+  padding-right: 22px !important;
+  padding-bottom: 8px !important;
+  padding-left: 22px !important;
+  color: black !important;
+  text-decoration: none !important;
+}
+
+.nav-link .activeSpan {
+  padding-bottom: 4px;
+  border-bottom: 2px solid #8241aa;
+}
+
+.nav-link:hover {
+  color: #8241aa !important;
+}
+
+.nav-link:active {
+  color: black !important;
+}
+
+#dropdownMenuLink {
+  padding: 0 !important;
+}
+
+#profilePic {
+  border-radius: inherit;
+  object-fit: cover;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6),
+    0 1px 1px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  position: relative;
+  z-index: 998;
+  margin: 10px;
+}
+
+#profileName {
+  font-size: 14.5px;
+  font-family: NeutroMYOB-Reg;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: black;
+}
+
+#profileName:hover {
+  color: #8241aa;
+}
+
+.profileDropdownItem {
+  font-size: 0.9em;
+  color: black !important;
+  text-decoration: none !important;
+}
+
+.profileDropdownItem:active {
+  background: #8241aa;
+  color: white !important;
+}
+
+#nominationPage,
+#nominationPage div {
+  text-align: center;
+}
+
+#nominationPage .stepper {
+  margin-left: 20%;
+  width: 60%;
+  margin-right: 20%;
+}
+
+#nominationJustification {
+  display: inline-block;
+  width: 40%;
+  text-align: center;
+}
+
+.justificationInfo label {
+  font-family: NeutroMYOB-Med;
+}
+
+.justificationInfo span:first-child {
+  font-family: NeutroMYOB-Med;
+  font-weight: 700;
+}
+
+.justificationInfo:nth-child(2) {
+  margin-bottom: 1em;
+}
+
 .App {
   text-align: center;
   font-weight: 400;
 }
 
 .App-logo {
-/*  animation: App-logo-spin infinite 20s linear;*/
-  padding:1em;
-  padding-top:4em;
+  /*  animation: App-logo-spin infinite 20s linear;*/
+  padding: 1em;
+  padding-top: 4em;
   height: 190px;
 }
 
@@ -19,12 +216,12 @@
 
 .App-title {
   font-size: 1.5em;
-  color:black;
+  color: black;
   padding: 1em;
   text-align: center;
 }
 
-.App-user-status{
+.App-user-status {
   display: inline-block;
   padding-left: 1em;
   padding-right: 1em;
@@ -34,34 +231,129 @@
   max-width: 500px;
   border: 1px solid transparent;
   border-color: #515e6d;
-  border-radius: .25em;
-  border-width: .125em;
+  border-radius: 0.25em;
+  border-width: 0.125em;
 }
 
-.App-intro {
-  font-size: large;
-  padding-bottom: 1em;
-}
-
-.continue-button {
+.category-button {
   display: inline-block;
   text-align: center;
-  padding: .5em 1.625em;
+  padding: 0.5em 1.625em;
   border: 1px solid transparent;
-  border-radius: .25em;
-  border-color: rgba(46,62,79,.6);
-  border-width: .125em;
+  border-radius: 0.25em;
+  border-color: rgba(46, 62, 79, 0.6);
+  border-width: 0.125em;
   background-color: white;
   color: #8241aa;
   font-size: 100%;
   font-weight: 400;
-}
-
-.continue-button:hover {
-  border-color: #515e6d;
+  width: 300px;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#loginPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+  display: inline-block;
+  text-align: center;
+  width: 60%;
+  height: 50%;
+}
+
+#loginLogo {
+  width: 36%;
+  margin: 20px;
+}
+
+#loginBg {
+  background-color: #f3ffff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#loginBgPic {
+  height: 100%;
+  float: right;
+}
+
+#loginDesc {
+  font-family: NeutroMYOB-Med;
+  font-size: 1.05em;
+}
+
+#loginButton {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+.feelix-card {
+  padding: 1.6rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  border-radius: 0.4rem;
+  margin-left: 20%;
+  width: 60%;
+  margin-right: 20%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.overflowHid {
+  overflow: hidden;
+}
+
+#nominationComplete {
+  display: inline-block;
+  text-align: center;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  border-radius: 0.4rem;
+  margin-left: 25%;
+  width: 50%;
+  margin-right: 25%;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  overflow: hidden;
+}
+
+.complete-card-top {
+  background-color: #8241aa;
+  color: white;
+  font-family: "Unica One";
+  padding: 1.2em;
+}
+
+.complete-card-bottom {
+  font-family: "Unica One";
+  padding: 1em;
+  padding-bottom: 2.6em;
+}
+
+#nominationComplete p {
+  padding-left: 15%;
+  padding-right: 15%;
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+
+#nominationComplete p span {
+  font-family: NeutroMYOB-Med;
+}
+
+.octicon {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }

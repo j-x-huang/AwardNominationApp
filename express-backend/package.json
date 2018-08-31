@@ -1,16 +1,14 @@
 {
-    "name": "passport-azure-ad-login-oidc",
+    "name": "award-nomination-backend",
     "version": "0.0.1",
     "dependencies": {
-        "assert-plus": "^1.0.0",
-        "bunyan": "^1.8.12",
-        "connect-mongo": "^2.0.1",
-        "ejs": "^2.6.1",
-        "ejs-locals": "^1.0.2",
-        "express": "^3.21.2",
-        "mongoose": "^5.2.7",
-        "passport": "^0.4.0",
-        "passport-azure-ad": "^3.0.12",
-        "restify": "^7.2.1"
+        "azure-ad-jwt": "^1.1.0",
+        "body-parser": "^1.18.3",
+        "cors": "^2.8.4",
+        "express": "^4.0.0",
+        "firebase": "^5.4.1"
+    },
+    "scripts": {
+        "start": "node server.js"
     }
 }

@@ -1,33 +1,50 @@
-import * as React from 'react';
-import './App.css';
-import { getUser, isAuthenticated } from './auth';
-import AppIntro from './components/AppIntro';
-import LoginButton from './components/LoginButton';
-import NavBar from './components/NavBar';
-import logo from './logo.svg';
+import * as React from "react";
+import { isAuthenticated } from "./auth";
+import NavBar from "./components/NeoNavBar";
+import Router from "./Router";
+import LoginPage from "./components/LoginPage";
 
-class App extends React.Component<any, any>{
+class App extends React.Component<any, any> {
+  public state = {
+    selection: 0
+  };
 
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
-            
+  }
+
+  public componentDidMount() {
+    this.handlePathChange();
   }
 
   public render() {
     return (
-      <div className="App">  
-          {(isAuthenticated()) ? <NavBar /> : null } 
-            <header className="App-header">
-             <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Ignition Awards</h1>
-          </header>
-          <div className="App-user-status">
-            <AppIntro isLoggedIn={isAuthenticated()} user={getUser()} />
-            <LoginButton isLoggedIn={isAuthenticated()} />
-          </div>
+      <div>
+        {isAuthenticated() ? (
+          <React.Fragment>
+            <NavBar selection={this.state.selection} />
+            <Router />
+          </React.Fragment>
+        ) : (
+          <LoginPage />
+        )}
       </div>
     );
   }
+
+  private handlePathChange = () => {
+    const pathname = location.pathname;
+
+    if (pathname.indexOf("/awards") !== -1) {
+      this.setState({ selection: 1 });
+    }
+    if (pathname.indexOf("/nominate") !== -1) {
+      this.setState({ selection: 2 });
+    }
+    if (pathname.indexOf("/mynominations") !== -1) {
+      this.setState({ selection: 3 });
+    }
+  };
 }
 
 export default App;
