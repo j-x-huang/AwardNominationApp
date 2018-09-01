@@ -186,6 +186,21 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.setState({ awards: newAwards });
   };
 
+  public goBack = () => {
+    this.props.history.push("/awards");
+  };
+
+  public openModal = () => {
+    return (
+      <div>
+        <Modal
+          nominationID={this.state.selectedNomination}
+          onClose={this.goBack}
+        />
+      </div>
+    );
+  };
+
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
@@ -224,14 +239,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         )}
         <Route
           path={"/awards/nomination/" + this.state.selectedNomination}
-          render={() => (
-            <div>
-              <Modal
-                nominationID={this.state.selectedNomination}
-                onClose={() => this.props.history.push("/awards")}
-              />
-            </div>
-          )}
+          render={this.openModal}
         />
       </div>
     );
