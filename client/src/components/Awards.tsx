@@ -9,6 +9,8 @@ import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
 import { getUserDetails } from "../MicrosoftGraphClient";
+import { Route } from "react-router-dom";
+import Modal from "./NominationModal";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -30,12 +32,26 @@ export interface IAwardsProps extends WithStyles<typeof styles> {}
 
 export interface IAwardsStates {
   value: number;
+  selectedNomination: string;
   awards: any[];
 }
 
-class Awards extends React.Component<IAwardsProps, IAwardsStates> {
+class Awards extends React.Component<any, IAwardsStates> {
+  public previousLocation = this.props.location;
+
+  public componentWillUpdate(nextProps: any) {
+    const { location } = this.props;
+    if (
+      nextProps.history.action !== "POP" &&
+      (!location.state || !location.state.modal)
+    ) {
+      this.previousLocation = this.props.location;
+    }
+  }
+
   public state = {
     value: 0,
+    selectedNomination: "",
     awards: [] as any[]
   };
 
@@ -46,8 +62,12 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
     this.setState({ value });
   };
 
-  private handleSelect = (id: number, name: string) => {
-    alert("ID: " + id + " Name: " + name);
+  private handleSelect = (id: string, name: string) => {
+    this.setState({ selectedNomination: id });
+    this.props.history.push({
+      pathname: "/awards/nomination/" + id,
+      state: { modal: true }
+    });
   };
 
   public componentDidMount() {
@@ -169,6 +189,13 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
+    // const { location } = this.props;
+
+    /* const isModal = !!(
+      location.state &&
+      location.state.modal &&
+      this.previousLocation !== location
+    ); */
 
     return (
       <div className={classes.root}>
@@ -195,6 +222,17 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
               />
             )
         )}
+        <Route
+          path={"/awards/nomination/" + this.state.selectedNomination}
+          render={() => (
+            <div>
+              <Modal
+                nominationID={this.state.selectedNomination}
+                onClose={() => this.props.history.push("/awards")}
+              />
+            </div>
+          )}
+        />
       </div>
     );
   }

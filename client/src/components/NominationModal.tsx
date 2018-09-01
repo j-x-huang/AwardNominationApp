@@ -1,11 +1,10 @@
 import * as React from "react";
 
-export interface INominationContainerProps {
+export interface INominationModalProps {
   nominationID: string;
-  open: boolean;
 }
 
-class NominationContainer extends React.Component<any, any> {
+class NominationModal extends React.Component<any, any> {
   public state = {
     nominationID: "",
     img: "",
@@ -54,7 +53,7 @@ class NominationContainer extends React.Component<any, any> {
             </div>
 
             <div className="modal-body">
-              <p>Modal body</p>
+              <p>{this.props.nominationID}</p>
             </div>
           </div>
         </div>
@@ -63,4 +62,4 @@ class NominationContainer extends React.Component<any, any> {
   }
 }
 
-export default NominationContainer;
+export default NominationModal;
