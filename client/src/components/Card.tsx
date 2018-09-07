@@ -9,6 +9,7 @@ import MaterialCard from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
+import { getUserDetails } from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -51,6 +52,7 @@ export interface ICardProps extends WithStyles<typeof styles> {
   id: number;
   img: string;
   title: string;
+  objectId: string;
   description: string;
   onSelect: (...args: any[]) => void;
 }
@@ -58,8 +60,27 @@ export interface ICardProps extends WithStyles<typeof styles> {
 // export interface ICardState {}
 
 class Card extends React.Component<ICardProps> {
+  public state = {
+    img: this.props.img,
+    title: this.props.title,
+  }
+
+  public componentWillMount() {
+    getUserDetails(this.props.objectId, (err, userDetails) => {
+        if (err) {
+          // TODO
+        } else {
+          this.setState({
+            img: userDetails.profilePic,
+            title: userDetails.name,
+          });
+        }
+    });
+  }
+
   public render() {
-    const { classes, id, img, title, description, onSelect } = this.props;
+    const { classes, id, description, onSelect } = this.props;
+    const { img, title } = this.state;
     const handleSelect = () => onSelect(id, title);
 
     return (

@@ -8,7 +8,6 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
-import { getUserDetails } from "../MicrosoftGraphClient";
 import { Route } from "react-router-dom";
 import Modal from "./NominationModal";
 
@@ -130,33 +129,37 @@ class Awards extends React.Component<any, IAwardsStates> {
     snapshot: firebase.database.DataSnapshot,
     category: string
   ) => {
-    const returnArr: object[] = [];
+    const nominations: object[] = [];
 
     snapshot.forEach(childSnapshot => {
       const item = childSnapshot.val();
-      let userName: string;
-      let imgUrl: string;
-      let ret;
-      getUserDetails(item.nominee, (err, userDetails) => {
-        if (err) {
-          // TODO
-        } else {
-          userName = userDetails.name;
-          imgUrl = userDetails.profilePic;
-          ret = {
-            img: imgUrl,
-            id: childSnapshot.key,
-            description: item.justification,
-            title: userName
-          };
-          this.updateNomination(category, ret);
-          returnArr.push(ret);
-        }
-      });
-      console.log("Array: " + returnArr);
+      let nomination;
+
+      nomination = {
+        img: 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg',
+        id: childSnapshot.key,
+        description: item.justification,
+        objectId: item.nominee,
+        title: '',
+      };
+
+      nominations.push(nomination);
     });
-    return returnArr;
+    this.updateAllNominations(category, nominations);
+    return nominations;
   };
+
+  private updateAllNominations = (category: string, nominations: any[]) => {
+    const awards = [...this.state.awards];
+
+    const index = awards.findIndex(c => {
+      return c.award === category;
+    });
+
+    awards[index].nominations = nominations;
+
+    this.setState({ awards });
+  }
 
   public getAllNominations = () => {
     const defaultDatabase = firebase.database();
@@ -168,23 +171,29 @@ class Awards extends React.Component<any, IAwardsStates> {
     });
   };
 
-  private updateNomination = (category: string, nomination: any) => {
-    const newAwards = [...this.state.awards];
+  // private updateNomination = (category: string, nomination: any) => {
+  //   const newAwards = [...this.state.awards];
 
-    const index = newAwards.findIndex(c => {
-      return c.award === category;
-    });
+  //   const index = newAwards.findIndex(c => {
+  //     return c.award === category;
+  //   });
 
-    console.log("Index: " + index);
+  //   console.log("Index: " + index);
 
-    console.log(newAwards[index].nominations);
+  //   console.log(newAwards[index].nominations);
 
-    newAwards[index].nominations.push(nomination);
+  //   const nominationIndex = newAwards[index].nominations.findIndex((x: any) => x.id === nomination.id);
 
-    console.log(newAwards[index].nominations);
+  //   if (nominationIndex >= 0) {
+  //     newAwards[index].nominations[nominationIndex] = nomination;
+  //   } else {
+  //     newAwards[index].nominations.push(nomination);
+  //   }
 
-    this.setState({ awards: newAwards });
-  };
+  //   console.log(newAwards[index].nominations);
+
+  //   this.setState({ awards: newAwards });
+  // };
 
   public goBack = () => {
     this.props.history.push("/awards");
