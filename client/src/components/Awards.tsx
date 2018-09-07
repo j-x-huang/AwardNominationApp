@@ -159,6 +159,18 @@ class Awards extends React.Component<any, IAwardsStates> {
     awards[index].nominations = nominations;
 
     this.setState({ awards });
+    /**
+     * TODO: Do a batch api fetch of user details as a callback to the setState call.
+     * This will retrieve all user details of nominees at once. This means we only have to update state
+     * one extra time.
+     * It will also mean that we don't put the responsibility of retrieving user data to the card component, meaning that
+     * when we click on another category, it won't need to refetch the user details. 
+     * Need to:
+     *  - investigate how to make batch requests
+     *  - create a MicrosoftGraphClient function to make a batch request
+     *  - call the function here and parse it to create a new array of the updated details and set the state
+     *  - remove code in Card which retrieves the user details
+     */
   }
 
   public getAllNominations = () => {
