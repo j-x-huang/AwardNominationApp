@@ -141,7 +141,7 @@ a:visited {
   padding: 0 !important;
 }
 
-#profilePic {
+.profilePic {
   border-radius: inherit;
   object-fit: cover;
   width: 38px;
@@ -373,7 +373,6 @@ a:visited {
 
 .award-modal {
   background-color: #eeeeee;
-  padding-top: 2em;
   overflow-y: auto;
 
   width: 100%;
@@ -383,6 +382,9 @@ a:visited {
 }
 
 .award-modal-dialog {
+  margin-top: 2em;
+  margin-bottom: 2em;
+
   margin-left: auto;
   margin-right: auto;
   width: 900px;
@@ -396,6 +398,7 @@ a:visited {
 
 #award-modal-back-container {
   position: fixed;
+  top: 2em;
   left: 2em;
 }
 
@@ -410,4 +413,20 @@ a:visited {
 .div-centre {
   display: flex;
   align-items: center;
+}
+
+.comment {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+.comment-box {
+  background-color: #eeeeee;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.commenter {
+  font-weight: bold;
+  color: #8241aa;
 }

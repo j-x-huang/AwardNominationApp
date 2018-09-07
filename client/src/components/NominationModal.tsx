@@ -1,5 +1,6 @@
 import * as React from "react";
 import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
+import Comment from "./Comment";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -62,6 +63,7 @@ class NominationModal extends React.Component<any, any> {
 
             <div className="award-modal-body">
               <p>{this.props.nominationID}</p>
+              <Comment />
               <p>
                 The standard Lorem Ipsum passage, used since the 1500s "Lorem
                 ipsum dolor sit amet, consectetur adipiscing elit, sed do

@@ -83,7 +83,7 @@ class NavBar extends React.Component<INavBarProps, any> {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <img id="profilePic" src={this.state.profilePic} />
+                <img className="profilePic" src={this.state.profilePic} />
                 <span id="profileName">{profileName}</span>
               </a>
 
