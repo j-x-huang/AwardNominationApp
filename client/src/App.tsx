@@ -5,16 +5,8 @@ import Router from "./Router";
 import LoginPage from "./components/LoginPage";
 
 class App extends React.Component<any, any> {
-  public state = {
-    selection: 0
-  };
-
   constructor(props: any) {
     super(props);
-  }
-
-  public componentDidMount() {
-    this.handlePathChange();
   }
 
   public render() {
@@ -22,7 +14,7 @@ class App extends React.Component<any, any> {
       <div>
         {isAuthenticated() ? (
           <React.Fragment>
-            <NavBar selection={this.state.selection} />
+            <NavBar />
             <Router />
           </React.Fragment>
         ) : (
@@ -31,20 +23,6 @@ class App extends React.Component<any, any> {
       </div>
     );
   }
-
-  private handlePathChange = () => {
-    const pathname = location.pathname;
-
-    if (pathname.indexOf("/awards") !== -1) {
-      this.setState({ selection: 1 });
-    }
-    if (pathname.indexOf("/nominate") !== -1) {
-      this.setState({ selection: 2 });
-    }
-    if (pathname.indexOf("/mynominations") !== -1) {
-      this.setState({ selection: 3 });
-    }
-  };
 }
 
 export default App;

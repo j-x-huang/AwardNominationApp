@@ -9,7 +9,7 @@ class Router extends React.Component {
   public render() {
     return (
       <Switch>
-        <Route exact={true} path="/" component={Home} />
+        <Route exact={true} path="/home" component={Home} />
         <Route path="/awards" component={Awards} />
         <Route path="/nominate" component={NominationForm} />
         <Route path="/nominationscomplete" component={NominationComplete} />

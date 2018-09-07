@@ -2,6 +2,8 @@ import * as React from "react";
 import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
 import { getUserDetails } from "../MicrosoftGraphClient";
+import Comment from "./Comment";
+import CommentAdder from "./CommentAdder";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -14,7 +16,8 @@ class NominationModal extends React.Component<any, any> {
     category: "",
     justification: "",
     upvoters: [] as any[],
-    comments: [] as any[]
+    comments: [] as any[],
+    newComment: ""
   };
 
   public static defaultProps = {
@@ -146,12 +149,32 @@ class NominationModal extends React.Component<any, any> {
                 <img src={nominator.img} />
                 <p>Justification: {justification}</p>
               </div>
+              <p>{this.props.nominationID}</p>
+              <CommentAdder
+                comment={this.state.newComment}
+                nominatorPic="https://galvanicmedia.files.wordpress.com/2018/02/screen-shot-2018-02-03-at-3-38-38-pm.png?w=672&h=372&crop=1"
+                onCommentAdd={this.handleCommentAdd}
+                onCommentChange={this.handleCommentChange}
+              />
+              <Comment
+                nominator="David Qi"
+                nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
+                comment="Random comment passing by"
+              />
             </div>
           </div>
         </div>
       </div>
     );
   }
+
+  private handleCommentAdd = () => {
+    alert(this.state.newComment);
+  };
+
+  private handleCommentChange = (event: any) => {
+    this.setState({ newComment: event.target.value });
+  };
 }
 
 export default NominationModal;
