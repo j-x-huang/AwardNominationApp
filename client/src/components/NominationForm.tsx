@@ -233,76 +233,72 @@ class NominationForm extends React.Component<any, any> {
 
   private makeNomination = () => {
     const defaultDatabase = firebase.database();
+    const category = this.state.category;
+    const nominee = this.state.nominee.value;
 
-    // Get a key for a new Post.
-    const newPostKey = defaultDatabase
-      .ref()
-      .child("nominations")
-      .push().key;
-
-    const user = getUser();
-    const userid = user.profile.oid;
-    const nomineeid = this.state.nominee.value;
-
-    // Write the new post's data simultaneously in the posts list and the user's post list.
-    const updates = {};
-
-    // check if nomination exist
-    const existingNominationPostKey = this.getNominationPostKeyIfExist(this.state.category, nomineeid);
-
-    if (existingNominationPostKey != null) {
-      this.makeComment(existingNominationPostKey, this.state.justification);
-      this.makeUpvote(existingNominationPostKey);
-      // TODO: redirect to comment page
-    } else {
-      updates["/nominations/" + newPostKey] = {
-        category: this.state.category,
-        justification: this.state.justification,
-        nominator: userid,
-        nominee: nomineeid,
-        score: 1
-      };
-      updates["/nominators/" + userid + "/" + newPostKey] = {
-        nomination_id: newPostKey,
-        nominee: this.state.nominee.value
-      };
-      updates["/nominees/" + nomineeid + "/" + newPostKey] = {
-        nomination_id: newPostKey,
-        nominator: userid
-      };
-
-      const nomCat = {
-        [nomineeid]: true
-      };
-      const nomCatPath = defaultDatabase.ref(
-        "/categories/" + this.state.category
-      );
-
-      nomCatPath.update(nomCat);
-    }
-
-    return defaultDatabase.ref().update(updates);
-  };
-
-  private getNominationPostKeyIfExist = (category: string, nominee: string) => {
-    const defaultDatabase = firebase.database();
-
+    // Check if nomination exist
     defaultDatabase
       .ref("nominations/")
       .once("value")
       .then(snap => {
         const array = snap.val();
         // console.log(array);
-        for (const key of Object.keys(array)) {
-          const existingNomination = array[key];
+        for (const existingNominationPostKey of Object.keys(array)) {
+          const existingNomination = array[existingNominationPostKey];
           if (existingNomination.category === category && existingNomination.nominee === nominee) {
-            // console.log("Existing Nomination Key: " + key);
-            return key;
+            console.log(existingNominationPostKey);
+            this.makeComment(existingNominationPostKey, this.state.justification);
+            this.makeUpvote(existingNominationPostKey);
+            return;
+            // TODO: redirect to comment page
           }
         }
-        return null;
+        this.createNewNomination(defaultDatabase);
       });
+
   };
+
+  private createNewNomination = (defaultDatabase: firebase.database.Database) => {
+    // Get a key for a new Post.
+    const newPostKey = defaultDatabase
+      .ref()
+      .child("nominations")
+      .push().key;
+
+    const nomineeid = this.state.nominee.value;
+    const user = getUser();
+    const userid = user.profile.oid;
+
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    const updates = {};
+
+    updates["/nominations/" + newPostKey] = {
+      category: this.state.category,
+      justification: this.state.justification,
+      nominator: userid,
+      nominee: nomineeid,
+      score: 1
+    };
+    updates["/nominators/" + userid + "/" + newPostKey] = {
+      nomination_id: newPostKey,
+      nominee: this.state.nominee.value
+    };
+    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
+      nomination_id: newPostKey,
+      nominator: userid
+    };
+
+    const nomCat = {
+      [nomineeid]: true
+    };
+    const nomCatPath = defaultDatabase.ref(
+      "/categories/" + this.state.category
+    );
+
+    nomCatPath.update(nomCat);
+
+    return defaultDatabase.ref().update(updates);
+  }
 
   private makeComment = (nominationPostKey: string, justification: string) => {
     const defaultDatabase = firebase.database();
