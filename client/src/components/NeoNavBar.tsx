@@ -2,6 +2,7 @@ import * as React from "react";
 import logo1 from "../images/logo1.png";
 import { getUser, logOutUser } from "../auth";
 import { getMyImage } from "../MicrosoftGraphClient";
+import { Link } from 'react-router-dom';
 
 export interface INavBarProps {
   selection: number;
@@ -53,24 +54,32 @@ class NavBar extends React.Component<INavBarProps, any> {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" href="/">
-                <span className={this.getLinkClass(0)}>HOME</span>
-              </a>
+              <Link to="/">
+                <a className="nav-link">
+                  <span className={this.getLinkClass(0)}>HOME</span>
+                </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/awards">
-                <span className={this.getLinkClass(1)}>AWARDS</span>
-              </a>
+              <Link to="/awards">
+                <a className="nav-link">
+                  <span className={this.getLinkClass(1)}>AWARDS</span>
+                </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/nominate">
+            <Link to="/nominate">
+              <a className="nav-link">
                 <span className={this.getLinkClass(2)}>NOMINATE</span>
               </a>
+            </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/mynominations">
+            <Link to="/mynominations">
+              <a className="nav-link">
                 <span className={this.getLinkClass(3)}>MY NOMINATIONS</span>
               </a>
+            </Link>
             </li>
           </ul>
           <ul className="nav navbar-nav ml-auto">
