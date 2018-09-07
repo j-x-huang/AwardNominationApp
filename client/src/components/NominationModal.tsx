@@ -1,5 +1,5 @@
 import * as React from "react";
-import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
+import Octicon, { ChevronLeft, Thumbsup } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
 import { getUserDetails } from "../MicrosoftGraphClient";
 import Comment from "./Comment";
@@ -17,7 +17,8 @@ class NominationModal extends React.Component<any, any> {
     justification: "",
     upvoters: [] as any[],
     comments: [] as any[],
-    newComment: ""
+    newComment: "",
+    hasBeenNominated: false
   };
 
   public static defaultProps = {
@@ -137,11 +138,11 @@ class NominationModal extends React.Component<any, any> {
         aria-labelledby="nomination"
         aria-hidden="true"
       >
-        <div id="modal-dialog award-modal-back-container">
+        <div id="award-modal-back-container">
           {this.props.isModal && (
             <button
               type="button"
-              className="btn btn-light btn-bold"
+              className="btn btn-light bold-this"
               onClick={this.props.onClose || this.onClose}
             >
               <div className="div-centre">
@@ -160,21 +161,22 @@ class NominationModal extends React.Component<any, any> {
             {/*<div className="award-modal-header" />*/}
             <div className="award-modal-body">
               <div className="nomination-info-container">
-                <div>
+                <div className="modal-element-padding">
                   <img className="nominee-image" src={nominee.img} />
                   <div className="nomination-info wrap-text">
-                    <h1>{nominee.name}</h1>
+                    <h2>{nominee.name}</h2>
                     <h6>
                       Nomination: <b>{category}</b>
                     </h6>
-                    <p>Justification: {justification}</p>
+                    <p style={{ paddingTop: "0.5em" }}>{justification}</p>
                   </div>
                 </div>
 
-                <div>
+                <div className="div-centre div-space-between modal-element-left-padding">
                   <div className="nominator-info inline-components">
                     <p className="inline-components wrap-text">
-                      Nominated by: {nominator.name}
+                      Nominated by{" "}
+                      <span className="bold-this">{nominator.name}</span>
                     </p>
                     <img
                       className="profilePic inline-components"
@@ -184,22 +186,31 @@ class NominationModal extends React.Component<any, any> {
                   <button
                     type="button"
                     className="btn btn-light float-right btn-top-round inline-components"
-                    style={{ alignSelf: "flex-start" }}
+                    onClick={this.handleUpvoteClicked}
                   >
-                    Upvote
+                    <Octicon
+                      className={
+                        this.state.hasBeenNominated ? "octiocti octism" : "octigrey octism"
+                      }
+                      icon={Thumbsup}
+                    />
                   </button>
                 </div>
               </div>
               <hr />
-              <p>{comments.length} Comments</p>
+              <p className="modal-element-padding">
+                {comments.length} Comments
+              </p>
               <CommentAdder
                 comment={this.state.newComment}
                 nominatorPic="https://galvanicmedia.files.wordpress.com/2018/02/screen-shot-2018-02-03-at-3-38-38-pm.png?w=672&h=372&crop=1"
                 onCommentAdd={this.handleCommentAdd}
                 onCommentChange={this.handleCommentChange}
               />
-              {comments.map((comment, i) => (
-                // Place holder for now
+              {comments.map((
+                comment,
+                i // Place holder for now
+              ) => (
                 <Comment
                   key={i}
                   nominator={comment.commenter}
@@ -213,6 +224,11 @@ class NominationModal extends React.Component<any, any> {
       </div>
     );
   }
+
+  private handleUpvoteClicked = () => {
+    this.setState({ hasBeenNominated: !this.state.hasBeenNominated });
+    // TODO actually upvote
+  };
 
   private handleCommentAdd = () => {
     alert(this.state.newComment);

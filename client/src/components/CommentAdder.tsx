@@ -1,5 +1,5 @@
 import * as React from "react";
-import Octicon, { Flame } from "@githubprimer/octicons-react";
+import Octicon, { PlusSmall } from "@githubprimer/octicons-react";
 
 export interface ICommentAdderProps {
   onCommentAdd: any;
@@ -13,7 +13,7 @@ class CommentAdder extends React.Component<any, any> {
     const { comment, onCommentAdd, onCommentChange, nominatorPic } = this.props;
 
     return (
-      <div className="div-centre">
+      <div className="div-centre" style={{ paddingBottom: "0.5em" }}>
         <img
           className="profilePic"
           style={{ alignSelf: "flex-start" }}
@@ -33,7 +33,7 @@ class CommentAdder extends React.Component<any, any> {
           style={{ alignSelf: "flex-start" }}
           onClick={onCommentAdd}
         >
-          <Octicon className="octiocti" size="medium" icon={Flame} />
+          <Octicon className="octigrey" size="medium" icon={PlusSmall} />
         </button>
       </div>
     );

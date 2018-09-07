@@ -406,13 +406,17 @@ a:visited {
   margin-right: 0.5em;
 }
 
-.btn-bold {
+.bold-this {
   font-weight: bold;
 }
 
 .div-centre {
   display: flex;
   align-items: center;
+}
+
+.div-space-between {
+  justify-content: space-between;
 }
 
 .comment-box {
@@ -432,10 +436,6 @@ a:visited {
   font-weight: bold;
   color: #8241aa;
   margin-right: 0.2em;
-}
-
-.octiocti {
-  color: #8241aa;
 }
 
 .btn-top-round {
@@ -466,6 +466,8 @@ a:visited {
   width: 35%;
   display: inline-block;
   vertical-align: top;
+  border-radius: 8px;
+  padding-right: 5px;
 }
 
 .wrap-text {
@@ -482,4 +484,26 @@ a:visited {
 
 .upvote-button {
   vertical-align: bottom;
+}
+
+.modal-element-padding {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.modal-element-left-padding {
+  padding-left: 10px;
+}
+
+.octism {
+  width: 24px;
+  height: 24px;
+}
+
+.octiocti {
+  color: #8241aa;
+}
+
+.octigrey {
+  color: #606770;
 }
