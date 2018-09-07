@@ -124,7 +124,7 @@ a:visited {
   text-decoration: none !important;
 }
 
-.nav-link .activeSpan {
+.activeLink span {
   padding-bottom: 4px;
   border-bottom: 2px solid #8241aa;
 }
