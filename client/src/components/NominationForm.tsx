@@ -106,58 +106,58 @@ class NominationForm extends React.Component<any, any> {
         {completed ? (
           <NominationComplete category={category} nominee={nominee.label} />
         ) : (
-          <form className="feelix-card">
-            <h5> Nominate a deserving candidate </h5>
-            <hr />
-            <div className="form-group">
-              <label htmlFor="categorySelect">Select an award category</label>
-              <select
-                className="form-control"
-                id="categorySelect"
-                value={this.state.category}
-                onChange={this.categoryChange}
-              >
-                <option />
-                <option>{this.categories[0]}</option>
-                <option>{this.categories[1]}</option>
-                <option>{this.categories[2]}</option>
-                <option>{this.categories[3]}</option>
-                <option>{this.categories[4]}</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-              <Select
-                isDisabled={category === ""}
-                isSearchable={true}
-                onChange={this.nomineeChange}
-                options={nominees}
-                value={this.state.nominee}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="justificationSelect">Justify your decision</label>
-              <textarea
-                className="form-control"
-                style={{ resize: "none" }}
-                id="justificationSelect"
-                rows={5}
-                value={this.state.justification}
-                onChange={this.justificationChange}
-              />
-            </div>
-            <div className="overflowHid">
-              <button
-                type="button"
-                className="btn btn-primary float-right"
-                disabled={this.checkFieldsFilled() ? false : true}
-                onClick={this.handleClick}
-              >
-                Nominate
+            <form className="feelix-card">
+              <h5> Nominate a deserving candidate </h5>
+              <hr />
+              <div className="form-group">
+                <label htmlFor="categorySelect">Select an award category</label>
+                <select
+                  className="form-control"
+                  id="categorySelect"
+                  value={this.state.category}
+                  onChange={this.categoryChange}
+                >
+                  <option />
+                  <option>{this.categories[0]}</option>
+                  <option>{this.categories[1]}</option>
+                  <option>{this.categories[2]}</option>
+                  <option>{this.categories[3]}</option>
+                  <option>{this.categories[4]}</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+                <Select
+                  isDisabled={category === ""}
+                  isSearchable={true}
+                  onChange={this.nomineeChange}
+                  options={nominees}
+                  value={this.state.nominee}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="justificationSelect">Justify your decision</label>
+                <textarea
+                  className="form-control"
+                  style={{ resize: "none" }}
+                  id="justificationSelect"
+                  rows={5}
+                  value={this.state.justification}
+                  onChange={this.justificationChange}
+                />
+              </div>
+              <div className="overflowHid">
+                <button
+                  type="button"
+                  className="btn btn-primary float-right"
+                  disabled={this.checkFieldsFilled() ? false : true}
+                  onClick={this.handleClick}
+                >
+                  Nominate
               </button>
-            </div>
-          </form>
-        )}
+              </div>
+            </form>
+          )}
       </div>
     );
   }
@@ -247,33 +247,117 @@ class NominationForm extends React.Component<any, any> {
     // Write the new post's data simultaneously in the posts list and the user's post list.
     const updates = {};
 
-    updates["/nominations/" + newPostKey] = {
-      category: this.state.category,
-      justification: this.state.justification,
-      nominator: userid,
-      nominee: nomineeid,
-      score: 1
-    };
-    updates["/nominators/" + userid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominee: this.state.nominee.value
-    };
-    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominator: userid
-    };
+    // check if nomination exist
+    const existingNominationPostKey = this.getNominationPostKeyIfExist(this.state.category, nomineeid);
 
-    const nomCat = {
-      [nomineeid]: true
-    };
-    const nomCatPath = defaultDatabase.ref(
-      "/categories/" + this.state.category
-    );
+    if (existingNominationPostKey != null) {
+      this.makeComment(existingNominationPostKey, this.state.justification);
+      this.makeUpvote(existingNominationPostKey);
+      // TODO: redirect to comment page
+    } else {
+      updates["/nominations/" + newPostKey] = {
+        category: this.state.category,
+        justification: this.state.justification,
+        nominator: userid,
+        nominee: nomineeid,
+        score: 1
+      };
+      updates["/nominators/" + userid + "/" + newPostKey] = {
+        nomination_id: newPostKey,
+        nominee: this.state.nominee.value
+      };
+      updates["/nominees/" + nomineeid + "/" + newPostKey] = {
+        nomination_id: newPostKey,
+        nominator: userid
+      };
 
-    nomCatPath.update(nomCat);
+      const nomCat = {
+        [nomineeid]: true
+      };
+      const nomCatPath = defaultDatabase.ref(
+        "/categories/" + this.state.category
+      );
+
+      nomCatPath.update(nomCat);
+    }
 
     return defaultDatabase.ref().update(updates);
   };
+
+  private getNominationPostKeyIfExist = (category: string, nominee: string) => {
+    const defaultDatabase = firebase.database();
+
+    defaultDatabase
+      .ref("nominations/")
+      .once("value")
+      .then(snap => {
+        const array = snap.val();
+        // console.log(array);
+        for (const key of Object.keys(array)) {
+          const existingNomination = array[key];
+          if (existingNomination.category === category && existingNomination.nominee === nominee) {
+            // console.log("Existing Nomination Key: " + key);
+            return key;
+          }
+        }
+        return null;
+      });
+  };
+
+  private makeComment = (nominationPostKey: string, justification: string) => {
+    const defaultDatabase = firebase.database();
+    const nominationid = nominationPostKey;
+
+    const newPostKey = defaultDatabase
+      .ref()
+      .child("/nominations/" + nominationid + "/comments/")
+      .push().key;
+
+    const user = getUser();
+
+    const comment = {
+      comment: justification,
+      commenter: user.profile.oid
+    };
+    const updates = {};
+    updates[
+      "/nominations/" + nominationid + "/comments/" + newPostKey
+    ] = comment;
+
+    return defaultDatabase.ref().update(updates);
+  };
+
+  private makeUpvote = (nominationPostKey: string) => {
+    const defaultDatabase = firebase.database();
+
+    const nominationid = nominationPostKey;
+    const user = getUser();
+    const uid = user.profile.oid;
+
+    const upvoter = {
+      [uid]: true
+    };
+
+    const upvoterPath = defaultDatabase.ref(
+      "/nominations/" + nominationid + "/upvoters/"
+    );
+
+    return upvoterPath.update(upvoter);
+  };
+  /*
+    private removeUpvote = (nominationPostKey: string) => {
+      const defaultDatabase = firebase.database();
+  
+      const nominationid = nominationPostKey;
+      const user = getUser();
+      const uid = user.profile.oid;
+  
+      const upvoterPath = defaultDatabase.ref(
+        "/nominations/" + nominationid + "/upvoters/" + uid
+      );
+  
+      return upvoterPath.remove();
+    };*/
 }
 
 export default NominationForm;
