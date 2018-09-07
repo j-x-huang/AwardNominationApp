@@ -96,8 +96,8 @@ export const getMyImage = (callback: (profilePic: any, err: any) => void) => {
 
 
     client
-      .api('/me/photo/$value')
-      .version('beta')
+    .api(`/me/photos/48*48/$value`)
+    .version('beta')
       .responseType(MicrosoftGraph.ResponseType.BLOB)
       .get()
       .then((blob) => {
@@ -156,7 +156,7 @@ export const getUserDetails = (id: string, callback: (err: any, userDetails: any
           };
 
           client
-            .api(`/users/${user.id}/photos/48x48/$value`)
+            .api(`/users/${user.id}/photos/225*225/$value`)
             .version('beta')
             .responseType(MicrosoftGraph.ResponseType.BLOB)
             .get()
