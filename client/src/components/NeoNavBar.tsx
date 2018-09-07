@@ -32,7 +32,6 @@ class NavBar extends React.Component<INavBarProps, any> {
       .split(" ")
       .slice(0, -1)
       .join(" ");
-    // const profilePicUrl ="https://i.pinimg.com/originals/01/e7/e2/01e7e206ff9a0b29fb4bac269140dda6.jpg";
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
