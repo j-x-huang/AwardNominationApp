@@ -1,5 +1,5 @@
 import * as React from "react";
-import Octicon, { MarkGithub } from "@githubprimer/octicons-react";
+import Octicon, { Flame } from "@githubprimer/octicons-react";
 
 export interface ICommentAdderProps {
   onCommentAdd: any;
@@ -29,11 +29,11 @@ class CommentAdder extends React.Component<any, any> {
         />
         <button
           type="button"
-          className="btn btn-primary float-right btn-top-round"
+          className="btn btn-light float-right btn-top-round"
           style={{ alignSelf: "flex-start" }}
           onClick={onCommentAdd}
         >
-          <Octicon className="octiocti" size="small" icon={MarkGithub} />
+          <Octicon className="octiocti" size="medium" icon={Flame} />
         </button>
       </div>
     );

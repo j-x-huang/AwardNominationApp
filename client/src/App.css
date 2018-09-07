@@ -434,8 +434,13 @@ a:visited {
   margin-right: 0.2em;
 }
 
+.octiocti {
+  color: #8241aa;
+}
+
 .btn-top-round {
-  margin: 0.6em;
+  margin-left: 5px;
+  margin-right: 5px;
   border-radius: 1em;
   display: inline-flex;
   align-items: center;
