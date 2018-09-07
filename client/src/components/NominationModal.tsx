@@ -29,7 +29,7 @@ class NominationModal extends React.Component<any, any> {
   };
 
   public componentDidMount() {
-    console.log("Modal mounted!");
+    console.log("Modal mounted! Location: " + this.props.location);
     this.getNominationDetails(this.props.nominationID);
   }
 
@@ -63,17 +63,30 @@ class NominationModal extends React.Component<any, any> {
     });
     console.log(data.comments != null);
     if (data.comments != null) {
-      this.setState({
-        comments: data.comments
-      });
+      console.log("Comments:");
+      console.log(data.comments);
+
+      const allComments = data.comments;
+      const previousComments = [...this.state.comments];
+
+      let comment;
+      let key;
+
+      for (key in allComments) {
+        if (allComments.hasOwnProperty(key)) {
+          comment = allComments[key];
+          previousComments.push(comment);
+        }
+      }
+
+      console.log(previousComments);
+      this.setState({ comments: previousComments });
     }
     if (data.upvoters != null) {
       this.setState({
         upvoters: data.upvoters
       });
     }
-    console.log("State updated!");
-    console.log(this.state);
     getUserDetails(data.nominee, (err, userDetails) => {
       if (err) {
         // TODO
@@ -105,7 +118,13 @@ class NominationModal extends React.Component<any, any> {
   };
 
   public render() {
-    const { nominee, nominator, category, justification } = this.state;
+    const {
+      nominee,
+      nominator,
+      category,
+      justification,
+      comments
+    } = this.state;
 
     return (
       <div
@@ -139,28 +158,55 @@ class NominationModal extends React.Component<any, any> {
         <div className="award-modal-dialog">
           <div className="award-modal-content">
             {/*<div className="award-modal-header" />*/}
-
             <div className="award-modal-body">
-              <div>
-                <img src={nominee.img} />
-                <h1>{nominee.name}</h1>
-                <p>category: {category}</p>
-                <p>Nominated by: {nominator.name}</p>
-                <img src={nominator.img} />
-                <p>Justification: {justification}</p>
+              <div className="nomination-info-container">
+                <div>
+                  <img className="nominee-image" src={nominee.img} />
+                  <div className="nomination-info wrap-text">
+                    <h1>{nominee.name}</h1>
+                    <h6>
+                      Nomination: <b>{category}</b>
+                    </h6>
+                    <p>Justification: {justification}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="nominator-info inline-components">
+                    <p className="inline-components wrap-text">
+                      Nominated by: {nominator.name}
+                    </p>
+                    <img
+                      className="profilePic inline-components"
+                      src={nominator.img}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-light float-right btn-top-round inline-components"
+                    style={{ alignSelf: "flex-start" }}
+                  >
+                    Upvote
+                  </button>
+                </div>
               </div>
-              <p>{this.props.nominationID}</p>
+              <hr />
+              <p>{comments.length} Comments</p>
               <CommentAdder
                 comment={this.state.newComment}
                 nominatorPic="https://galvanicmedia.files.wordpress.com/2018/02/screen-shot-2018-02-03-at-3-38-38-pm.png?w=672&h=372&crop=1"
                 onCommentAdd={this.handleCommentAdd}
                 onCommentChange={this.handleCommentChange}
               />
-              <Comment
-                nominator="David Qi"
-                nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
-                comment="Random comment passing by"
-              />
+              {comments.map((comment, i) => (
+                // Place holder for now
+                <Comment
+                  key={i}
+                  nominator={comment.commenter}
+                  nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
+                  comment={comment.comment}
+                />
+              ))}
             </div>
           </div>
         </div>

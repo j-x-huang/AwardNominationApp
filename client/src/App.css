@@ -446,3 +446,40 @@ a:visited {
   align-items: center;
   padding: 0.6em;
 }
+
+.nomination-info-container {
+  width: 100%;
+  padding-top: 10px;
+}
+
+.nomination-info {
+  width: 60%;
+  margin-top: 0%;
+  padding-top: 0px;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.nominee-image {
+  width: 35%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.wrap-text {
+  word-wrap: break-word;
+}
+
+.inline-components {
+  display: inline-block;
+}
+
+.nominator-info {
+  padding-top: 15px;
+}
+
+.upvote-button {
+  vertical-align: bottom;
+}
