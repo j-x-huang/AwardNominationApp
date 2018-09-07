@@ -1,6 +1,7 @@
 import * as React from "react";
 import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
 import Comment from "./Comment";
+import CommentAdder from "./CommentAdder";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -15,7 +16,8 @@ class NominationModal extends React.Component<any, any> {
     category: "",
     justification: "",
     upvoters: [] as any[],
-    comments: [] as any[]
+    comments: [] as any[],
+    newComment: ""
   };
 
   public static defaultProps = {
@@ -63,7 +65,17 @@ class NominationModal extends React.Component<any, any> {
 
             <div className="award-modal-body">
               <p>{this.props.nominationID}</p>
-              <Comment />
+              <CommentAdder
+                comment={this.state.newComment}
+                nominatorPic="https://galvanicmedia.files.wordpress.com/2018/02/screen-shot-2018-02-03-at-3-38-38-pm.png?w=672&h=372&crop=1"
+                onCommentAdd={this.handleCommentAdd}
+                onCommentChange={this.handleCommentChange}
+              />
+              <Comment
+                nominator="David Qi"
+                nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
+                comment="Random comment passing by"
+              />
               <p>
                 The standard Lorem Ipsum passage, used since the 1500s "Lorem
                 ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -83,7 +95,7 @@ class NominationModal extends React.Component<any, any> {
                 nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor
                 sit amet, consectetur, adipisci velit, sed quia non numquam eius
                 modi tempora incidunt ut labore et dolore magnam aliquam quaerat
-                voluptatem. Ut enim ad minima veniam, quis nostrum
+                voluptatem. Ut enim ad minima veniam, quis nostrum"
                 exercitationem ullam corporis suscipit laboriosam, nisi ut
                 aliquid ex ea commodi consequatur? Quis autem vel eum iure
                 reprehenderit qui in ea voluptate velit esse quam nihil
@@ -136,7 +148,7 @@ class NominationModal extends React.Component<any, any> {
                 annoyances accepted. The wise man therefore always holds in
                 these matters to this principle of selection: he rejects
                 pleasures to secure other greater pleasures, or else he endures
-                pains to avoid worse pains."
+                pains to avoid worse pains.
               </p>
             </div>
           </div>
@@ -144,6 +156,14 @@ class NominationModal extends React.Component<any, any> {
       </div>
     );
   }
+
+  private handleCommentAdd = () => {
+    alert(this.state.newComment);
+  };
+
+  private handleCommentChange = (event: any) => {
+    this.setState({ newComment: event.target.value });
+  };
 }
 
 export default NominationModal;
