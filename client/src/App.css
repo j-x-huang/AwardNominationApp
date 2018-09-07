@@ -67,6 +67,19 @@ a:visited {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #8241aa !important;
 }
 
+.btn-light,
+.btn-light:focus {
+  vertical-align: middle;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.btn-light:hover,
+.btn-light:active {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px transparent !important;
+}
+
 .form-purple:focus {
   border-color: #8241aa;
   box-shadow: none;
@@ -356,4 +369,45 @@ a:visited {
 .octicon {
   margin-left: 0.5em;
   margin-right: 0.5em;
+}
+
+.award-modal {
+  background-color: #eeeeee;
+  padding-top: 2em;
+  overflow-y: auto;
+
+  width: 100%;
+  height: 100%;
+  padding-right: 1em;
+  box-sizing: content-box;
+}
+
+.award-modal-dialog {
+  margin-left: auto;
+  margin-right: auto;
+  width: 900px;
+}
+
+.award-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+#award-modal-back-container {
+  position: fixed;
+  left: 2em;
+}
+
+.back-octicon {
+  margin-right: 0.5em;
+}
+
+.btn-bold {
+  font-weight: bold;
+}
+
+.div-centre {
+  display: flex;
+  align-items: center;
 }
