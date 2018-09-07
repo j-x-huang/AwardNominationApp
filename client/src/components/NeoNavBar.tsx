@@ -33,9 +33,9 @@ class NavBar extends React.Component<any, any> {
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#">
+        <NavLink className="navbar-brand" to="/home">
           <img src={logo1} height="24" alt="" />
-        </a>
+        </NavLink>
         <button
           className="navbar-toggler"
           type="button"
