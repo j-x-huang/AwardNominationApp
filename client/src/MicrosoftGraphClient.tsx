@@ -173,3 +173,53 @@ export const getUserDetails = (id: string, callback: (err: any, userDetails: any
   })
 }
 
+/**
+ * Fetches a list of user details based on objectIds passed in
+ * @param objectIds the list of ids to which user details should be fetched
+ * @param callback function to call with the result
+ */
+export const getUsersByObjectId = (objectIds: string[], callback: (err: any, users: any[]) => void) => {
+  acquireToken((error, token) => {
+
+    if (error) {
+      callback(error, []);
+      return;
+    }
+
+    // Initialises the Microsoft Graph Client using our acquired token
+    const client = MicrosoftGraph.Client.init({
+      authProvider: (done) => {
+          done(null, token);
+      }
+    });
+
+    // Makes an API call to Microsoft Graph to fetch the users in the Azure AD
+    client
+    .api('/directoryObjects/getByIds')
+    .post({
+      "ids": objectIds,
+      "types":["user"]
+    }, (err, res) => {
+      const users = new Array<any>();
+
+      if (err) {
+        callback(err, []);
+        return;
+      }
+
+      res.value.forEach((user: MicrosoftGraphTypes.User) => {
+        const userDetails = {
+          email: user.mail ? user.mail : '',
+          id: user.id,
+          name: user.displayName ? user.displayName : '',
+          profilePic: '',
+        };
+        users[user.id] = userDetails;
+      })
+
+      callback(null, users);
+    });
+  })
+}
+
+
