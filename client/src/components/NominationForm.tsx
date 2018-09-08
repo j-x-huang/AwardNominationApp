@@ -6,7 +6,7 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 
 class NominationForm extends React.Component<any, any> {
-  public allNominees = [{ value: "", label: "" }];
+  public allNominees = [{ value: "", label: "", isDisabled: false}];
   public categories = [
     "Being Purple",
     "One Small Step",
@@ -35,36 +35,59 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public updateNomineeList = (category: string) => {
-    let neoNominees = [{ value: "", label: "" }];
+    let neoNominees = [{ value: "", label: "", isDisabled: false }];
+    let actualNominees = new Array<any>();
+
     const selection = this.categories.indexOf(category);
     console.log(selection);
     if (selection === 0) {
       neoNominees = this.allNominees.filter(
         staff => this.beingPurple.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.beingPurple.indexOf(staff.value) > -1
+      );
     } else if (selection === 1) {
       neoNominees = this.allNominees.filter(
         staff => this.oneSmallStep.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.oneSmallStep.indexOf(staff.value) > -1
+      );
     } else if (selection === 2) {
       neoNominees = this.allNominees.filter(
         staff => this.newHorizon.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.newHorizon.indexOf(staff.value) > -1
+      );
     } else if (selection === 3) {
       neoNominees = this.allNominees.filter(
         staff => this.skyHigh.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.skyHigh.indexOf(staff.value) > -1
+      );
     } else if (selection === 4) {
       neoNominees = this.allNominees.filter(
         staff => this.starCrew.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.starCrew.indexOf(staff.value) > -1
+      );
     }
-    this.setState({ nominees: neoNominees });
+
+    actualNominees.forEach((nom) => {
+      nom.isDisabled = true;
+    });
+
+    neoNominees.forEach((nom) => {
+      nom.isDisabled = false;
+    });
+
+    const superNominees = actualNominees.concat(neoNominees);
+    console.log(superNominees);
+    this.setState({ nominees: superNominees });
   };
 
   public categoryChange = (event: any) => {
@@ -90,7 +113,8 @@ class NominationForm extends React.Component<any, any> {
       } else {
         this.allNominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
-          label: suggestion.name
+          label: suggestion.name,
+          isDisabled: false
         }));
         console.log([...this.allNominees]);
         this.setState({ nominees: [...this.allNominees] });
@@ -100,31 +124,31 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public render() {
-    const { category, nominee, nominees, completed} = this.state;
+    const { category, nominee, nominees, completed } = this.state;
     const options = this.categories.map((loan, key) => {
       const isCurrent = this.state.category === loan
       return (
         <div key={key} className="radioPad">
-        <div>
-          <label
-            className={
-              isCurrent ?
-                'radioPad__wrapper radioPad__wrapper--selected' :
-                'radioPad__wrapper'
-            }
-          >
-            <input
-              className="radioPad__radio"
-              type="radio"
-              name="categories"
-              id={loan}
-              value={loan}
-              onChange={this.categoryChange}
-            />
-            {loan}
-          </label>
+          <div>
+            <label
+              className={
+                isCurrent ?
+                  'radioPad__wrapper radioPad__wrapper--selected' :
+                  'radioPad__wrapper'
+              }
+            >
+              <input
+                className="radioPad__radio"
+                type="radio"
+                name="categories"
+                id={loan}
+                value={loan}
+                onChange={this.categoryChange}
+              />
+              {loan}
+            </label>
+          </div>
         </div>
-      </div>
       )
     })
     return (
