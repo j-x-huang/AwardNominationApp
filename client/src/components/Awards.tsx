@@ -8,9 +8,10 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
-import { Route } from "react-router-dom";
+// import { Route } from "react-router-dom";
 import Modal from "./NominationModal";
 import { getPhotosByObjectId, getUsersByObjectId } from "../MicrosoftGraphClient";
+import MDSpinner from "react-md-spinner";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -28,12 +29,13 @@ const styles = (theme: Theme) =>
     }
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 export interface IAwardsStates {
   value: number;
   selectedNomination: string;
   awards: any[];
+  isLoading: boolean;
 }
 
 class Awards extends React.Component<any, IAwardsStates> {
@@ -52,7 +54,8 @@ class Awards extends React.Component<any, IAwardsStates> {
   public state = {
     value: 0,
     selectedNomination: "",
-    awards: [] as any[]
+    awards: [] as any[],
+    isLoading: true
   };
 
   private handleChange = (
@@ -176,7 +179,7 @@ class Awards extends React.Component<any, IAwardsStates> {
 
     awards[index].nominations = nominations;
 
-    this.setState({ awards }, () => {
+    this.setState({ awards, isLoading: false }, () => {
       // fetch all images for the nominees and reupdate the state
       getPhotosByObjectId(nominees, (err, photos) => {
         if (err) {
@@ -264,34 +267,41 @@ class Awards extends React.Component<any, IAwardsStates> {
       this.previousLocation !== location
     ); */
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default" className={classes.tabBar}>
-          <Tabs
-            value={value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            centered={true}
-          >
-            {awards.map((award, i) => (
-              <Tab key={i} label={award.award} />
-            ))}
-          </Tabs>
-        </AppBar>
-        {awards.map(
-          (award, i) =>
-            value === i && (
-              <CardContainer
-                key={i}
-                cards={award.nominations}
-                onSelect={this.handleSelect}
-              />
-            )
-        )}
-        <Route
-          path={"/awards/nomination/" + this.state.selectedNomination}
-          render={this.openModal}
-        />
+      <div>
+        {this.state.isLoading ?
+          (<div id="spinner">
+            <MDSpinner
+              singleColor="#8241aa"
+              size="50%"
+            />
+          </div>)
+          :
+          (<div className={classes.root}>
+            <AppBar position="static" color="default" className={classes.tabBar}>
+              <Tabs
+                value={value}
+                onChange={this.handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered={true}
+              >
+                {awards.map((award, i) => (
+                  <Tab key={i} label={award.award} />
+                ))}
+              </Tabs>
+            </AppBar>
+            {awards.map(
+              (award, i) =>
+                value === i && (
+                  <CardContainer
+                    key={i}
+                    cards={award.nominations}
+                    onSelect={this.handleSelect}
+                  />
+                )
+            )}
+          </div>)
+        }
       </div>
     );
   }
