@@ -28,7 +28,7 @@ class NominationForm extends React.Component<any, any> {
     category: "",
     justification: "",
     nominator: "",
-    nominee: { value: "", label: "" },
+    nominee: { value: "", label: "", isDisabled: false },
     score: 1,
     nominees: new Array<any>(),
     completed: false,
@@ -160,20 +160,6 @@ class NominationForm extends React.Component<any, any> {
               <h5> Nominate a deserving candidate </h5>
               <hr />
               {options}
-              {/* <div className="form-group">
-                <select
-                  className="form-control"
-                  id="categorySelect"
-                  value={this.state.category}
-                  onChange={this.categoryChange}>
-                  <option />
-                  <option>{this.categories[0]}</option>
-                  <option>{this.categories[1]}</option>
-                  <option>{this.categories[2]}</option>
-                  <option>{this.categories[3]}</option>
-                  <option>{this.categories[4]}</option>
-                </select>
-              </div> */}
               <div className="form-group">
                 <label htmlFor="nomineeeSelect">Select a fellow staff</label>
                 <Select
