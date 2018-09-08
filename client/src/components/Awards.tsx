@@ -9,6 +9,7 @@ import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
 import { getUserDetails } from "../MicrosoftGraphClient";
+import MDSpinner from "react-md-spinner";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -26,17 +27,19 @@ const styles = (theme: Theme) =>
     }
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 export interface IAwardsStates {
   value: number;
   awards: any[];
+  isLoading: boolean;
 }
 
 class Awards extends React.Component<IAwardsProps, IAwardsStates> {
   public state = {
     value: 0,
-    awards: [] as any[]
+    awards: [] as any[],
+    isLoading: true
   };
 
   private handleChange = (
@@ -65,6 +68,12 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
     awardCategories.forEach(c => {
       this.getCategoryNomination(c);
     });
+
+    // TODO: Remove me!!
+    setTimeout(() => {
+      this.setState({ isLoading: false })
+    },
+   15000);
   }
 
   public createAwardCategories = (categories: string[]) => {
@@ -166,35 +175,50 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
     this.setState({ awards: newAwards });
   };
 
+  // private turnOff = () => {
+  //   this.setState.isLoading = false;
+  // };
+
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default" className={classes.tabBar}>
-          <Tabs
-            value={value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            centered={true}
-          >
-            {awards.map((award, i) => (
-              <Tab key={i} label={award.award} />
-            ))}
-          </Tabs>
-        </AppBar>
-        {awards.map(
-          (award, i) =>
-            value === i && (
-              <CardContainer
-                key={i}
-                cards={award.nominations}
-                onSelect={this.handleSelect}
-              />
-            )
-        )}
+      <div>
+        {this.state.isLoading ?
+          (<div id="spinner">
+            <MDSpinner
+              singleColor="#8241aa"
+              size="50%"
+            />
+          </div>)
+          :
+          (<div className={classes.root}>
+            <AppBar position="static" color="default" className={classes.tabBar}>
+              <Tabs
+                value={value}
+                onChange={this.handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered={true}
+              >
+                {awards.map((award, i) => (
+                  <Tab key={i} label={award.award} />
+                ))}
+              </Tabs>
+            </AppBar>
+            {awards.map(
+              (award, i) =>
+                value === i && (
+                  <CardContainer
+                    key={i}
+                    cards={award.nominations}
+                    onSelect={this.handleSelect}
+                  />
+                )
+            )}
+          </div>)
+        }
       </div>
     );
   }
