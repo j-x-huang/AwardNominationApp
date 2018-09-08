@@ -40,8 +40,8 @@ class CardContainer extends React.Component<ICardContainerProps> {
         container={true}
         className={classes.root}
         spacing={32}
-        // alignItems="flex-start"
-        // justify="flex-start"
+      // alignItems="flex-start"
+      // justify="flex-start"
       >
         <Grid item={true} xs={12}>
           <Grid

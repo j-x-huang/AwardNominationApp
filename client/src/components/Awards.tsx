@@ -8,7 +8,7 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
-// import { Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Modal from "./NominationModal";
 import { getPhotosByObjectId, getUsersByObjectId } from "../MicrosoftGraphClient";
 import MDSpinner from "react-md-spinner";
@@ -26,7 +26,25 @@ const styles = (theme: Theme) =>
     tabBar: {
       boxShadow: "none",
       backgroundColor: "#f9f9f9"
-    }
+    },
+    tabsIndicator: {
+      backgroundColor: "#8241aa"
+    },
+    tabRoot: {
+      fontWeight: theme.typography.fontWeightRegular,
+      borderColor: "black",
+      "&:hover": {
+        color: "#8241aa",
+        opacity: 1
+      },
+      "&$tabSelected": {
+        fontWeight: theme.typography.fontWeightMedium
+      },
+      "&:focus": {
+        color: "#8241aa"
+      }
+    },
+    tabSelected: {}
   });
 
 export interface IAwardsProps extends WithStyles<typeof styles> { }
@@ -281,12 +299,20 @@ class Awards extends React.Component<any, IAwardsStates> {
               <Tabs
                 value={value}
                 onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
                 centered={true}
+                classes={{
+                  indicator: classes.tabsIndicator
+                }}
               >
                 {awards.map((award, i) => (
-                  <Tab key={i} label={award.award} />
+                  <Tab
+                    key={i}
+                    label={award.award}
+                    classes={{
+                      root: classes.tabRoot,
+                      selected: classes.tabSelected
+                    }}
+                  />
                 ))}
               </Tabs>
             </AppBar>
@@ -300,9 +326,13 @@ class Awards extends React.Component<any, IAwardsStates> {
                   />
                 )
             )}
+            <Route
+              path={"/awards/nomination/" + this.state.selectedNomination}
+              render={this.openModal}
+            />
           </div>)
         }
-      </div>
+      </div>   
     );
   }
 }
