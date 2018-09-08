@@ -248,6 +248,7 @@ class NominationModal extends React.Component<any, any> {
 
   private handleCommentAdd = () => {
     alert(this.state.newComment);
+    this.makeComment(this.state.newComment);
   };
 
   private makeUpvote = () => {
@@ -274,6 +275,22 @@ class NominationModal extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref('/nominations/' + this.props.nominationID + '/upvoters/' + uid);
 
     return upvoterPath.remove();
+  }
+
+  private makeComment = (userComment: string) => {
+    const defaultDatabase = firebase.database();
+
+    const newPostKey = defaultDatabase.ref().child('/nominations/' + this.props.nominationID + '/comments/').push().key;
+
+    const user = getUser();
+
+    const comment = {
+      comment: userComment,
+      commenter: user.profile.oid
+    }
+    const updates = {};
+    updates['/nominations/' + this.props.nominationID + '/comments/' + newPostKey] = comment; 
+    return defaultDatabase.ref().update(updates);
   }
 
   private handleCommentChange = (event: any) => {
