@@ -168,7 +168,7 @@ class NominationModal extends React.Component<any, any> {
                     <h6>
                       Nomination: <b>{category}</b>
                     </h6>
-                    <p style={{ paddingTop: "0.5em" }}>{justification}</p>
+                    <p style={{ paddingTop: "0.25em" }}>{justification}</p>
                   </div>
                 </div>
 
@@ -190,7 +190,9 @@ class NominationModal extends React.Component<any, any> {
                   >
                     <Octicon
                       className={
-                        this.state.hasBeenNominated ? "octiocti octism" : "octigrey octism"
+                        this.state.hasBeenNominated
+                          ? "octiocti octism"
+                          : "octigrey octism"
                       }
                       icon={Thumbsup}
                     />
