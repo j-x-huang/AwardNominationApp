@@ -25,7 +25,25 @@ const styles = (theme: Theme) =>
     tabBar: {
       boxShadow: "none",
       backgroundColor: "#f9f9f9"
-    }
+    },
+    tabsIndicator: {
+      backgroundColor: "#8241aa"
+    },
+    tabRoot: {
+      fontWeight: theme.typography.fontWeightRegular,
+      borderColor: "black",
+      "&:hover": {
+        color: "#8241aa",
+        opacity: 1
+      },
+      "&$tabSelected": {
+        fontWeight: theme.typography.fontWeightMedium
+      },
+      "&:focus": {
+        color: "#8241aa"
+      }
+    },
+    tabSelected: {}
   });
 
 export interface IAwardsProps extends WithStyles<typeof styles> {}
@@ -218,12 +236,20 @@ class Awards extends React.Component<any, IAwardsStates> {
           <Tabs
             value={value}
             onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
             centered={true}
+            classes={{
+              indicator: classes.tabsIndicator
+            }}
           >
             {awards.map((award, i) => (
-              <Tab key={i} label={award.award} />
+              <Tab
+                key={i}
+                label={award.award}
+                classes={{
+                  root: classes.tabRoot,
+                  selected: classes.tabSelected
+                }}
+              />
             ))}
           </Tabs>
         </AppBar>
