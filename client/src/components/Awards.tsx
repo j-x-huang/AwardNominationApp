@@ -10,6 +10,7 @@ import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
 import { Route } from "react-router-dom";
 import Modal from "./NominationModal";
+import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -109,7 +110,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         .orderByChild("category")
         .once("value", snapshot => {
           if (snapshot != null) {
-            console.log(this.snapshotToArray(snapshot, str));
+            console.log(this.retrieveUserDetails(snapshot, str));
           }
         });
     } else {
@@ -119,33 +120,50 @@ class Awards extends React.Component<any, IAwardsStates> {
         .equalTo(str)
         .once("value", snapshot => {
           if (snapshot != null) {
-            console.log(this.snapshotToArray(snapshot, str));
+            console.log(this.retrieveUserDetails(snapshot, str));
           }
         });
     }
   }
 
-  public snapshotToArray = (
+  public retrieveUserDetails = (
     snapshot: firebase.database.DataSnapshot,
     category: string
   ) => {
     const nominations: object[] = [];
+    const nominees: string[] = [];
 
     snapshot.forEach(childSnapshot => {
       const item = childSnapshot.val();
-      let nomination;
 
-      nomination = {
-        img: 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg',
-        id: childSnapshot.key,
-        description: item.justification,
-        objectId: item.nominee,
-        title: '',
-      };
+      if (nominees.indexOf(item.nominee)) {
+        nominees.push(item.nominee);
+      }
 
-      nominations.push(nomination);
     });
-    this.updateAllNominations(category, nominations);
+
+    getUsersByObjectId(nominees, (err, users) => {
+      if (err) {
+        // todo
+      } else {
+        snapshot.forEach(childSnapshot => {
+          const item = childSnapshot.val();
+          const name = users[item.nominee] === undefined ? '' : users[item.nominee].name;
+          let nomination;
+    
+          nomination = {
+            img: 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg',
+            id: childSnapshot.key,
+            description: item.justification,
+            objectId: item.nominee,
+            title: name,
+          };
+          nominations.push(nomination);
+        });
+
+        this.updateAllNominations(category, nominations);
+      }
+    });
     return nominations;
   };
 
