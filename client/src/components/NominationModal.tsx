@@ -4,6 +4,7 @@ import * as firebase from "firebase";
 import { getUserDetails } from "../MicrosoftGraphClient";
 import Comment from "./Comment";
 import CommentAdder from "./CommentAdder";
+import {Redirect} from "react-router-dom";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -18,7 +19,8 @@ class NominationModal extends React.Component<any, any> {
     upvoters: [] as any[],
     comments: [] as any[],
     newComment: "",
-    hasBeenNominated: false
+    hasBeenNominated: false,
+    failed : false
   };
 
   public static defaultProps = {
@@ -46,7 +48,9 @@ class NominationModal extends React.Component<any, any> {
 
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
-    nomRef
+  
+    try {
+      nomRef
       .child("nominations")
       .child(nominationID)
       .once("value", snapshot => {
@@ -54,6 +58,10 @@ class NominationModal extends React.Component<any, any> {
           this.saveSnapshot(snapshot);
         }
       });
+    } catch (error) {
+      this.setState({failed : true})
+    }
+
   }
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
@@ -138,6 +146,7 @@ class NominationModal extends React.Component<any, any> {
         aria-labelledby="nomination"
         aria-hidden="true"
       >
+        {this.state.failed ? <Redirect to="/awards" /> : null}
         <div id="award-modal-back-container">
           {this.props.isModal && (
             <button
