@@ -4,7 +4,6 @@ import Select from "react-select";
 import { getUser } from "../auth";
 import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
 
 class NominationForm extends React.Component<any, any> {
   public allNominees = [{ value: "", label: "" }];
@@ -32,7 +31,7 @@ class NominationForm extends React.Component<any, any> {
     nominee: { value: "", label: "" },
     score: 1,
     nominees: new Array<any>(),
-    completed: false
+    completed: false,
   };
 
   public updateNomineeList = (category: string) => {
@@ -101,7 +100,33 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public render() {
-    const { category, nominee, nominees, completed } = this.state;
+    const { category, nominee, nominees, completed} = this.state;
+    const options = this.categories.map((loan, key) => {
+      const isCurrent = this.state.category === loan
+      return (
+        <div key={key} className="radioPad">
+        <div>
+          <label
+            className={
+              isCurrent ?
+                'radioPad__wrapper radioPad__wrapper--selected' :
+                'radioPad__wrapper'
+            }
+          >
+            <input
+              className="radioPad__radio"
+              type="radio"
+              name="categories"
+              id={loan}
+              value={loan}
+              onChange={this.categoryChange}
+            />
+            {loan}
+          </label>
+        </div>
+      </div>
+      )
+    })
     return (
       <div>
         {completed ? (
@@ -110,26 +135,9 @@ class NominationForm extends React.Component<any, any> {
             <form className="feelix-card">
               <h5> Nominate a deserving candidate </h5>
               <hr />
-              <div className="form-group">
-                <label htmlFor="categorySelect">Select an award category</label>
-                <RadioGroup onChange={this.categoryChange} horizontal>
-                  <RadioButton value={this.category[0]}>
-                    {this.category[0]}
-                  </RadioButton>
-                  <RadioButton value={this.category[1]}>
-                    {this.category[1]}
-                  </RadioButton>
-                  <RadioButton value={this.category[2]}>
-                    {this.category[2]}
-                  </RadioButton>
-                  <RadioButton value={this.category[3]}>
-                    {this.category[3]}
-                  </RadioButton>
-                  <RadioButton value={this.category[4]}>
-                    {this.category[4]}
-                  </RadioButton>
-                </RadioGroup>
-                {/* <select
+              {options}
+              {/* <div className="form-group">
+                <select
                   className="form-control"
                   id="categorySelect"
                   value={this.state.category}
@@ -140,8 +148,8 @@ class NominationForm extends React.Component<any, any> {
                   <option>{this.categories[2]}</option>
                   <option>{this.categories[3]}</option>
                   <option>{this.categories[4]}</option>
-                </select> */}
-              </div>
+                </select>
+              </div> */}
               <div className="form-group">
                 <label htmlFor="nomineeeSelect">Select a fellow staff</label>
                 <Select
