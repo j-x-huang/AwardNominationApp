@@ -222,4 +222,73 @@ export const getUsersByObjectId = (objectIds: string[], callback: (err: any, use
   })
 }
 
+/**
+ * Does a batch request for photos based on a list of object ids
+ * @param objectIds 
+ * @param callback 
+ */
+export const getPhotosByObjectId = (objectIds: string[], callback: (err: any, photos: any[]) => void) => {
+  acquireToken((error, token) => {
+
+    if (error) {
+      callback(error, []);
+      return;
+    }
+
+    // Initialises the Microsoft Graph Client using our acquired token
+    const client = MicrosoftGraph.Client.init({
+      authProvider: (done) => {
+          done(null, token);
+      }
+    });
+
+    const promises = new Array<any>();
+    const requestMap = new Array<any>();
+    const photos = new Array<any>();
+
+    let index = 0;
+
+    // Since the batch request can only handle 20 requests at a time, we split the objectId array into groups of 20
+    // and make individual batch requests for each chunk
+    while (objectIds.length > 0) {
+      const objectIdChunk = objectIds.splice(0, 20);
+      const requests = new Array<any>();
+
+      // Create list of requests for the chunk
+      objectIdChunk.forEach((objectId: string) => {
+        const request = {
+          "id": index,
+          "method": "GET",
+          "url": `/users/${objectId}/photos/225*225/$value`,
+        }
+
+        requests.push(request);
+        requestMap[index] = objectId; // this provides a mapping for the request to the objectId so we know whose photo it is
+        index++;
+      })
+
+      // Make the request and push it to the promise array
+      promises.push(
+        client
+        .api('/$batch')
+        .version('beta')
+        .post({
+          "requests": requests,
+        })
+      );
+    }
+
+    // This ensures that we wait until all batch requests are finished before we begin processing
+    Promise.all(promises).then((results) => {
+      results.forEach((responses: any) => {
+        responses.responses.forEach((photoMetaData: any) => {
+          photos[requestMap[photoMetaData.id]] = `data:image/jpeg;base64,${photoMetaData.body}`;
+        });
+      });
+
+      callback(null, photos);
+    }); 
+  })
+}
+
 
