@@ -10,7 +10,7 @@ import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
 import { Route } from "react-router-dom";
 import Modal from "./NominationModal";
-import { getUsersByObjectId } from "../MicrosoftGraphClient";
+import { getPhotosByObjectId, getUsersByObjectId } from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -177,10 +177,29 @@ class Awards extends React.Component<any, IAwardsStates> {
     awards[index].nominations = nominations;
 
     this.setState({ awards }, () => {
-    /**
-     * TODO: do a fetch of user photos as a batch request.
-     * Then update the nominations to render the photos
-     */
+      // fetch all images for the nominees and reupdate the state
+      getPhotosByObjectId(nominees, (err, photos) => {
+        if (err) {
+          // todo
+        } else {
+          const newAwards = [...this.state.awards];
+
+          const categoryIndex = awards.findIndex(c => {
+            return c.award === category;
+          });
+
+          const categoryNominations = awards[categoryIndex].nominations;
+          const nominationsWithPhoto = new Array<any>();
+
+          categoryNominations.forEach((nomination: any) => {
+            nomination.img = photos[nomination.objectId];
+            nominationsWithPhoto.push(nomination);
+          });
+
+          newAwards[categoryIndex].nominations = nominationsWithPhoto;
+          this.setState({ awards: newAwards });
+        }
+      })
     });
     
   }
@@ -244,7 +263,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       location.state.modal &&
       this.previousLocation !== location
     ); */
-
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default" className={classes.tabBar}>
