@@ -179,7 +179,7 @@ class NominationModal extends React.Component<any, any> {
                 <div className="modal-element-padding">
                   {this.state.isLoading ? <MDSpinner
                     singleColor="#8241aa"
-                    size="25%"
+                    size="200%"
                   /> : <img className="nominee-image" src={nominee.img} />}
                   <div className="nomination-info wrap-text">
                     <h2>{nominee.name}</h2>
