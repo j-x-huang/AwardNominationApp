@@ -22,6 +22,7 @@ export interface ICardContent {
   id: number;
   img: string;
   title: string;
+  objectId: string;
   description: string;
 }
 
@@ -56,6 +57,7 @@ class CardContainer extends React.Component<ICardContainerProps> {
                   img={card.img}
                   title={card.title}
                   description={card.description}
+                  objectId={card.objectId}
                   onSelect={onSelect}
                 />
               </Grid>
