@@ -66,9 +66,8 @@ class NominationModal extends React.Component<any, any> {
           }
         });
     } catch (error) {
-      this.setState({ failed: true })
+      this.setState({ failed: true });
     }
-
   }
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
@@ -236,13 +235,13 @@ class NominationModal extends React.Component<any, any> {
                 comment,
                 i // Place holder for now
               ) => (
-                  <Comment
-                    key={i}
-                    nominator={comment.commenter}
-                    nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
-                    comment={comment.comment}
-                  />
-                ))}
+                <Comment
+                  key={i}
+                  nominator={comment.commenter}
+                  nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
+                  comment={comment.comment}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -260,8 +259,8 @@ class NominationModal extends React.Component<any, any> {
   };
 
   private handleCommentAdd = () => {
-    alert(this.state.newComment);
     this.makeComment(this.state.newComment);
+    this.setState({ newComment: "" });
   };
 
   private makeUpvote = () => {
@@ -274,10 +273,12 @@ class NominationModal extends React.Component<any, any> {
       [uid]: true
     };
 
-    const upvoterPath = defaultDatabase.ref('/nominations/' + this.props.nominationID + '/upvoters/');
+    const upvoterPath = defaultDatabase.ref(
+      "/nominations/" + this.props.nominationID + "/upvoters/"
+    );
 
     return upvoterPath.update(upvoter);
-  }
+  };
 
   private removeUpvote = () => {
     const defaultDatabase = firebase.database();
@@ -285,29 +286,36 @@ class NominationModal extends React.Component<any, any> {
     const user = getUser();
     const uid = user.profile.oid;
 
-    const upvoterPath = defaultDatabase.ref('/nominations/' + this.props.nominationID + '/upvoters/' + uid);
+    const upvoterPath = defaultDatabase.ref(
+      "/nominations/" + this.props.nominationID + "/upvoters/" + uid
+    );
 
     return upvoterPath.remove();
-  }
+  };
 
   private makeComment = (userComment: string) => {
     const defaultDatabase = firebase.database();
 
-    const newPostKey = defaultDatabase.ref().child('/nominations/' + this.props.nominationID + '/comments/').push().key;
+    const newPostKey = defaultDatabase
+      .ref()
+      .child("/nominations/" + this.props.nominationID + "/comments/")
+      .push().key;
 
     const user = getUser();
 
     const comment = {
       comment: userComment,
       commenter: user.profile.oid
-    }
+    };
     const commentsArray = this.state.comments;
     commentsArray.push(comment);
     this.setState({ comments: commentsArray });
     const updates = {};
-    updates['/nominations/' + this.props.nominationID + '/comments/' + newPostKey] = comment;
+    updates[
+      "/nominations/" + this.props.nominationID + "/comments/" + newPostKey
+    ] = comment;
     return defaultDatabase.ref().update(updates);
-  }
+  };
 
   private handleCommentChange = (event: any) => {
     this.setState({ newComment: event.target.value });
