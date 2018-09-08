@@ -6,6 +6,7 @@ import Comment from "./Comment";
 import CommentAdder from "./CommentAdder";
 import { Redirect } from "react-router-dom";
 import { getUser } from "../auth";
+import MDSpinner from "react-md-spinner";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -21,7 +22,8 @@ class NominationModal extends React.Component<any, any> {
     comments: [] as any[],
     newComment: "",
     hasBeenNominated: false,
-    failed: false
+    failed: false,
+    isLoading: true
   };
 
   public static defaultProps = {
@@ -35,6 +37,10 @@ class NominationModal extends React.Component<any, any> {
   public componentDidMount() {
     console.log("Modal mounted! Location: " + this.props.location);
     this.getNominationDetails(this.props.nominationID);
+
+    setTimeout(() => {
+      this.setState({isLoading : false})
+    }, 1000);
   }
 
   /* public componentWillReceiveProps() {
@@ -172,7 +178,10 @@ class NominationModal extends React.Component<any, any> {
             <div className="award-modal-body">
               <div className="nomination-info-container">
                 <div className="modal-element-padding">
-                  <img className="nominee-image" src={nominee.img} />
+                  {this.state.isLoading ? <MDSpinner
+                    singleColor="#8241aa"
+                    size="25%"
+                  /> : <img className="nominee-image" src={nominee.img} />}
                   <div className="nomination-info wrap-text">
                     <h2>{nominee.name}</h2>
                     <h6>
@@ -183,16 +192,20 @@ class NominationModal extends React.Component<any, any> {
                 </div>
 
                 <div className="div-centre div-space-between modal-element-left-padding">
-                  <div className="nominator-info inline-components">
-                    <p className="inline-components wrap-text">
-                      Nominated by{" "}
-                      <span className="bold-this">{nominator.name}</span>
+                  {this.state.isLoading ? <MDSpinner
+                    singleColor="#8241aa"
+                    size="25%"
+                  /> :
+                    <div className="nominator-info inline-components">
+                      <p className="inline-components wrap-text">
+                        Nominated by{" "}
+                        <span className="bold-this">{nominator.name}</span>
                     </p>
-                    <img
-                      className="profilePic inline-components"
-                      src={nominator.img}
-                    />
-                  </div>
+                      <img
+                        className="profilePic inline-components"
+                        src={nominator.img}
+                      />
+                    </div>}
                   <button
                     type="button"
                     className="btn btn-light float-right btn-top-round inline-components"
@@ -290,9 +303,9 @@ class NominationModal extends React.Component<any, any> {
     }
     const commentsArray = this.state.comments;
     commentsArray.push(comment);
-    this.setState({ comments: commentsArray});
+    this.setState({ comments: commentsArray });
     const updates = {};
-    updates['/nominations/' + this.props.nominationID + '/comments/' + newPostKey] = comment; 
+    updates['/nominations/' + this.props.nominationID + '/comments/' + newPostKey] = comment;
     return defaultDatabase.ref().update(updates);
   }
 
