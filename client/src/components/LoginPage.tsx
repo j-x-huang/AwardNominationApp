@@ -2,7 +2,7 @@ import * as React from "react";
 import "../App.css";
 import logo1 from "../images/logo1.png";
 import { logInUser } from "./../auth";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 class LoginPage extends React.Component<any, any> {
   constructor(props: any) {

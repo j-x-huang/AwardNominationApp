@@ -106,58 +106,58 @@ class NominationForm extends React.Component<any, any> {
         {completed ? (
           <NominationComplete category={category} nominee={nominee.label} />
         ) : (
-          <form className="feelix-card">
-            <h5> Nominate a deserving candidate </h5>
-            <hr />
-            <div className="form-group">
-              <label htmlFor="categorySelect">Select an award category</label>
-              <select
-                className="form-control"
-                id="categorySelect"
-                value={this.state.category}
-                onChange={this.categoryChange}
-              >
-                <option />
-                <option>{this.categories[0]}</option>
-                <option>{this.categories[1]}</option>
-                <option>{this.categories[2]}</option>
-                <option>{this.categories[3]}</option>
-                <option>{this.categories[4]}</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-              <Select
-                isDisabled={category === ""}
-                isSearchable={true}
-                onChange={this.nomineeChange}
-                options={nominees}
-                value={this.state.nominee}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="justificationSelect">Justify your decision</label>
-              <textarea
-                className="form-control"
-                style={{ resize: "none" }}
-                id="justificationSelect"
-                rows={5}
-                value={this.state.justification}
-                onChange={this.justificationChange}
-              />
-            </div>
-            <div className="overflowHid">
-              <button
-                type="button"
-                className="btn btn-primary float-right"
-                disabled={this.checkFieldsFilled() ? false : true}
-                onClick={this.handleClick}
-              >
-                Nominate
+            <form className="feelix-card">
+              <h5> Nominate a deserving candidate </h5>
+              <hr />
+              <div className="form-group">
+                <label htmlFor="categorySelect">Select an award category</label>
+                <select
+                  className="form-control"
+                  id="categorySelect"
+                  value={this.state.category}
+                  onChange={this.categoryChange}
+                >
+                  <option />
+                  <option>{this.categories[0]}</option>
+                  <option>{this.categories[1]}</option>
+                  <option>{this.categories[2]}</option>
+                  <option>{this.categories[3]}</option>
+                  <option>{this.categories[4]}</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+                <Select
+                  isDisabled={category === ""}
+                  isSearchable={true}
+                  onChange={this.nomineeChange}
+                  options={nominees}
+                  value={this.state.nominee}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="justificationSelect">Justify your decision</label>
+                <textarea
+                  className="form-control"
+                  style={{ resize: "none" }}
+                  id="justificationSelect"
+                  rows={5}
+                  value={this.state.justification}
+                  onChange={this.justificationChange}
+                />
+              </div>
+              <div className="overflowHid">
+                <button
+                  type="button"
+                  className="btn btn-primary float-right"
+                  disabled={this.checkFieldsFilled() ? false : true}
+                  onClick={this.handleClick}
+                >
+                  Nominate
               </button>
-            </div>
-          </form>
-        )}
+              </div>
+            </form>
+          )}
       </div>
     );
   }

@@ -4,7 +4,8 @@ import * as firebase from "firebase";
 import { getUserDetails } from "../MicrosoftGraphClient";
 import Comment from "./Comment";
 import CommentAdder from "./CommentAdder";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import { getUser } from "../auth";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -20,7 +21,7 @@ class NominationModal extends React.Component<any, any> {
     comments: [] as any[],
     newComment: "",
     hasBeenNominated: false,
-    failed : false
+    failed: false
   };
 
   public static defaultProps = {
@@ -48,18 +49,18 @@ class NominationModal extends React.Component<any, any> {
 
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
-  
+
     try {
       nomRef
-      .child("nominations")
-      .child(nominationID)
-      .once("value", snapshot => {
-        if (snapshot != null) {
-          this.saveSnapshot(snapshot);
-        }
-      });
+        .child("nominations")
+        .child(nominationID)
+        .once("value", snapshot => {
+          if (snapshot != null) {
+            this.saveSnapshot(snapshot);
+          }
+        });
     } catch (error) {
-      this.setState({failed : true})
+      this.setState({ failed: true })
     }
 
   }
@@ -222,13 +223,13 @@ class NominationModal extends React.Component<any, any> {
                 comment,
                 i // Place holder for now
               ) => (
-                <Comment
-                  key={i}
-                  nominator={comment.commenter}
-                  nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
-                  comment={comment.comment}
-                />
-              ))}
+                  <Comment
+                    key={i}
+                    nominator={comment.commenter}
+                    nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
+                    comment={comment.comment}
+                  />
+                ))}
             </div>
           </div>
         </div>
@@ -238,12 +239,42 @@ class NominationModal extends React.Component<any, any> {
 
   private handleUpvoteClicked = () => {
     this.setState({ hasBeenNominated: !this.state.hasBeenNominated });
-    // TODO actually upvote
+    if (this.state.hasBeenNominated) {
+      this.makeUpvote();
+    } else {
+      this.removeUpvote();
+    }
   };
 
   private handleCommentAdd = () => {
     alert(this.state.newComment);
   };
+
+  private makeUpvote = () => {
+    const defaultDatabase = firebase.database();
+
+    const user = getUser();
+    const uid = user.profile.oid;
+
+    const upvoter = {
+      [uid]: true
+    };
+
+    const upvoterPath = defaultDatabase.ref('/nominations/' + this.props.nominationID + '/upvoters/');
+
+    return upvoterPath.update(upvoter);
+  }
+
+  private removeUpvote = () => {
+    const defaultDatabase = firebase.database();
+
+    const user = getUser();
+    const uid = user.profile.oid;
+
+    const upvoterPath = defaultDatabase.ref('/nominations/' + this.props.nominationID + '/upvoters/' + uid);
+
+    return upvoterPath.remove();
+  }
 
   private handleCommentChange = (event: any) => {
     this.setState({ newComment: event.target.value });

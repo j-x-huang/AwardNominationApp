@@ -46,7 +46,7 @@ const styles = (theme: Theme) =>
     tabSelected: {}
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 export interface IAwardsStates {
   value: number;
