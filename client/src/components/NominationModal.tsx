@@ -288,6 +288,9 @@ class NominationModal extends React.Component<any, any> {
       comment: userComment,
       commenter: user.profile.oid
     }
+    const commentsArray = this.state.comments;
+    commentsArray.push(comment);
+    this.setState({ comments: commentsArray});
     const updates = {};
     updates['/nominations/' + this.props.nominationID + '/comments/' + newPostKey] = comment; 
     return defaultDatabase.ref().update(updates);
