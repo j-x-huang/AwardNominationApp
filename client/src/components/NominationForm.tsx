@@ -4,10 +4,9 @@ import Select from "react-select";
 import { getUser } from "../auth";
 import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
 
 class NominationForm extends React.Component<any, any> {
-  public allNominees = [{ value: "", label: "" }];
+  public allNominees = [{ value: "", label: "", isDisabled: false}];
   public categories = [
     "Being Purple",
     "One Small Step",
@@ -32,40 +31,63 @@ class NominationForm extends React.Component<any, any> {
     nominee: { value: "", label: "" },
     score: 1,
     nominees: new Array<any>(),
-    completed: false
+    completed: false,
   };
 
   public updateNomineeList = (category: string) => {
-    let neoNominees = [{ value: "", label: "" }];
+    let neoNominees = [{ value: "", label: "", isDisabled: false }];
+    let actualNominees = new Array<any>();
+
     const selection = this.categories.indexOf(category);
     console.log(selection);
     if (selection === 0) {
       neoNominees = this.allNominees.filter(
         staff => this.beingPurple.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.beingPurple.indexOf(staff.value) > -1
+      );
     } else if (selection === 1) {
       neoNominees = this.allNominees.filter(
         staff => this.oneSmallStep.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.oneSmallStep.indexOf(staff.value) > -1
+      );
     } else if (selection === 2) {
       neoNominees = this.allNominees.filter(
         staff => this.newHorizon.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.newHorizon.indexOf(staff.value) > -1
+      );
     } else if (selection === 3) {
       neoNominees = this.allNominees.filter(
         staff => this.skyHigh.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.skyHigh.indexOf(staff.value) > -1
+      );
     } else if (selection === 4) {
       neoNominees = this.allNominees.filter(
         staff => this.starCrew.indexOf(staff.value) === -1
       );
-      console.log(neoNominees);
+      actualNominees = this.allNominees.filter(
+        staff => this.starCrew.indexOf(staff.value) > -1
+      );
     }
-    this.setState({ nominees: neoNominees });
+
+    actualNominees.forEach((nom) => {
+      nom.isDisabled = true;
+    });
+
+    neoNominees.forEach((nom) => {
+      nom.isDisabled = false;
+    });
+
+    const superNominees = actualNominees.concat(neoNominees);
+    console.log(superNominees);
+    this.setState({ nominees: superNominees });
   };
 
   public categoryChange = (event: any) => {
@@ -91,7 +113,8 @@ class NominationForm extends React.Component<any, any> {
       } else {
         this.allNominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
-          label: suggestion.name
+          label: suggestion.name,
+          isDisabled: false
         }));
         console.log([...this.allNominees]);
         this.setState({ nominees: [...this.allNominees] });
@@ -102,6 +125,32 @@ class NominationForm extends React.Component<any, any> {
 
   public render() {
     const { category, nominee, nominees, completed } = this.state;
+    const options = this.categories.map((loan, key) => {
+      const isCurrent = this.state.category === loan
+      return (
+        <div key={key} className="radioPad">
+          <div>
+            <label
+              className={
+                isCurrent ?
+                  'radioPad__wrapper radioPad__wrapper--selected' :
+                  'radioPad__wrapper'
+              }
+            >
+              <input
+                className="radioPad__radio"
+                type="radio"
+                name="categories"
+                id={loan}
+                value={loan}
+                onChange={this.categoryChange}
+              />
+              {loan}
+            </label>
+          </div>
+        </div>
+      )
+    })
     return (
       <div>
         {completed ? (
@@ -110,26 +159,9 @@ class NominationForm extends React.Component<any, any> {
             <form className="feelix-card">
               <h5> Nominate a deserving candidate </h5>
               <hr />
-              <div className="form-group">
-                <label htmlFor="categorySelect">Select an award category</label>
-                <RadioGroup onChange={this.categoryChange} horizontal>
-                  <RadioButton value={this.category[0]}>
-                    {this.category[0]}
-                  </RadioButton>
-                  <RadioButton value={this.category[1]}>
-                    {this.category[1]}
-                  </RadioButton>
-                  <RadioButton value={this.category[2]}>
-                    {this.category[2]}
-                  </RadioButton>
-                  <RadioButton value={this.category[3]}>
-                    {this.category[3]}
-                  </RadioButton>
-                  <RadioButton value={this.category[4]}>
-                    {this.category[4]}
-                  </RadioButton>
-                </RadioGroup>
-                {/* <select
+              {options}
+              {/* <div className="form-group">
+                <select
                   className="form-control"
                   id="categorySelect"
                   value={this.state.category}
@@ -140,8 +172,8 @@ class NominationForm extends React.Component<any, any> {
                   <option>{this.categories[2]}</option>
                   <option>{this.categories[3]}</option>
                   <option>{this.categories[4]}</option>
-                </select> */}
-              </div>
+                </select>
+              </div> */}
               <div className="form-group">
                 <label htmlFor="nomineeeSelect">Select a fellow staff</label>
                 <Select
