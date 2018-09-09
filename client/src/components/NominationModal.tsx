@@ -1,7 +1,7 @@
 import * as React from "react";
 import Octicon, { ChevronLeft, Thumbsup } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
-import { getUserDetails, getMyImage } from "../MicrosoftGraphClient";
+import { getUsersByObjectId, getMyImage, getPhotosByObjectId } from "../MicrosoftGraphClient";
 
 import Comment from "./Comment";
 import CommentAdder from "./CommentAdder";
@@ -49,9 +49,6 @@ class NominationModal extends React.Component<any, any> {
         }
         return;
       });
-    setTimeout(() => {
-      this.setState({isLoading : false})
-    }, 1000);
   }
 
   /* public componentWillReceiveProps() {
@@ -83,10 +80,52 @@ class NominationModal extends React.Component<any, any> {
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
     const data = snapshot.val();
-    this.setState({
-      justification: data.justification,
-      category: data.category
+
+    getUsersByObjectId([data.nominee, data.nominator], (err, users) => {
+      if (err) {
+        // TODO
+      } else {
+        let retrievedNominee = {
+          img: 'https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg',
+          name: users[data.nominee].name
+        };
+
+        let retrievedNominator = {
+          img: 'https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg',
+          name: users[data.nominator].name
+        };
+
+        this.setState({
+          justification: data.justification,
+          category: data.category,
+          nominee: retrievedNominee,
+          nominator: retrievedNominator,
+          isLoading: false,
+        }, () => {
+          getPhotosByObjectId([data.nominee, data.nominator], (error, photos) => {
+            if (error) {
+              // TODO
+            } else {
+              retrievedNominee = {
+                img: photos[data.nominee],
+                name: this.state.nominee.name
+              };
+  
+              retrievedNominator = {
+                img: photos[data.nominator],
+                name: this.state.nominator.name
+              };
+  
+              this.setState({
+                nominee: retrievedNominee,
+                nominator: retrievedNominator,
+              });
+            }
+          });
+        });
+      }
     });
+
     console.log(data.comments != null);
     if (data.comments != null) {
       console.log("Comments:");
@@ -113,34 +152,6 @@ class NominationModal extends React.Component<any, any> {
         upvoters: data.upvoters
       });
     }
-    getUserDetails(data.nominee, (err, userDetails) => {
-      if (err) {
-        // TODO
-      } else {
-        const retrievedNominee = {
-          img: userDetails.profilePic,
-          name: userDetails.name
-        };
-
-        this.setState({
-          nominee: retrievedNominee
-        });
-      }
-    });
-    getUserDetails(data.nominator, (err, userDetails) => {
-      if (err) {
-        // TODO
-      } else {
-        const retrievedNominator = {
-          img: userDetails.profilePic,
-          name: userDetails.name
-        };
-
-        this.setState({
-          nominator: retrievedNominator
-        });
-      }
-    });
   };
 
   public render() {
