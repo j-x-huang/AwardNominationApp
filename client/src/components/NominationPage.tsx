@@ -154,55 +154,6 @@ class NominationPage extends React.Component<any, any> {
     return defaultDatabase.ref().update(updates);
   };
 
-  // move this function later to comment page
-  /*  private makeComment = () => {
-    const defaultDatabase = firebase.database();
-
-    const newPostKey = defaultDatabase.ref().child('/nominations/' + '-LKt6HFSC0KasTNDjXb1' + '/comments/').push().key;
-
-    const nominationid = '-LKt6HFSC0KasTNDjXb1';
-    const user = getUser();
-
-    const comment = {
-      comment: "hello",
-      commenter: user.profile.oid
-    }
-    const updates = {};
-    updates['/nominations/' + nominationid + '/comments/' + newPostKey] = comment; 
-
-    return defaultDatabase.ref().update(updates);
-  } */
-
-  // move this function later to comment page
-  /*  private makeUpvote = () => {
-    const defaultDatabase = firebase.database();
-
-    const nominationid = '-LKt6HFSC0KasTNDjXb1';
-    const user = getUser();
-    const uid = user.profile.oid;
-
-    const upvoter = {
-      [uid]: true
-    };
-
-    const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/');
-
-    return upvoterPath.update(upvoter);
-  } */
-
-  // move this function later to comment page
-  /* private removeUpvote = () => {
-    const defaultDatabase = firebase.database();
-
-    const nominationid = '-LKt6HFSC0KasTNDjXb1';
-    const user = getUser();
-    const uid = user.profile.oid;
-
-    const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/' + uid);
-
-    return upvoterPath.remove();
-  } */
-
   private handleNext = () => {
     const { activeStep } = this.state;
     if (activeStep === getSteps().length - 1) {
@@ -211,10 +162,6 @@ class NominationPage extends React.Component<any, any> {
         completed: true
       });
     } else {
-      // remove these btw
-      // this.makeComment();
-      // this.makeUpvote();
-      // this.removeUpvote();
       this.setState({
         activeStep: activeStep + 1
       });
