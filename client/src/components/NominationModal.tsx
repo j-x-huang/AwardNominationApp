@@ -316,7 +316,7 @@ class NominationModal extends React.Component<any, any> {
 
     const comment = {
       comment: userComment,
-      commenter: user.profile.oid,
+      commenter: user.profile.name,
       commentPic: this.state.profilePic
     };
     const commentsArray = this.state.comments;
