@@ -13,14 +13,18 @@
     "bootstrap": "^4.1.3",
     "firebase": "latest",
     "jquery": "^3.3.1",
+    "myob": "^0.3.18",
     "popper.js": "^1.14.3",
     "react": "^16.4.2",
     "react-adal": "^0.4.18",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.2",
+    "react-md-spinner": "^0.3.0",
+    "react-radio-buttons": "^1.2.2",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "2.17.0",
-    "react-select": "^2.0.0"
+    "react-select": "^2.0.0",
+    "react-spinner-component": "^0.2.2"
   },
   "scripts": {
     "start": "react-scripts-ts start",
