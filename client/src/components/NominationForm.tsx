@@ -6,7 +6,7 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 
 class NominationForm extends React.Component<any, any> {
-  public allNominees = [{ value: "", label: "", isDisabled: false}];
+  public allNominees = [{ value: "", label: "", isDisabled: false }];
   public categories = [
     "Being Purple",
     "One Small Step",
@@ -31,7 +31,7 @@ class NominationForm extends React.Component<any, any> {
     nominee: { value: "", label: "", isDisabled: false },
     score: 1,
     nominees: new Array<any>(),
-    completed: false,
+    completed: false
   };
 
   public updateNomineeList = (category: string) => {
@@ -77,11 +77,11 @@ class NominationForm extends React.Component<any, any> {
       );
     }
 
-    actualNominees.forEach((nom) => {
+    actualNominees.forEach(nom => {
       nom.isDisabled = true;
     });
 
-    neoNominees.forEach((nom) => {
+    neoNominees.forEach(nom => {
       nom.isDisabled = false;
     });
 
@@ -126,15 +126,15 @@ class NominationForm extends React.Component<any, any> {
   public render() {
     const { category, nominee, nominees, completed } = this.state;
     const options = this.categories.map((loan, key) => {
-      const isCurrent = this.state.category === loan
+      const isCurrent = this.state.category === loan;
       return (
         <div key={key} className="radioPad">
           <div>
             <label
               className={
-                isCurrent ?
-                  'radioPad__wrapper radioPad__wrapper--selected' :
-                  'radioPad__wrapper'
+                isCurrent
+                  ? "radioPad__wrapper radioPad__wrapper--selected"
+                  : "radioPad__wrapper"
               }
             >
               <input
@@ -149,50 +149,50 @@ class NominationForm extends React.Component<any, any> {
             </label>
           </div>
         </div>
-      )
-    })
+      );
+    });
     return (
       <div>
         {completed ? (
           <NominationComplete category={category} nominee={nominee.label} />
         ) : (
-            <form className="feelix-card">
-              <h5> Nominate a deserving candidate </h5>
-              <hr />
-              {options}
-              <div className="form-group">
-                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-                <Select
-                  isDisabled={category === ""}
-                  isSearchable={true}
-                  onChange={this.nomineeChange}
-                  options={nominees}
-                  value={this.state.nominee}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="justificationSelect">Justify your decision</label>
-                <textarea
-                  className="form-control"
-                  style={{ resize: "none" }}
-                  id="justificationSelect"
-                  rows={5}
-                  value={this.state.justification}
-                  onChange={this.justificationChange}
-                />
-              </div>
-              <div className="overflowHid">
-                <button
-                  type="button"
-                  className="btn btn-primary float-right"
-                  disabled={this.checkFieldsFilled() ? false : true}
-                  onClick={this.handleClick}
-                >
-                  Nominate
+          <form className="feelix-card">
+            <h5> Nominate a deserving candidate </h5>
+            <hr />
+            <div id="categorySelect">{options}</div>
+            <div className="form-group">
+              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+              <Select
+                isDisabled={category === ""}
+                isSearchable={true}
+                onChange={this.nomineeChange}
+                options={nominees}
+                value={this.state.nominee}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="justificationSelect">Justify your decision</label>
+              <textarea
+                className="form-control"
+                style={{ resize: "none" }}
+                id="justificationSelect"
+                rows={5}
+                value={this.state.justification}
+                onChange={this.justificationChange}
+              />
+            </div>
+            <div className="overflowHid">
+              <button
+                type="button"
+                className="btn btn-primary float-right"
+                disabled={this.checkFieldsFilled() ? false : true}
+                onClick={this.handleClick}
+              >
+                Nominate
               </button>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
+        )}
       </div>
     );
   }
