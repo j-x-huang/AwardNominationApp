@@ -402,16 +402,16 @@ a:visited {
   }
 }
 .radioPad__wrapper {
-  display: block;
+  display: flex;
   cursor: pointer;
   background: #7b1096;
   color: #fff;
   text-transform: uppercase;
-  font-size: 1.5rem;
+  font-size: 1.5vw;
   margin: 0.5rem;
-  padding: 3rem;
   height: 175px;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 .radioPad__wrapper:active,
 .radioPad__wrapper--selected {
