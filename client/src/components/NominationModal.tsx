@@ -38,17 +38,20 @@ class NominationModal extends React.Component<any, any> {
 
   public componentDidMount() {
     console.log("Modal mounted! Location: " + this.props.location);
+    getMyImage((picUrl, err) => {
+      if (err) {
+        // nothing
+      } else {
+        const url = window.URL;
+        const imageUrl = url.createObjectURL(picUrl);
+        this.setState({
+          profilePic: imageUrl
+        });
+      }
+      return;
+    });
     this.getNominationDetails(this.props.nominationID);
-      getMyImage((picUrl, err) => {
-        if (err) {
-          // nothing
-        } else {
-          this.setState({
-            profilePic: picUrl
-          });
-        }
-        return;
-      });
+     
     setTimeout(() => {
       this.setState({isLoading : false})
     }, 1000);
@@ -305,6 +308,7 @@ class NominationModal extends React.Component<any, any> {
   };
 
   private makeComment = (userComment: string) => {
+    const userPic = this.state.profilePic;
     const defaultDatabase = firebase.database();
 
     const newPostKey = defaultDatabase
@@ -317,7 +321,7 @@ class NominationModal extends React.Component<any, any> {
     const comment = {
       comment: userComment,
       commenter: user.profile.name,
-      commentPic: this.state.profilePic
+      commentPic: userPic
     };
     const commentsArray = this.state.comments;
     commentsArray.push(comment);
