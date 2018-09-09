@@ -1,7 +1,8 @@
 import * as React from "react";
 import Octicon, { ChevronLeft, Thumbsup } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
-import { getUserDetails } from "../MicrosoftGraphClient";
+import { getUserDetails, getMyImage } from "../MicrosoftGraphClient";
+
 import Comment from "./Comment";
 import CommentAdder from "./CommentAdder";
 import { Redirect } from "react-router-dom";
@@ -23,7 +24,8 @@ class NominationModal extends React.Component<any, any> {
     newComment: "",
     hasBeenNominated: false,
     failed: false,
-    isLoading: true
+    isLoading: true,
+    profilePic: "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
   };
 
   public static defaultProps = {
@@ -37,7 +39,16 @@ class NominationModal extends React.Component<any, any> {
   public componentDidMount() {
     console.log("Modal mounted! Location: " + this.props.location);
     this.getNominationDetails(this.props.nominationID);
-
+      getMyImage((picUrl, err) => {
+        if (err) {
+          // nothing
+        } else {
+          this.setState({
+            profilePic: picUrl
+          });
+        }
+        return;
+      });
     setTimeout(() => {
       this.setState({isLoading : false})
     }, 1000);
@@ -227,7 +238,7 @@ class NominationModal extends React.Component<any, any> {
               </p>
               <CommentAdder
                 comment={this.state.newComment}
-                nominatorPic="https://galvanicmedia.files.wordpress.com/2018/02/screen-shot-2018-02-03-at-3-38-38-pm.png?w=672&h=372&crop=1"
+                nominatorPic={this.state.profilePic}
                 onCommentAdd={this.handleCommentAdd}
                 onCommentChange={this.handleCommentChange}
               />
@@ -238,7 +249,7 @@ class NominationModal extends React.Component<any, any> {
                 <Comment
                   key={i}
                   nominator={comment.commenter}
-                  nominatorPic="https://i.kinja-img.com/gawker-media/image/upload/s--s1IAfVS_--/c_fill,f_auto,fl_progressive,g_center,h_675,q_80,w_1200/kaprfadz9rnvypesa2u9.png"
+                  nominatorPic={comment.commentPic}
                   comment={comment.comment}
                 />
               ))}
@@ -305,7 +316,8 @@ class NominationModal extends React.Component<any, any> {
 
     const comment = {
       comment: userComment,
-      commenter: user.profile.oid
+      commenter: user.profile.oid,
+      commentPic: this.state.profilePic
     };
     const commentsArray = this.state.comments;
     commentsArray.push(comment);
