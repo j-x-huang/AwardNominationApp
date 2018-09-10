@@ -24,6 +24,7 @@ class NominationModal extends React.Component<any, any> {
     justification: "",
     upvoters: [] as any[],
     comments: [] as any[],
+    commenters: [] as any[],
     newComment: "",
     hasBeenNominated: false,
     failed: false,
@@ -157,64 +158,88 @@ class NominationModal extends React.Component<any, any> {
 
       const allComments = data.comments;
       const previousComments = [...this.state.comments];
+      const commentersArray: any[] = [];
 
       let comment;
       let key;
+      let commenter;
 
       for (key in allComments) {
         if (allComments.hasOwnProperty(key)) {
           comment = allComments[key];
           previousComments.push(comment);
+          commenter = comment.commenter;
+          commentersArray.push(commenter);
+
+          if (commentersArray.indexOf(commenter) === -1) {
+            commentersArray.push(commenter);
+          }
         }
       }
 
       console.log(previousComments);
-      this.setState({ comments: previousComments });
+      this.setState({
+        comments: previousComments,
+        commenters: commentersArray
+      });
 
       const namedComments: any[] = [];
-      const commentsCopy = this.state.comments;
+      const commenters = this.state.commenters;
+      const comments = this.state.comments;
 
-      this.state.comments.forEach(element => {
-        console.log(element.commenter);
-        getUsersByObjectId([element.commenter], (err, user) => {
-          if (err) {
-            // TODO
-          } else {
-            const retrievedName = {
+      getUsersByObjectId(commenters, (err, users) => {
+        if (err) {
+          console.log("error");
+          // todo
+        } else {
+          comments.forEach(commentInfo => {
+            console.log(commentInfo.commenter);
+            const fullname =
+              users[commentInfo.commenter] === undefined ? "" : users[commentInfo.commenter].name;
+            console.log(name);
+            let comment1;
+
+            comment1 = {
               img:
-                "https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg",
-              commenter: element.commenter,
-              comment: element.comment,
-              name: user[element.commenter].name
+                "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+              commenter: commentInfo.commenter,
+              comment: commentInfo.comment,
+              name: fullname
             };
-            namedComments[commentsCopy.indexOf(element)] = retrievedName;
-          }
-          console.log(namedComments);
-          this.setState({ comments: namedComments });
+            namedComments.push(comment1);
+          });
+          this.setState({comments: namedComments});
 
           const updatedComments: any[] = [];
-          const anotherCommentsCopy = this.state.comments;
-
-          this.state.comments.forEach(commentElement => {
-            console.log(commentElement.commenter);
-            getPhotosByObjectId([commentElement.commenter], (error, photo) => {
-              if (error) {
-                // TODO
-              } else {
-                const retrievedName = {
-                  img: photo[commentElement.commenter],
-                  commenter: commentElement.commenter,
-                  comment: commentElement.comment,
-                  name: commentElement.name
+          const newComments = this.state.comments;
+    
+          getPhotosByObjectId(commenters, (err2, photos) => {
+            if (err) {
+              console.log("error");
+              // todo
+            } else {
+              newComments.forEach(commentInfo => {
+                console.log(commentInfo.commenter);
+                const picture =
+                  photos[commentInfo.commenter] === undefined ? "" : photos[commentInfo.commenter];
+                console.log(picture);
+                let comment1;
+    
+                comment1 = {
+                  img:
+                    picture,
+                  commenter: commentInfo.commenter,
+                  comment: commentInfo.comment,
+                  name: commentInfo.name
                 };
-                updatedComments[anotherCommentsCopy.indexOf(commentElement)] = retrievedName;
-              }
-              console.log(updatedComments);
-              this.setState({ comments: updatedComments });
-            });
+                updatedComments.push(comment1);
+              });
+              this.setState({comments: updatedComments});
+            }
           });
-        });
+        }
       });
+
     }
     if (data.upvoters != null) {
       this.setState({
@@ -416,7 +441,7 @@ class NominationModal extends React.Component<any, any> {
       commenter: user.profile.oid,
       img: this.state.profilePic,
       name: user.profile.name
-    }
+    };
     commentsArray.push(newComment);
     this.setState({ comments: commentsArray });
     const updates = {};
