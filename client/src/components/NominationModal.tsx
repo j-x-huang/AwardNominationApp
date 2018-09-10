@@ -1,8 +1,11 @@
 import * as React from "react";
 import Octicon, { ChevronLeft, Thumbsup } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
-import { getUsersByObjectId, getMyImage, getPhotosByObjectId } from "../MicrosoftGraphClient";
-
+import {
+  getUsersByObjectId,
+  getMyImage,
+  getPhotosByObjectId
+} from "../MicrosoftGraphClient";
 import Comment from "./Comment";
 import CommentAdder from "./CommentAdder";
 import { Redirect } from "react-router-dom";
@@ -25,7 +28,8 @@ class NominationModal extends React.Component<any, any> {
     hasBeenNominated: false,
     failed: false,
     isLoading: true,
-    profilePic: "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+    profilePic:
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
   };
 
   public static defaultProps = {
@@ -51,16 +55,16 @@ class NominationModal extends React.Component<any, any> {
       return;
     });
     this.getNominationDetails(this.props.nominationID);
-      getMyImage((picUrl, err) => {
-        if (err) {
-          // nothing
-        } else {
-          this.setState({
-            profilePic: picUrl
-          });
-        }
-        return;
-      });
+    getMyImage((picUrl, err) => {
+      if (err) {
+        // nothing
+      } else {
+        this.setState({
+          profilePic: picUrl
+        });
+      }
+      return;
+    });
   }
 
   /* public componentWillReceiveProps() {
@@ -98,43 +102,51 @@ class NominationModal extends React.Component<any, any> {
         // TODO
       } else {
         let retrievedNominee = {
-          img: 'https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg',
+          img:
+            "https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg",
           name: users[data.nominee].name
         };
 
         let retrievedNominator = {
-          img: 'https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg',
+          img:
+            "https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg",
           name: users[data.nominator].name
         };
 
-        this.setState({
-          justification: data.justification,
-          category: data.category,
-          nominee: retrievedNominee,
-          nominator: retrievedNominator,
-          isLoading: false,
-        }, () => {
-          getPhotosByObjectId([data.nominee, data.nominator], (error, photos) => {
-            if (error) {
-              // TODO
-            } else {
-              retrievedNominee = {
-                img: photos[data.nominee],
-                name: this.state.nominee.name
-              };
-  
-              retrievedNominator = {
-                img: photos[data.nominator],
-                name: this.state.nominator.name
-              };
-  
-              this.setState({
-                nominee: retrievedNominee,
-                nominator: retrievedNominator,
-              });
-            }
-          });
-        });
+        this.setState(
+          {
+            justification: data.justification,
+            category: data.category,
+            nominee: retrievedNominee,
+            nominator: retrievedNominator,
+            isLoading: false
+          },
+          () => {
+            getPhotosByObjectId(
+              [data.nominee, data.nominator],
+              (error, photos) => {
+                if (error) {
+                  // TODO
+                } else {
+                  retrievedNominee = {
+                    img: photos[data.nominee],
+                    name: this.state.nominee.name
+                  };
+
+                  retrievedNominator = {
+                    img: photos[data.nominator],
+                    name: this.state.nominator.name
+                  };
+
+                  this.setState({
+                    nominee: retrievedNominee,
+                    nominator: retrievedNominator
+                  });
+                }
+              }
+            );
+          }
+        );
       }
     });
 
@@ -158,6 +170,51 @@ class NominationModal extends React.Component<any, any> {
 
       console.log(previousComments);
       this.setState({ comments: previousComments });
+
+      const namedComments: any[] = [];
+      const commentsCopy = this.state.comments;
+
+      this.state.comments.forEach(element => {
+        console.log(element.commenter);
+        getUsersByObjectId([element.commenter], (err, user) => {
+          if (err) {
+            // TODO
+          } else {
+            const retrievedName = {
+              img:
+                "https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg",
+              commenter: element.commenter,
+              comment: element.comment,
+              name: user[element.commenter].name
+            };
+            namedComments[commentsCopy.indexOf(element)] = retrievedName;
+          }
+          console.log(namedComments);
+          this.setState({ comments: namedComments });
+
+          const updatedComments: any[] = [];
+          const anotherCommentsCopy = this.state.comments;
+
+          this.state.comments.forEach(commentElement => {
+            console.log(commentElement.commenter);
+            getPhotosByObjectId([commentElement.commenter], (error, photo) => {
+              if (error) {
+                // TODO
+              } else {
+                const retrievedName = {
+                  img: photo[commentElement.commenter],
+                  commenter: commentElement.commenter,
+                  comment: commentElement.comment,
+                  name: commentElement.name
+                };
+                updatedComments[anotherCommentsCopy.indexOf(commentElement)] = retrievedName;
+              }
+              console.log(updatedComments);
+              this.setState({ comments: updatedComments });
+            });
+          });
+        });
+      });
     }
     if (data.upvoters != null) {
       this.setState({
@@ -165,14 +222,13 @@ class NominationModal extends React.Component<any, any> {
       });
 
       console.log(this.state.upvoters);
-      Object.keys(this.state.upvoters).forEach((key) => {
+      Object.keys(this.state.upvoters).forEach(key => {
         console.log(key);
         console.log(getUser().profile.oid);
         if (key === getUser().profile.oid) {
-          this.setState({hasBeenNominated: true})
+          this.setState({ hasBeenNominated: true });
         }
       });
-
     }
   };
 
@@ -221,10 +277,11 @@ class NominationModal extends React.Component<any, any> {
             <div className="award-modal-body">
               <div className="nomination-info-container">
                 <div className="modal-element-padding">
-                  {this.state.isLoading ? <MDSpinner
-                    singleColor="#8241aa"
-                    size="200%"
-                  /> : <img className="nominee-image" src={nominee.img} />}
+                  {this.state.isLoading ? (
+                    <MDSpinner singleColor="#8241aa" size="200%" />
+                  ) : (
+                    <img className="nominee-image" src={nominee.img} />
+                  )}
                   <div className="nomination-info wrap-text">
                     <h2>{nominee.name}</h2>
                     <h6>
@@ -235,20 +292,20 @@ class NominationModal extends React.Component<any, any> {
                 </div>
 
                 <div className="div-centre div-space-between modal-element-left-padding">
-                  {this.state.isLoading ? <MDSpinner
-                    singleColor="#8241aa"
-                    size="25%"
-                  /> :
+                  {this.state.isLoading ? (
+                    <MDSpinner singleColor="#8241aa" size="25%" />
+                  ) : (
                     <div className="nominator-info inline-components">
                       <p className="inline-components wrap-text">
                         Nominated by{" "}
                         <span className="bold-this">{nominator.name}</span>
-                    </p>
+                      </p>
                       <img
                         className="profilePic inline-components"
                         src={nominator.img}
                       />
-                    </div>}
+                    </div>
+                  )}
                   <button
                     type="button"
                     className="btn btn-light float-right btn-top-round inline-components"
@@ -282,8 +339,8 @@ class NominationModal extends React.Component<any, any> {
               ) => (
                 <Comment
                   key={i}
-                  nominator={comment.commenter}
-                  nominatorPic={comment.commentPic}
+                  nominator={comment.name}
+                  nominatorPic={comment.img}
                   comment={comment.comment}
                 />
               ))}
@@ -340,7 +397,6 @@ class NominationModal extends React.Component<any, any> {
   };
 
   private makeComment = (userComment: string) => {
-    const userPic = this.state.profilePic;
     const defaultDatabase = firebase.database();
 
     const newPostKey = defaultDatabase
@@ -352,8 +408,7 @@ class NominationModal extends React.Component<any, any> {
 
     const comment = {
       comment: userComment,
-      commenter: user.profile.name,
-      commentPic: userPic
+      commenter: user.profile.oid
     };
     const commentsArray = this.state.comments;
     commentsArray.push(comment);
