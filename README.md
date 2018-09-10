@@ -16,6 +16,9 @@ This is an award nomination application that allows all MYOB staff to nominate e
 1. First clone this GitHub repository
 2. Install npm [here](https://www.npmjs.com/get-npm)
 3. Use command line to navigate to the client folder of the cloned repository
+```sh
+$ cd client
+```
 4. Execute the following command in the client folder to install the required dependencies
 ```sh
 $ npm install
