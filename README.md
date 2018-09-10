@@ -2,9 +2,11 @@
 ## Introduction
 **Project Team**: Final Frontier (Group 7)
 
+![alt text](https://cdn.discordapp.com/attachments/482526151403765763/488843789260029966/newlogoffsmall.png)
+
 **Customer**: MYOB (Product Owner: Chester Booker)
 
-This is an awards nomination application that allows all MYOB staff to nominate each other for a variety of different award categories. This will involve the following capabilities: 
+This is an award nomination application that allows all MYOB staff to nominate each other for a variety of different award categories. This will involve the following capabilities: 
 1. Nominate a staff member who deserves an award
 2. Tally votes given for each nomination
 3. Filter votes of award nominations
