@@ -190,9 +190,9 @@ class NominationForm extends React.Component<any, any> {
               >
                 Nominate
               </button>
-            </div>
-          </form>
-        )}
+              </div>
+            </form>
+          )}
       </div>
     );
   }
@@ -268,16 +268,41 @@ class NominationForm extends React.Component<any, any> {
 
   private makeNomination = () => {
     const defaultDatabase = firebase.database();
+    const category = this.state.category;
+    const nominee = this.state.nominee.value;
 
+    // Check if nomination exist
+    defaultDatabase
+      .ref("nominations/")
+      .once("value")
+      .then(snap => {
+        const array = snap.val();
+        // console.log(array);
+        for (const existingNominationPostKey of Object.keys(array)) {
+          const existingNomination = array[existingNominationPostKey];
+          if (existingNomination.category === category && existingNomination.nominee === nominee) {
+            console.log(existingNominationPostKey);
+            this.makeComment(existingNominationPostKey, this.state.justification);
+            this.makeUpvote(existingNominationPostKey);
+            return;
+            // TODO: redirect to comment page
+          }
+        }
+        this.createNewNomination(defaultDatabase);
+      });
+
+  };
+
+  private createNewNomination = (defaultDatabase: firebase.database.Database) => {
     // Get a key for a new Post.
     const newPostKey = defaultDatabase
       .ref()
       .child("nominations")
       .push().key;
 
+    const nomineeid = this.state.nominee.value;
     const user = getUser();
     const userid = user.profile.oid;
-    const nomineeid = this.state.nominee.value;
 
     // Write the new post's data simultaneously in the posts list and the user's post list.
     const updates = {};
@@ -308,7 +333,62 @@ class NominationForm extends React.Component<any, any> {
     nomCatPath.update(nomCat);
 
     return defaultDatabase.ref().update(updates);
+  }
+
+  private makeComment = (nominationPostKey: string, justification: string) => {
+    const defaultDatabase = firebase.database();
+    const nominationid = nominationPostKey;
+
+    const newPostKey = defaultDatabase
+      .ref()
+      .child("/nominations/" + nominationid + "/comments/")
+      .push().key;
+
+    const user = getUser();
+
+    const comment = {
+      comment: justification,
+      commenter: user.profile.oid
+    };
+    const updates = {};
+    updates[
+      "/nominations/" + nominationid + "/comments/" + newPostKey
+    ] = comment;
+
+    return defaultDatabase.ref().update(updates);
   };
+
+  private makeUpvote = (nominationPostKey: string) => {
+    const defaultDatabase = firebase.database();
+
+    const nominationid = nominationPostKey;
+    const user = getUser();
+    const uid = user.profile.oid;
+
+    const upvoter = {
+      [uid]: true
+    };
+
+    const upvoterPath = defaultDatabase.ref(
+      "/nominations/" + nominationid + "/upvoters/"
+    );
+
+    return upvoterPath.update(upvoter);
+  };
+  /*
+    private removeUpvote = (nominationPostKey: string) => {
+      const defaultDatabase = firebase.database();
+  
+      const nominationid = nominationPostKey;
+      const user = getUser();
+      const uid = user.profile.oid;
+  
+      const upvoterPath = defaultDatabase.ref(
+        "/nominations/" + nominationid + "/upvoters/" + uid
+      );
+  
+      return upvoterPath.remove();
+    };*/
 }
 
 export default NominationForm;
