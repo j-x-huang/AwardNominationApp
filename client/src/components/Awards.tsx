@@ -10,18 +10,25 @@ import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
 import { Route } from "react-router-dom";
 import Modal from "./NominationModal";
-import { getPhotosByObjectId, getUsersByObjectId } from "../MicrosoftGraphClient";
+import {
+  getPhotosByObjectId,
+  getUsersByObjectId
+} from "../MicrosoftGraphClient";
 import MDSpinner from "react-md-spinner";
+
+const awardsContainerWidth = window.screen.availWidth < 1496 ? 1114 : 1496;
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      width: "90%",
       backgroundColor: theme.palette.background.paper,
-      marginLeft: "5%",
-      marginRight: "5%",
-      marginTop: "2%"
+      display: "block",
+      width: awardsContainerWidth,
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginTop: "2%",
+      padding: 0
     },
     tabBar: {
       boxShadow: "none",
@@ -47,7 +54,7 @@ const styles = (theme: Theme) =>
     tabSelected: {}
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> { }
+export interface IAwardsProps extends WithStyles<typeof styles> {}
 
 export interface IAwardsStates {
   value: number;
@@ -160,7 +167,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       if (nominees.indexOf(item.nominee)) {
         nominees.push(item.nominee);
       }
-
     });
 
     getUsersByObjectId(nominees, (err, users) => {
@@ -169,15 +175,17 @@ class Awards extends React.Component<any, IAwardsStates> {
       } else {
         snapshot.forEach(childSnapshot => {
           const item = childSnapshot.val();
-          const name = users[item.nominee] === undefined ? '' : users[item.nominee].name;
+          const name =
+            users[item.nominee] === undefined ? "" : users[item.nominee].name;
           let nomination;
-    
+
           nomination = {
-            img: 'http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg',
+            img:
+              "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
             id: childSnapshot.key,
             description: item.justification,
             objectId: item.nominee,
-            title: name,
+            title: name
           };
           nominations.push(nomination);
         });
@@ -188,7 +196,11 @@ class Awards extends React.Component<any, IAwardsStates> {
     return nominations;
   };
 
-  private updateAllNominations = (category: string, nominations: any[], nominees: any[]) => {
+  private updateAllNominations = (
+    category: string,
+    nominations: any[],
+    nominees: any[]
+  ) => {
     const awards = [...this.state.awards];
 
     const index = awards.findIndex(c => {
@@ -220,10 +232,9 @@ class Awards extends React.Component<any, IAwardsStates> {
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
           this.setState({ awards: newAwards });
         }
-      })
+      });
     });
-    
-  }
+  };
 
   public getAllNominations = () => {
     const defaultDatabase = firebase.database();
@@ -286,16 +297,17 @@ class Awards extends React.Component<any, IAwardsStates> {
     ); */
     return (
       <div>
-        {this.state.isLoading ?
-          (<div id="spinner">
-            <MDSpinner
-              singleColor="#8241aa"
-              size="50%"
-            />
-          </div>)
-          :
-          (<div className={classes.root}>
-            <AppBar position="static" color="default" className={classes.tabBar}>
+        {this.state.isLoading ? (
+          <div id="spinner">
+            <MDSpinner singleColor="#8241aa" size="50%" />
+          </div>
+        ) : (
+          <div className={classes.root}>
+            <AppBar
+              position="static"
+              color="default"
+              className={classes.tabBar}
+            >
               <Tabs
                 value={value}
                 onChange={this.handleChange}
@@ -330,9 +342,9 @@ class Awards extends React.Component<any, IAwardsStates> {
               path={"/awards/nomination/" + this.state.selectedNomination}
               render={this.openModal}
             />
-          </div>)
-        }
-      </div>   
+          </div>
+        )}
+      </div>
     );
   }
 }

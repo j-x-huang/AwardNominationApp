@@ -267,7 +267,8 @@ class NominationModal extends React.Component<any, any> {
               </div>
               <hr />
               <p className="modal-element-padding">
-                {comments.length} Comments
+                {comments.length}{" "}
+                {comments.length === 1 ? "Comment" : "Comments"}
               </p>
               <CommentAdder
                 comment={this.state.newComment}
