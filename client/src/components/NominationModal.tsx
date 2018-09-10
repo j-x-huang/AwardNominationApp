@@ -195,7 +195,9 @@ class NominationModal extends React.Component<any, any> {
           comments.forEach(commentInfo => {
             console.log(commentInfo.commenter);
             const fullname =
-              users[commentInfo.commenter] === undefined ? "" : users[commentInfo.commenter].name;
+              users[commentInfo.commenter] === undefined
+                ? ""
+                : users[commentInfo.commenter].name;
             console.log(name);
             let comment1;
 
@@ -208,11 +210,11 @@ class NominationModal extends React.Component<any, any> {
             };
             namedComments.push(comment1);
           });
-          this.setState({comments: namedComments});
+          this.setState({ comments: namedComments });
 
           const updatedComments: any[] = [];
           const newComments = this.state.comments;
-    
+
           getPhotosByObjectId(commenters, (err2, photos) => {
             if (err) {
               console.log("error");
@@ -221,25 +223,25 @@ class NominationModal extends React.Component<any, any> {
               newComments.forEach(commentInfo => {
                 console.log(commentInfo.commenter);
                 const picture =
-                  photos[commentInfo.commenter] === undefined ? "" : photos[commentInfo.commenter];
+                  photos[commentInfo.commenter] === undefined
+                    ? ""
+                    : photos[commentInfo.commenter];
                 console.log(picture);
                 let comment1;
-    
+
                 comment1 = {
-                  img:
-                    picture,
+                  img: picture,
                   commenter: commentInfo.commenter,
                   comment: commentInfo.comment,
                   name: commentInfo.name
                 };
                 updatedComments.push(comment1);
               });
-              this.setState({comments: updatedComments});
+              this.setState({ comments: updatedComments });
             }
           });
         }
       });
-
     }
     if (data.upvoters != null) {
       this.setState({
@@ -387,8 +389,10 @@ class NominationModal extends React.Component<any, any> {
   };
 
   private handleCommentAdd = () => {
-    this.makeComment(this.state.newComment);
-    this.setState({ newComment: "" });
+    if (this.state.newComment.trim() !== "") {
+      this.makeComment(this.state.newComment);
+      this.setState({ newComment: "" });
+    }
   };
 
   private makeUpvote = () => {

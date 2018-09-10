@@ -13,7 +13,7 @@ class CommentAdder extends React.Component<any, any> {
     const { comment, onCommentAdd, onCommentChange, nominatorPic } = this.props;
 
     return (
-      <div className="div-centre" style={{ paddingBottom: "0.5em" }}>
+      <div className="div-centre" style={{ paddingBottom: "0.75em" }}>
         <img
           className="profilePic"
           style={{ alignSelf: "flex-start" }}
