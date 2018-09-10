@@ -163,6 +163,16 @@ class NominationModal extends React.Component<any, any> {
       this.setState({
         upvoters: data.upvoters
       });
+
+      console.log(this.state.upvoters);
+      Object.keys(this.state.upvoters).forEach((key) => {
+        console.log(key);
+        console.log(getUser().profile.oid);
+        if (key === getUser().profile.oid) {
+          this.setState({hasBeenNominated: true})
+        }
+      });
+
     }
   };
 
