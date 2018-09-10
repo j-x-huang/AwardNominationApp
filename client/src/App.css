@@ -475,6 +475,12 @@ a:visited {
   align-items: center;
 }
 
+.div-spin-centre {
+  margin:auto;
+  text-align:center;
+  margin: 10em;
+}
+
 .div-space-between {
   justify-content: space-between;
 }
