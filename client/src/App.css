@@ -571,3 +571,23 @@ a:visited {
 #categorySelect {
   padding-bottom: 16px;
 }
+
+.cardMainContent {
+  padding-top: 8px;
+  max-height: 10.5em;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  line-height: 1.5em;
+}
+
+.cardMainContent::before {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 50%);
+  content: "\200C";
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 9em;
+  width: 30%;
+  text-align: center;
+}

@@ -31,10 +31,6 @@ const styles = (theme: Theme) =>
       height: 250,
       width: 158
     },
-    description: {
-      color: "#687480 ",
-      paddingTop: theme.spacing.unit
-    },
     details: {
       display: "flex",
       flexDirection: "column",
@@ -79,7 +75,7 @@ class Card extends React.Component<ICardProps> {
                   {title}
                 </Typography>
                 <Divider className={classes.divider} />
-                <Typography component="p" className={classes.description}>
+                <Typography component="p" className="cardMainContent">
                   {description}
                 </Typography>
               </CardContent>
