@@ -16,7 +16,17 @@ import {
 } from "../MicrosoftGraphClient";
 import MDSpinner from "react-md-spinner";
 
-const awardsContainerWidth = window.screen.availWidth < 1496 ? 1114 : 1496;
+function awardsContainerWidth() {
+  const width = window.screen.availWidth;
+  if (width < 732) {
+    return 350;
+  } else if (width < 1114) {
+    return 732;
+  } else if (width < 1496) {
+    return 1114;
+  }
+  return 1496;
+}
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -24,7 +34,7 @@ const styles = (theme: Theme) =>
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
       display: "block",
-      width: awardsContainerWidth,
+      width: awardsContainerWidth(),
       marginLeft: "auto",
       marginRight: "auto",
       marginTop: "2%",
