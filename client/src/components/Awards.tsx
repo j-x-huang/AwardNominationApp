@@ -174,7 +174,7 @@ class Awards extends React.Component<any, IAwardsStates> {
     snapshot.forEach(childSnapshot => {
       const item = childSnapshot.val();
 
-      if (nominees.indexOf(item.nominee)) {
+      if (nominees.indexOf(item.nominee) === -1) {
         nominees.push(item.nominee);
       }
     });
