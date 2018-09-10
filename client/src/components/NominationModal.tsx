@@ -285,7 +285,8 @@ class NominationModal extends React.Component<any, any> {
 
   private handleUpvoteClicked = () => {
     this.setState({ hasBeenNominated: !this.state.hasBeenNominated });
-    if (this.state.hasBeenNominated) {
+    console.log(this.state.hasBeenNominated);
+    if (!this.state.hasBeenNominated) {
       this.makeUpvote();
     } else {
       this.removeUpvote();
