@@ -411,7 +411,13 @@ class NominationModal extends React.Component<any, any> {
       commenter: user.profile.oid
     };
     const commentsArray = this.state.comments;
-    commentsArray.push(comment);
+    const newComment = {
+      comment: userComment,
+      commenter: user.profile.oid,
+      img: this.state.profilePic,
+      name: user.profile.name
+    }
+    commentsArray.push(newComment);
     this.setState({ comments: commentsArray });
     const updates = {};
     updates[
