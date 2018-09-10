@@ -312,7 +312,9 @@ class NominationForm extends React.Component<any, any> {
       justification: this.state.justification,
       nominator: userid,
       nominee: nomineeid,
-      score: 1
+      upvoters: {
+        [userid]: true
+      }
     };
     updates["/nominators/" + userid + "/" + newPostKey] = {
       nomination_id: newPostKey,
