@@ -1,23 +1,43 @@
 # Award Nomination App [![Build Status](https://travis-ci.com/hbao448/AwardNominationApp.svg?token=cciKEDpQyfT6yqJyJd58&branch=master)](https://travis-ci.com/hbao448/AwardNominationApp)
+**Project Team**: Final Frontier (Group 7)
 
-Group 7: Final Frontier
+![alt text](https://cdn.discordapp.com/attachments/482526151403765763/488843789260029966/newlogoffsmall.png)
 
-![Logo](https://cdn.discordapp.com/attachments/439232581951553537/476870356418953236/received_2155629124759234.png)
+**Customer**: MYOB (Product Owner: Chester Booker)
 
 ## Introduction
+This is an award nomination application that allows all MYOB staff to nominate each other for a variety of different award categories. This will involve the following capabilities: 
+1. Nominate a staff member who deserves an award
+2. Tally votes given for each nomination
+3. Filter votes of award nominations
+4. Identification of MYOB staff.
 
-This is a proof-of-concept application that will be used for employee awards ceremonies. It will be used for the nomination of candidates and allow for voting by other employees.
+## Execution Instructions
+1. First clone this GitHub repository
+2. Install npm [here](https://www.npmjs.com/get-npm)
+3. Use command line to navigate to the client folder of the cloned repository
+```sh
+$ cd client
+```
+4. Execute the following command in the client folder to install the required dependencies
+```sh
+$ npm install
+```
+5. To start the web application, execute this:
+```sh
+$ npm start
+```
 
 ## Contributors
-
-* Josh Asi (jasi433@aucklanduni.ac.nz)
-* Hunter Bao (hbao448@aucklanduni.ac.nz)
-* Justin Chuk (hchu167@aucklanduni.ac.nz) 
-* Jack Huang (xhua451@aucklanduni.ac.nz)
-* Andy Tang (atan932@aucklanduni.ac.nz)
-* David Qi (yqi955@aucklanduni.ac.nz)
-* Yao Jian Yap (yyap601@aucklanduni.ac.nz)
-* Alex Yoo (syu680@aucklanduni.ac.nz)
+**GitHub username** > **Official name** > **UPI**
+* josh-asi > Josh Asi > jasi433
+* hbao448 > Hunter Bao > hbao448
+* hchuk > Hang-Chi Justin Chuk > hchu167
+* j-x-huang > Jack Huang > xhua451
+* ponchotang > Andy Tang > atan932
+* RustedWheel > David Qi > yqi955
+* RemRinRamChi > Yao Jian Yap > yyap601
+* SuhoNova > Alex Yoo > syu680
 
 ## Final Frontier Wiki
 

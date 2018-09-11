@@ -9,6 +9,7 @@ import MaterialCard from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
+// import { getUserDetails } from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -30,10 +31,6 @@ const styles = (theme: Theme) =>
       height: 250,
       width: 158
     },
-    description: {
-      color: "#687480 ",
-      paddingTop: theme.spacing.unit
-    },
     details: {
       display: "flex",
       flexDirection: "column",
@@ -51,6 +48,7 @@ export interface ICardProps extends WithStyles<typeof styles> {
   id: number;
   img: string;
   title: string;
+  objectId: string;
   description: string;
   onSelect: (...args: any[]) => void;
 }
@@ -77,7 +75,7 @@ class Card extends React.Component<ICardProps> {
                   {title}
                 </Typography>
                 <Divider className={classes.divider} />
-                <Typography component="p" className={classes.description}>
+                <Typography component="p" className="cardMainContent">
                   {description}
                 </Typography>
               </CardContent>

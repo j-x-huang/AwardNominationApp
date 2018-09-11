@@ -22,6 +22,7 @@ export interface ICardContent {
   id: number;
   img: string;
   title: string;
+  objectId: string;
   description: string;
 }
 
@@ -39,8 +40,8 @@ class CardContainer extends React.Component<ICardContainerProps> {
         container={true}
         className={classes.root}
         spacing={32}
-        // alignItems="flex-start"
-        // justify="flex-start"
+      // alignItems="flex-start"
+      // justify="flex-start"
       >
         <Grid item={true} xs={12}>
           <Grid
@@ -56,6 +57,7 @@ class CardContainer extends React.Component<ICardContainerProps> {
                   img={card.img}
                   title={card.title}
                   description={card.description}
+                  objectId={card.objectId}
                   onSelect={onSelect}
                 />
               </Grid>

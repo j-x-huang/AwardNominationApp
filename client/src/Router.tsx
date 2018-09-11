@@ -8,15 +8,14 @@ import NominationComplete from "./components/NominationComplete";
 class Router extends React.Component {
   public render() {
     return (
-      <div>
-        <Switch>
-          <Route exact={true} path="/" component={Home} />
-          <Route path="/awards" component={Awards} />
-          <Route path="/nominate" component={NominationForm} />
-          <Route path="/nominationscomplete" component={NominationComplete} />
-          <Route path="/mynominations" component={NominationComplete} />
-        </Switch>
-      </div>
+      <Switch>
+        <Route exact={true} path="/home" component={Home} />
+        <Route path="/awards" component={Awards} />
+        <Route path="/nominate" component={NominationForm} />
+        <Route path="/nominationscomplete" component={NominationComplete} />
+        <Route path="/mynominations" component={NominationComplete} />
+        <Route component={Home} />
+      </Switch>
     );
   }
 }

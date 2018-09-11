@@ -69,56 +69,61 @@ class NominationPage extends React.Component<any, any> {
           <NominationComplete
             category={this.state.category}
             nominee={this.state.nominee}
+            onClick={this.showPic}
           />
         ) : (
-            <div>
-              {(() => {
-                switch (this.state.activeStep) {
-                  case 0:
-                    return <SelectCategory />;
-                  // break;
+          <div>
+            {(() => {
+              switch (this.state.activeStep) {
+                case 0:
+                  return <SelectCategory />;
+                // break;
 
-                  case 1:
-                    return (
-                      <NominationJustification
-                        category={this.state.category}
-                        nominee={this.state.nominee}
-                        justification={this.state.justification}
-                      />
-                    );
-                  // break;
+                case 1:
+                  return (
+                    <NominationJustification
+                      category={this.state.category}
+                      nominee={this.state.nominee}
+                      justification={this.state.justification}
+                    />
+                  );
+                // break;
 
-                  default:
-                    return <SelectCategory />;
-                  // break;
+                default:
+                  return <SelectCategory />;
+                // break;
+              }
+            })()}
+
+            <div className="buttonBlock">
+              <button
+                type="button"
+                className="btn btn-primary buttonLeft"
+                onClick={this.handleBack}
+                style={
+                  activeStep === 0
+                    ? { visibility: "hidden" }
+                    : { visibility: "visible" }
                 }
-              })()}
-
-              <div className="buttonBlock">
-                <button
-                  type="button"
-                  className="btn btn-primary buttonLeft"
-                  onClick={this.handleBack}
-                  style={
-                    activeStep === 0
-                      ? { visibility: "hidden" }
-                      : { visibility: "visible" }
-                  }
-                >
-                  Back
+              >
+                Back
               </button>
-                <button
-                  type="button"
-                  className="btn btn-primary buttonRight"
-                  onClick={this.handleNext}
-                >
-                  {activeStep === steps.length - 1 ? "Nominate" : "Next"}
-                </button>
-              </div>
+              <button
+                type="button"
+                className="btn btn-primary buttonRight"
+                onClick={this.handleNext}
+              >
+                {activeStep === steps.length - 1 ? "Nominate" : "Next"}
+              </button>
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
+  }
+
+  public showPic() {
+    return;
   }
 
   private makeNomination = () => {
@@ -154,55 +159,6 @@ class NominationPage extends React.Component<any, any> {
     return defaultDatabase.ref().update(updates);
   };
 
-  // move this function later to comment page
-  /*  private makeComment = () => {
-    const defaultDatabase = firebase.database();
-
-    const newPostKey = defaultDatabase.ref().child('/nominations/' + '-LKt6HFSC0KasTNDjXb1' + '/comments/').push().key;
-
-    const nominationid = '-LKt6HFSC0KasTNDjXb1';
-    const user = getUser();
-
-    const comment = {
-      comment: "hello",
-      commenter: user.profile.oid
-    }
-    const updates = {};
-    updates['/nominations/' + nominationid + '/comments/' + newPostKey] = comment; 
-
-    return defaultDatabase.ref().update(updates);
-  } */
-
-  // move this function later to comment page
-  /*  private makeUpvote = () => {
-    const defaultDatabase = firebase.database();
-
-    const nominationid = '-LKt6HFSC0KasTNDjXb1';
-    const user = getUser();
-    const uid = user.profile.oid;
-
-    const upvoter = {
-      [uid]: true
-    };
-
-    const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/');
-
-    return upvoterPath.update(upvoter);
-  } */
-
-  // move this function later to comment page
-  /* private removeUpvote = () => {
-    const defaultDatabase = firebase.database();
-
-    const nominationid = '-LKt6HFSC0KasTNDjXb1';
-    const user = getUser();
-    const uid = user.profile.oid;
-
-    const upvoterPath = defaultDatabase.ref('/nominations/' + nominationid + '/upvoters/' + uid);
-
-    return upvoterPath.remove();
-  } */
-
   private handleNext = () => {
     const { activeStep } = this.state;
     if (activeStep === getSteps().length - 1) {
@@ -211,10 +167,6 @@ class NominationPage extends React.Component<any, any> {
         completed: true
       });
     } else {
-      // remove these btw
-      // this.makeComment();
-      // this.makeUpvote();
-      // this.removeUpvote();
       this.setState({
         activeStep: activeStep + 1
       });

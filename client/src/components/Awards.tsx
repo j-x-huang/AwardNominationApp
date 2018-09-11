@@ -8,35 +8,89 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
-import { getUserDetails } from "../MicrosoftGraphClient";
+import { Route } from "react-router-dom";
+import Modal from "./NominationModal";
+import {
+  getPhotosByObjectId,
+  getUsersByObjectId
+} from "../MicrosoftGraphClient";
+import MDSpinner from "react-md-spinner";
+
+function awardsContainerWidth() {
+  const width = window.screen.availWidth;
+  if (width < 732) {
+    return 350;
+  } else if (width < 1114) {
+    return 732;
+  } else if (width < 1496) {
+    return 1114;
+  }
+  return 1496;
+}
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      width: "90%",
       backgroundColor: theme.palette.background.paper,
-      marginLeft: "5%",
-      marginRight: "5%",
-      marginTop: "2%"
+      display: "block",
+      width: awardsContainerWidth(),
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginTop: "2%",
+      padding: 0
     },
     tabBar: {
       boxShadow: "none",
       backgroundColor: "#f9f9f9"
-    }
+    },
+    tabsIndicator: {
+      backgroundColor: "#8241aa"
+    },
+    tabRoot: {
+      fontWeight: theme.typography.fontWeightRegular,
+      borderColor: "black",
+      "&:hover": {
+        color: "#8241aa",
+        opacity: 1
+      },
+      "&$tabSelected": {
+        fontWeight: theme.typography.fontWeightMedium
+      },
+      "&:focus": {
+        color: "#8241aa"
+      }
+    },
+    tabSelected: {}
   });
 
 export interface IAwardsProps extends WithStyles<typeof styles> {}
 
 export interface IAwardsStates {
   value: number;
+  selectedNomination: string;
   awards: any[];
+  isLoading: boolean;
 }
 
-class Awards extends React.Component<IAwardsProps, IAwardsStates> {
+class Awards extends React.Component<any, IAwardsStates> {
+  public previousLocation = this.props.location;
+
+  public componentWillUpdate(nextProps: any) {
+    const { location } = this.props;
+    if (
+      nextProps.history.action !== "POP" &&
+      (!location.state || !location.state.modal)
+    ) {
+      this.previousLocation = this.props.location;
+    }
+  }
+
   public state = {
     value: 0,
-    awards: [] as any[]
+    selectedNomination: "",
+    awards: [] as any[],
+    isLoading: true
   };
 
   private handleChange = (
@@ -46,8 +100,12 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
     this.setState({ value });
   };
 
-  private handleSelect = (id: number, name: string) => {
-    alert("ID: " + id + " Name: " + name);
+  private handleSelect = (id: string, name: string) => {
+    this.setState({ selectedNomination: id });
+    this.props.history.push({
+      pathname: "/awards/nomination/" + id,
+      state: { modal: true }
+    });
   };
 
   public componentDidMount() {
@@ -90,7 +148,7 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
         .orderByChild("category")
         .once("value", snapshot => {
           if (snapshot != null) {
-            console.log(this.snapshotToArray(snapshot, str));
+            console.log(this.retrieveUserDetails(snapshot, str));
           }
         });
     } else {
@@ -100,42 +158,92 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
         .equalTo(str)
         .once("value", snapshot => {
           if (snapshot != null) {
-            console.log(this.snapshotToArray(snapshot, str));
+            console.log(this.retrieveUserDetails(snapshot, str));
           }
         });
     }
   }
 
-  public snapshotToArray = (
+  public retrieveUserDetails = (
     snapshot: firebase.database.DataSnapshot,
     category: string
   ) => {
-    const returnArr: object[] = [];
+    const nominations: object[] = [];
+    const nominees: string[] = [];
 
     snapshot.forEach(childSnapshot => {
       const item = childSnapshot.val();
-      let userName: string;
-      let imgUrl: string;
-      let ret;
-      getUserDetails(item.nominee, (err, userDetails) => {
-        if (err) {
-          // TODO
-        } else {
-          userName = userDetails.name;
-          imgUrl = userDetails.profilePic;
-          ret = {
-            img: imgUrl,
+
+      if (nominees.indexOf(item.nominee) === -1) {
+        nominees.push(item.nominee);
+      }
+    });
+
+    getUsersByObjectId(nominees, (err, users) => {
+      if (err) {
+        // todo
+      } else {
+        snapshot.forEach(childSnapshot => {
+          const item = childSnapshot.val();
+          const name =
+            users[item.nominee] === undefined ? "" : users[item.nominee].name;
+          let nomination;
+
+          nomination = {
+            img:
+              "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
             id: childSnapshot.key,
             description: item.justification,
-            title: userName
+            objectId: item.nominee,
+            title: name
           };
-          this.updateNomination(category, ret);
-          returnArr.push(ret);
+          nominations.push(nomination);
+        });
+
+        this.updateAllNominations(category, nominations, nominees);
+      }
+    });
+    return nominations;
+  };
+
+  private updateAllNominations = (
+    category: string,
+    nominations: any[],
+    nominees: any[]
+  ) => {
+    const awards = [...this.state.awards];
+
+    const index = awards.findIndex(c => {
+      return c.award === category;
+    });
+
+    awards[index].nominations = nominations;
+
+    this.setState({ awards, isLoading: false }, () => {
+      // fetch all images for the nominees and reupdate the state
+      getPhotosByObjectId(nominees, (err, photos) => {
+        if (err) {
+          // todo
+        } else {
+          const newAwards = [...this.state.awards];
+
+          const categoryIndex = awards.findIndex(c => {
+            return c.award === category;
+          });
+
+          const categoryNominations = awards[categoryIndex].nominations;
+          const nominationsWithPhoto = new Array<any>();
+
+          categoryNominations.forEach((nomination: any) => {
+            nomination.img = photos[nomination.objectId];
+            nominationsWithPhoto.push(nomination);
+          });
+
+          newAwards[categoryIndex].nominations = nominationsWithPhoto;
+          this.setState({ awards: newAwards });
         }
       });
-      console.log("Array: " + returnArr);
     });
-    return returnArr;
   };
 
   public getAllNominations = () => {
@@ -148,52 +256,103 @@ class Awards extends React.Component<IAwardsProps, IAwardsStates> {
     });
   };
 
-  private updateNomination = (category: string, nomination: any) => {
-    const newAwards = [...this.state.awards];
+  // private updateNomination = (category: string, nomination: any) => {
+  //   const newAwards = [...this.state.awards];
 
-    const index = newAwards.findIndex(c => {
-      return c.award === category;
-    });
+  //   const index = newAwards.findIndex(c => {
+  //     return c.award === category;
+  //   });
 
-    console.log("Index: " + index);
+  //   console.log("Index: " + index);
 
-    console.log(newAwards[index].nominations);
+  //   console.log(newAwards[index].nominations);
 
-    newAwards[index].nominations.push(nomination);
+  //   const nominationIndex = newAwards[index].nominations.findIndex((x: any) => x.id === nomination.id);
 
-    console.log(newAwards[index].nominations);
+  //   if (nominationIndex >= 0) {
+  //     newAwards[index].nominations[nominationIndex] = nomination;
+  //   } else {
+  //     newAwards[index].nominations.push(nomination);
+  //   }
 
-    this.setState({ awards: newAwards });
+  //   console.log(newAwards[index].nominations);
+
+  //   this.setState({ awards: newAwards });
+  // };
+
+  public goBack = () => {
+    this.props.history.push("/awards");
+  };
+
+  public openModal = () => {
+    return (
+      <div>
+        <Modal
+          nominationID={this.state.selectedNomination}
+          onClose={this.goBack}
+        />
+      </div>
+    );
   };
 
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
+    // const { location } = this.props;
 
+    /* const isModal = !!(
+      location.state &&
+      location.state.modal &&
+      this.previousLocation !== location
+    ); */
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default" className={classes.tabBar}>
-          <Tabs
-            value={value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            centered={true}
-          >
-            {awards.map((award, i) => (
-              <Tab key={i} label={award.award} />
-            ))}
-          </Tabs>
-        </AppBar>
-        {awards.map(
-          (award, i) =>
-            value === i && (
-              <CardContainer
-                key={i}
-                cards={award.nominations}
-                onSelect={this.handleSelect}
-              />
-            )
+      <div>
+        {this.state.isLoading ? (
+          <div id="spinner">
+            <MDSpinner singleColor="#8241aa" size="50%" />
+          </div>
+        ) : (
+          <div className={classes.root}>
+            <AppBar
+              position="static"
+              color="default"
+              className={classes.tabBar}
+            >
+              <Tabs
+                value={value}
+                onChange={this.handleChange}
+                centered={true}
+                classes={{
+                  indicator: classes.tabsIndicator
+                }}
+              >
+                {awards.map((award, i) => (
+                  <Tab
+                    key={i}
+                    label={award.award}
+                    classes={{
+                      root: classes.tabRoot,
+                      selected: classes.tabSelected
+                    }}
+                  />
+                ))}
+              </Tabs>
+            </AppBar>
+            {awards.map(
+              (award, i) =>
+                value === i && (
+                  <CardContainer
+                    key={i}
+                    cards={award.nominations}
+                    onSelect={this.handleSelect}
+                  />
+                )
+            )}
+            <Route
+              path={"/awards/nomination/" + this.state.selectedNomination}
+              render={this.openModal}
+            />
+          </div>
         )}
       </div>
     );
