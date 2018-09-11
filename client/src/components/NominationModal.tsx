@@ -301,77 +301,79 @@ class NominationModal extends React.Component<any, any> {
         <div className="award-modal-dialog">
           <div className="award-modal-content">
             {/*<div className="award-modal-header" />*/}
-            <div className="award-modal-body">
-              <div className="nomination-info-container">
-                <div className="modal-element-padding">
-                  {this.state.isLoading ? (
-                    <MDSpinner singleColor="#8241aa" size="200%" />
-                  ) : (
-                    <img className="nominee-image" src={nominee.img} />
-                  )}
-                  <div className="nomination-info wrap-text">
-                    <h2>{nominee.name}</h2>
-                    <h6>
-                      Nomination: <b>{category}</b>
-                    </h6>
-                    <p style={{ paddingTop: "0.25em" }}>{justification}</p>
+
+            {this.state.isLoading ? (
+              <div className="div-spin-centre">
+                <MDSpinner singleColor="#8241aa" size="200%" />
+              </div>
+            ) : (
+                <div className="award-modal-body">
+                  <div className="nomination-info-container">
+                    <div className="modal-element-padding">
+                      <img className="nominee-image" src={nominee.img} />
+                      <div className="nomination-info wrap-text">
+                        <h2>{nominee.name}</h2>
+                        <h6>
+                          Nomination: <b>{category}</b>
+                        </h6>
+                        <p style={{ paddingTop: "0.25em" }}>{justification}</p>
+                      </div>
+                    </div>
+
+                    <div className="div-centre div-space-between modal-element-left-padding">
+                      <div className="nominator-info inline-components">
+                        <p className="inline-components wrap-text">
+                          Nominated by{" "}
+                          <span className="bold-this">{nominator.name}</span>
+                        </p>
+                        <img
+                          className="profilePic inline-components"
+                          src={nominator.img}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn-light float-right btn-top-round inline-components"
+                        onClick={this.handleUpvoteClicked}
+                      >
+                        <Octicon
+                          className={
+                            this.state.hasBeenNominated
+                              ? "octiocti octism"
+                              : "octigrey octism"
+                          }
+                          icon={Thumbsup}
+                        />
+                      </button>
+                    </div>
                   </div>
+                  <hr />
+                  <p className="modal-element-padding">
+                    {comments.length}{" "}
+                    {comments.length === 1 ? "Comment" : "Comments"}
+                  </p>
+                  <CommentAdder
+                    comment={this.state.newComment}
+                    nominatorPic={this.state.profilePic}
+                    onCommentAdd={this.handleCommentAdd}
+                    onCommentChange={this.handleCommentChange}
+                  />
+                  {comments.map((
+                    comment,
+                    i // Place holder for now
+                  ) => (
+                      <Comment
+                        key={i}
+                        nominator={comment.name}
+                        nominatorPic={comment.img}
+                        comment={comment.comment}
+                      />
+                    ))}
                 </div>
 
-                <div className="div-centre div-space-between modal-element-left-padding">
-                  {this.state.isLoading ? (
-                    <MDSpinner singleColor="#8241aa" size="25%" />
-                  ) : (
-                    <div className="nominator-info inline-components">
-                      <p className="inline-components wrap-text">
-                        Nominated by{" "}
-                        <span className="bold-this">{nominator.name}</span>
-                      </p>
-                      <img
-                        className="profilePic inline-components"
-                        src={nominator.img}
-                      />
-                    </div>
-                  )}
-                  <button
-                    type="button"
-                    className="btn btn-light float-right btn-top-round inline-components"
-                    onClick={this.handleUpvoteClicked}
-                  >
-                    <Octicon
-                      className={
-                        this.state.hasBeenNominated
-                          ? "octiocti octism"
-                          : "octigrey octism"
-                      }
-                      icon={Thumbsup}
-                    />
-                  </button>
-                </div>
-              </div>
-              <hr />
-              <p className="modal-element-padding">
-                {comments.length}{" "}
-                {comments.length === 1 ? "Comment" : "Comments"}
-              </p>
-              <CommentAdder
-                comment={this.state.newComment}
-                nominatorPic={this.state.profilePic}
-                onCommentAdd={this.handleCommentAdd}
-                onCommentChange={this.handleCommentChange}
-              />
-              {comments.map((
-                comment,
-                i // Place holder for now
-              ) => (
-                <Comment
-                  key={i}
-                  nominator={comment.name}
-                  nominatorPic={comment.img}
-                  comment={comment.comment}
-                />
-              ))}
-            </div>
+
+              )}
+
           </div>
         </div>
       </div>
