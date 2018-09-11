@@ -8,10 +8,16 @@ class Home extends React.Component<any, any> {
 
   public render() {
     return (
-      <img
-        style={{ width: "100%"}}
-        src="http://hdqwalls.com/download/purple-sunset-in-ocean-2560x1440.jpg"
-      />
+      <div>
+        <div id="homeLabel">
+          {" "}
+          <div id="homeLabelText">Ignite Awards</div>{" "}
+        </div>
+        <img
+          style={{ width: "100%" }}
+          src="http://hdqwalls.com/download/purple-sunset-in-ocean-2560x1440.jpg"
+        />
+      </div>
     );
   }
 }

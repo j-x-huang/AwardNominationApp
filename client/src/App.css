@@ -476,8 +476,8 @@ a:visited {
 }
 
 .div-spin-centre {
-  margin:auto;
-  text-align:center;
+  margin: auto;
+  text-align: center;
   margin: 10em;
 }
 
@@ -597,4 +597,22 @@ a:visited {
   top: 9em;
   width: 30%;
   text-align: center;
+}
+
+#homeLabel {
+  position: absolute;
+  width: 65%;
+  margin-top: 10%;
+  margin-left: 17.5%;
+  margin-right: 17.5%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 1em;
+}
+
+#homeLabelText {
+  font-size: 5em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
 }
