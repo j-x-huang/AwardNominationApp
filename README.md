@@ -27,7 +27,7 @@ $ npm install
 ```sh
 $ npm start
 ```
-6. To access the functionalities of the application beyond the login page, you newill ed to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
+6. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
 
 ## Contributors
 **GitHub username** > **Official name** > **UPI**
