@@ -27,7 +27,11 @@ $ npm install
 ```sh
 $ npm start
 ```
-6. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
+6. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". For the purposes of testing out the prototype, you can login using a dummy account created using the follow details when prompted to login using an Office365 account:
+
+Email: bob@ignitewards.onmicrosoft.com
+
+Password: Softeng761
 
 ## Contributors
 **GitHub username** > **Official name** > **UPI**
