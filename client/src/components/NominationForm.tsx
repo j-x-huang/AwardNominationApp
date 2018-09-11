@@ -4,8 +4,22 @@ import Select from "react-select";
 import { getUser } from "../auth";
 import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
+import Modal from "./NominationModal";
+import { Route } from "react-router-dom";
 
 class NominationForm extends React.Component<any, any> {
+  public previousLocation = this.props.location;
+
+  public componentWillUpdate(nextProps: any) {
+    const { location } = this.props;
+    if (
+      nextProps.history.action !== "POP" &&
+      (!location.state || !location.state.modal)
+    ) {
+      this.previousLocation = this.props.location;
+    }
+  }
+
   public allNominees = [{ value: "", label: "", isDisabled: false }];
   public categories = [
     "Being Purple",
@@ -29,6 +43,7 @@ class NominationForm extends React.Component<any, any> {
     justification: "",
     nominator: "",
     nominee: { value: "", label: "", isDisabled: false },
+    nominationID: "-LM4wBg-yv0zNphsbcMz",
     score: 1,
     nominees: new Array<any>(),
     completed: false
@@ -154,7 +169,11 @@ class NominationForm extends React.Component<any, any> {
     return (
       <div>
         {completed ? (
-          <NominationComplete category={category} nominee={nominee.label} />
+          <NominationComplete
+            category={category}
+            nominee={nominee.label}
+            onClick={this.redirectToNomination}
+          />
         ) : (
           <form className="feelix-card">
             <h5> Nominate a deserving candidate </h5>
@@ -190,9 +209,13 @@ class NominationForm extends React.Component<any, any> {
               >
                 Nominate
               </button>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
+        )}
+        <Route
+          path={"/nominate/nomination/" + this.state.nominationID}
+          render={this.openModal}
+        />
       </div>
     );
   }
@@ -213,6 +236,12 @@ class NominationForm extends React.Component<any, any> {
     this.makeNomination();
     this.setState({
       completed: true
+    });
+  };
+
+  private setNominationID = (id: string | null) => {
+    this.setState({
+      nominationID: id
     });
   };
 
@@ -266,6 +295,25 @@ class NominationForm extends React.Component<any, any> {
     });
   }
 
+  private redirectToNomination = () => {
+    this.props.history.push({
+      pathname: "/nominate/nomination/" + this.state.nominationID,
+      state: { modal: true }
+    });
+  };
+
+  public goBack = () => {
+    this.props.history.push("/nominate");
+  };
+
+  public openModal = () => {
+    return (
+      <div>
+        <Modal nominationID={this.state.nominationID} onClose={this.goBack} />
+      </div>
+    );
+  };
+
   private makeNomination = () => {
     const defaultDatabase = firebase.database();
     const category = this.state.category;
@@ -280,20 +328,28 @@ class NominationForm extends React.Component<any, any> {
         // console.log(array);
         for (const existingNominationPostKey of Object.keys(array)) {
           const existingNomination = array[existingNominationPostKey];
-          if (existingNomination.category === category && existingNomination.nominee === nominee) {
+          if (
+            existingNomination.category === category &&
+            existingNomination.nominee === nominee
+          ) {
             console.log(existingNominationPostKey);
-            this.makeComment(existingNominationPostKey, this.state.justification);
+            this.makeComment(
+              existingNominationPostKey,
+              this.state.justification
+            );
             this.makeUpvote(existingNominationPostKey);
-            return;
+            this.setNominationID(existingNominationPostKey);
+            this.redirectToNomination();
             // TODO: redirect to comment page
           }
         }
         this.createNewNomination(defaultDatabase);
       });
-
   };
 
-  private createNewNomination = (defaultDatabase: firebase.database.Database) => {
+  private createNewNomination = (
+    defaultDatabase: firebase.database.Database
+  ) => {
     // Get a key for a new Post.
     const newPostKey = defaultDatabase
       .ref()
@@ -334,8 +390,10 @@ class NominationForm extends React.Component<any, any> {
 
     nomCatPath.update(nomCat);
 
+    this.setNominationID(newPostKey);
+
     return defaultDatabase.ref().update(updates);
-  }
+  };
 
   private makeComment = (nominationPostKey: string, justification: string) => {
     const defaultDatabase = firebase.database();

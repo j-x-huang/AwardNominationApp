@@ -69,56 +69,61 @@ class NominationPage extends React.Component<any, any> {
           <NominationComplete
             category={this.state.category}
             nominee={this.state.nominee}
+            onClick={this.showPic}
           />
         ) : (
-            <div>
-              {(() => {
-                switch (this.state.activeStep) {
-                  case 0:
-                    return <SelectCategory />;
-                  // break;
+          <div>
+            {(() => {
+              switch (this.state.activeStep) {
+                case 0:
+                  return <SelectCategory />;
+                // break;
 
-                  case 1:
-                    return (
-                      <NominationJustification
-                        category={this.state.category}
-                        nominee={this.state.nominee}
-                        justification={this.state.justification}
-                      />
-                    );
-                  // break;
+                case 1:
+                  return (
+                    <NominationJustification
+                      category={this.state.category}
+                      nominee={this.state.nominee}
+                      justification={this.state.justification}
+                    />
+                  );
+                // break;
 
-                  default:
-                    return <SelectCategory />;
-                  // break;
+                default:
+                  return <SelectCategory />;
+                // break;
+              }
+            })()}
+
+            <div className="buttonBlock">
+              <button
+                type="button"
+                className="btn btn-primary buttonLeft"
+                onClick={this.handleBack}
+                style={
+                  activeStep === 0
+                    ? { visibility: "hidden" }
+                    : { visibility: "visible" }
                 }
-              })()}
-
-              <div className="buttonBlock">
-                <button
-                  type="button"
-                  className="btn btn-primary buttonLeft"
-                  onClick={this.handleBack}
-                  style={
-                    activeStep === 0
-                      ? { visibility: "hidden" }
-                      : { visibility: "visible" }
-                  }
-                >
-                  Back
+              >
+                Back
               </button>
-                <button
-                  type="button"
-                  className="btn btn-primary buttonRight"
-                  onClick={this.handleNext}
-                >
-                  {activeStep === steps.length - 1 ? "Nominate" : "Next"}
-                </button>
-              </div>
+              <button
+                type="button"
+                className="btn btn-primary buttonRight"
+                onClick={this.handleNext}
+              >
+                {activeStep === steps.length - 1 ? "Nominate" : "Next"}
+              </button>
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
+  }
+
+  public showPic() {
+    return;
   }
 
   private makeNomination = () => {
