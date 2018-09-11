@@ -27,11 +27,15 @@ $ npm install
 ```sh
 $ npm start
 ```
-6. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". For the purposes of testing out the prototype, you can login using a dummy account created using the follow details when prompted to login using an Office365 account:
+6. If not automatically opened, view the web app by visiting the following link on your browser:
+```sh
+localhost:3000
+```
+7. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". For the purposes of testing out the prototype, you can login using a dummy account created using the follow details when prompted to login using an Office365 account:
 
-Email: bob@ignitewards.onmicrosoft.com
+ Email: bob@ignitewards.onmicrosoft.com
 
-Password: Softeng761
+ Password: Softeng761
 
 ## Contributors
 **GitHub username** > **Official name** > **UPI**
