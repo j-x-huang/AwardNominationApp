@@ -84,6 +84,15 @@ class NavBar extends React.Component<any, any> {
                 <span>MY NOMINATIONS</span>
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink
+                activeClassName="activeLink"
+                to="/admin"
+                className="nav-link"
+              >
+                <span>ADMIN</span>
+              </NavLink>
+            </li>
           </ul>
           <ul className="nav navbar-nav ml-auto">
             <li className="dropdown links nav-item">
