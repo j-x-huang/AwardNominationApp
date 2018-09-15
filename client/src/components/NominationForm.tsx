@@ -93,7 +93,8 @@ class NominationForm extends React.Component<any, any> {
     }
 
     actualNominees.forEach(nom => {
-      nom.isDisabled = true;
+      nom.label = nom.label + ' (nominated) ';
+      nom.isDisabled = false;
     });
 
     neoNominees.forEach(nom => {
