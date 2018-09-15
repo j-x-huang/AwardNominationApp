@@ -5,6 +5,9 @@ class Admin extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
     }
+    public state = {
+        isLockDown: false
+    }
     public render() {
         return (
             <div>
@@ -26,7 +29,8 @@ class Admin extends React.Component<any, any> {
         );
     }
     private lockDown = () => {
-        console.log('I will lock down');
+        this.state.isLockDown = !this.state.isLockDown;
+        console.log('Lock down ' + this.state.isLockDown);
     };
 
     private filterTally = () => {
