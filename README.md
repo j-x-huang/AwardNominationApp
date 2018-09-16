@@ -27,6 +27,7 @@ $ npm install
 ```sh
 $ npm start
 ```
+6. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
 
 ## Contributors
 **GitHub username** > **Official name** > **UPI**
@@ -41,4 +42,4 @@ $ npm start
 
 ## Final Frontier Wiki
 
-The Sprint Review and Retrospective details can be viewed in the [wiki page](https://github.com/hbao448/AwardNominationApp/wiki).
+The Wiki Home page contains the a list of the group member names and their development skills, which can be found [here](https://github.com/hbao448/AwardNominationApp/wiki). Please navigate through the sub-pages to view the [Individual Contributions](https://github.com/hbao448/AwardNominationApp/wiki/Individual-Contributions), [Meeting Notes](https://github.com/hbao448/AwardNominationApp/wiki/Meeting-Notes), [Prototype Summary](https://github.com/hbao448/AwardNominationApp/wiki/Prototype-Summary), and [Retrospectives Reflection Points](https://github.com/hbao448/AwardNominationApp/wiki/Retrospectives-Reflection-Points).
