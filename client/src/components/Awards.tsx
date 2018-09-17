@@ -281,7 +281,11 @@ class Awards extends React.Component<any, IAwardsStates> {
   // };
 
   public goBack = () => {
-    this.props.history.push("/awards");
+    if (this.props.isMyNomination) {
+      this.props.history.push("/mynominations");
+    } else {
+      this.props.history.push("/awards");
+    }
   };
 
   public openModal = () => {
@@ -296,7 +300,7 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   public render() {
-    const { classes } = this.props;
+    const { classes, isMyNomination } = this.props;
     const { value, awards } = this.state;
     // const { location } = this.props;
 
@@ -305,6 +309,9 @@ class Awards extends React.Component<any, IAwardsStates> {
       location.state.modal &&
       this.previousLocation !== location
     ); */
+
+    console.log(isMyNomination);
+
     return (
       <div>
         {this.state.isLoading ? (
