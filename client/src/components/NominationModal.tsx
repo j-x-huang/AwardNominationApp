@@ -29,6 +29,7 @@ class NominationModal extends React.Component<any, any> {
     hasBeenNominated: false,
     failed: false,
     isLoading: true,
+    isLocked: false,
     profilePic:
       "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
   };
@@ -42,6 +43,7 @@ class NominationModal extends React.Component<any, any> {
   };
 
   public componentDidMount() {
+    this.readLockState();
     console.log("Modal mounted! Location: " + this.props.location);
     getMyImage((picUrl, err) => {
       if (err) {
@@ -93,6 +95,16 @@ class NominationModal extends React.Component<any, any> {
     } catch (error) {
       this.setState({ failed: true });
     }
+  }
+
+  private readLockState = () => {
+    const defaultDatabase = firebase.database();
+    const lockPath = defaultDatabase.ref("/lockdown");
+    lockPath.once('value').then(value => {
+        console.log(value.val().lockState);
+        this.setState({ isLocked: value.val().lockState});
+        return value.val().lockState;
+    })
   }
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
@@ -335,6 +347,7 @@ class NominationModal extends React.Component<any, any> {
                       type="button"
                       className="btn btn-light float-right btn-top-round inline-components"
                       onClick={this.handleUpvoteClicked}
+                      style={this.state.isLocked ? { display: 'none' } : {} }
                     >
                       <Octicon
                         className={
