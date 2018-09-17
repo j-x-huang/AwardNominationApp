@@ -93,7 +93,7 @@ class NominationForm extends React.Component<any, any> {
     }
 
     actualNominees.forEach(nom => {
-      nom.label = nom.label + ' (nominated) ';
+      nom.label = nom.label + " (nominated) ";
       nom.isDisabled = false;
     });
 
@@ -176,7 +176,7 @@ class NominationForm extends React.Component<any, any> {
             onClick={this.redirectToNomination}
           />
         ) : (
-          <form className="feelix-card">
+          <form className="feelix-card" id="nominateDiv">
             <h5> Nominate a deserving candidate </h5>
             <hr />
             <div id="categorySelect">{options}</div>
