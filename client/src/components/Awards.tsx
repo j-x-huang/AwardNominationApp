@@ -3,8 +3,11 @@ import "./../App.css";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Input from '@material-ui/core/Input';
+import SearchIcon from '@material-ui/icons/Search';
 import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
@@ -48,10 +51,54 @@ const styles = (theme: Theme) =>
         color: "#8241aa"
       }
     },
+    grow: {
+      flexGrow: 1,
+    },
+    search: {
+      position: 'relative',
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade(theme.palette.common.white, 0.15),
+      '&:hover': {
+        backgroundColor: fade(theme.palette.common.white, 0.25),
+      },
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing.unit,
+        width: 'auto',
+      },
+    },
+    searchIcon: {
+      width: theme.spacing.unit * 9,
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    inputRoot: {
+      color: 'inherit',
+      width: '100%',
+    },
+    inputInput: {
+      paddingTop: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit * 10,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        width: 120,
+        '&:focus': {
+          width: 200,
+        },
+      },
+    },
     tabSelected: {}
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 export interface IAwardsStates {
   value: number;
@@ -286,6 +333,11 @@ class Awards extends React.Component<any, IAwardsStates> {
     );
   };
 
+  private handleSearch= () => {
+    console.log("on change")
+
+  }
+
   public render() {
     const { classes, isMyNomination } = this.props;
     const { value, awards } = this.state;
@@ -306,48 +358,64 @@ class Awards extends React.Component<any, IAwardsStates> {
             <MDSpinner singleColor="#8241aa" size="50%" />
           </div>
         ) : (
-          <div className={classes.root} id="awardsContainer">
-            <AppBar
-              position="static"
-              color="default"
-              className={classes.tabBar}
-            >
-              <Tabs
-                value={value}
-                onChange={this.handleChange}
-                centered={true}
-                classes={{
-                  indicator: classes.tabsIndicator
-                }}
+            <div className={classes.root} id="awardsContainer">
+              <AppBar
+                position="static"
+                color="default"
+                className={classes.tabBar}
               >
-                {awards.map((award, i) => (
-                  <Tab
-                    key={i}
-                    label={award.award}
-                    classes={{
-                      root: classes.tabRoot,
-                      selected: classes.tabSelected
-                    }}
-                  />
-                ))}
-              </Tabs>
-            </AppBar>
-            {awards.map(
-              (award, i) =>
-                value === i && (
-                  <CardContainer
-                    key={i}
-                    cards={award.nominations}
-                    onSelect={this.handleSelect}
-                  />
-                )
-            )}
-            <Route
-              path={"/awards/nomination/" + this.state.selectedNomination}
-              render={this.openModal}
-            />
-          </div>
-        )}
+                <Tabs
+                  value={value}
+                  onChange={this.handleChange}
+                  centered={true}
+                  classes={{
+                    indicator: classes.tabsIndicator
+                  }}
+                >
+                  {awards.map((award, i) => (
+                    <Tab
+                      key={i}
+                      label={award.award}
+                      classes={{
+                        root: classes.tabRoot,
+                        selected: classes.tabSelected
+                      }}
+                    />
+                  ))}
+                </Tabs>
+              </AppBar>
+              {awards.map(
+                (award, i) =>
+                  value === i && (
+                    <CardContainer
+                      key={i}
+                      cards={award.nominations}
+                      onSelect={this.handleSelect}
+                    />
+                  )
+              )}
+              <div className={classes.grow} />
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <Input
+                  placeholder="Search…"
+                  disableUnderline={true}
+                  onChange={this.handleSearch}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }
+                }
+                />
+              </div>
+              <Route
+                path={"/awards/nomination/" + this.state.selectedNomination}
+                render={this.openModal}
+              />
+            </div>
+          )}
       </div>
     );
   }
