@@ -16,25 +16,12 @@ import {
 } from "../MicrosoftGraphClient";
 import MDSpinner from "react-md-spinner";
 
-function awardsContainerWidth() {
-  const width = window.screen.availWidth;
-  if (width < 732) {
-    return 350;
-  } else if (width < 1114) {
-    return 732;
-  } else if (width < 1496) {
-    return 1114;
-  }
-  return 1496;
-}
-
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
       display: "block",
-      width: awardsContainerWidth(),
       marginLeft: "auto",
       marginRight: "auto",
       marginTop: "2%",
@@ -319,7 +306,7 @@ class Awards extends React.Component<any, IAwardsStates> {
             <MDSpinner singleColor="#8241aa" size="50%" />
           </div>
         ) : (
-          <div className={classes.root}>
+          <div className={classes.root} id="awardsContainer">
             <AppBar
               position="static"
               color="default"

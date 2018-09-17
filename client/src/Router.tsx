@@ -8,7 +8,7 @@ import Admin from "./components/Admin";
 
 class Router extends React.Component {
   public render() {
-    const isAdmin = false;
+    const isAdmin = true;
 
     const getNominationComponent = (isMyNomination: boolean) => (
       props: RouteComponentProps<{}>

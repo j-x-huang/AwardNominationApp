@@ -27,7 +27,7 @@ class NavBar extends React.Component<any, any> {
     const user = getUser();
 
     // TODO: Should be pulling from a variable somewhere
-    const isAdmin = false;
+    const isAdmin = true;
 
     const profileName = user.profile.name
       .split(" ")
