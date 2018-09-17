@@ -53,12 +53,12 @@ class NominationForm extends React.Component<any, any> {
   private readLockState = () => {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once('value').then(value => {
-        console.log(value.val().lockState);
-        this.setState({ isLocked: value.val().lockState});
-        return value.val().lockState;
-    })
-  }
+    lockPath.once("value").then(value => {
+      console.log(value.val().lockState);
+      this.setState({ isLocked: value.val().lockState });
+      return value.val().lockState;
+    });
+  };
 
   public updateNomineeList = (category: string) => {
     let neoNominees = [{ value: "", label: "", isDisabled: false }];
@@ -139,7 +139,6 @@ class NominationForm extends React.Component<any, any> {
       if (err) {
         // TODO
       } else {
-
         this.allNominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
           label: suggestion.name,
@@ -153,7 +152,6 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public render() {
-
     const { category, nominee, nominees, completed } = this.state;
     const options = this.categories.map((loan, key) => {
       const isCurrent = this.state.category === loan;
@@ -215,13 +213,13 @@ class NominationForm extends React.Component<any, any> {
                 onChange={this.justificationChange}
               />
             </div>
-            <div className="overflowHid" >
+            <div className="overflowHid">
               <button
                 type="button"
-                className="btn btn-primary float-right"
+                className="btn btn-primary btn-purple float-right"
                 disabled={this.checkFieldsFilled() ? false : true}
                 onClick={this.handleClick}
-                style={this.state.isLocked ? { display: 'none' } : {} }
+                style={this.state.isLocked ? { display: "none" } : {}}
               >
                 Nominate
               </button>
