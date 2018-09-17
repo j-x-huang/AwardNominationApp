@@ -6,8 +6,11 @@ class Admin extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
   }
+  public componentDidMount() {
+    this.readLockState();
+  }
   public state = {
-    isLockDown: false
+    isLocked: false
   };
   public render() {
     return (
@@ -42,22 +45,21 @@ class Admin extends React.Component<any, any> {
     );
   }
   private lockDown = () => {
-    this.state.isLockDown = !this.state.isLockDown;
-    console.log("Lock down " + this.state.isLockDown);
-    this.setState({ isLockDown: this.state.isLockDown });
-    this.writeLockState(this.state.isLockDown);
+    this.state.isLocked = !this.state.isLocked;
+    console.log("Lock down " + this.state.isLocked);
+    this.setState({ isLockDown: this.state.isLocked });
+    this.writeLockState(this.state.isLocked);
   };
 
-  /*
   private readLockState = () => {
     const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown/lockstate");
+    const lockPath = defaultDatabase.ref("/lockdown");
     lockPath.once('value').then(value => {
-        console.log(value.val());
-        return value.val();
+        console.log(value.val().lockState);
+        this.setState({ isLocked: value.val().lockState});
+        return value.val().lockState;
     })
   }
-  */
 
   private writeLockState = (lockState: boolean) => {
     const defaultDatabase = firebase.database();
