@@ -243,6 +243,31 @@ class Awards extends React.Component<any, IAwardsStates> {
     });
   };
 
+  private filterNominationsByName = (name: any) => {
+    const awards = this.state.awards;
+    const filteredAwards = new Array<any>();
+
+    awards.forEach(awardCategory => {
+      console.log("Category Nominations");
+      console.log(awardCategory);
+      const newAwardCategory = {
+        award: awardCategory.award,
+        nominations: [],
+      };
+
+      const newNominations = awardCategory.nominations.filter((nomination: any) => {
+        console.log(nomination.title.toLowerCase());
+        return nomination.title.toLowerCase().includes("an");
+      });
+
+      newAwardCategory.nominations = newNominations;
+      filteredAwards.push(newAwardCategory);
+    });
+
+    console.log(filteredAwards);
+    this.setState({ awards: filteredAwards });
+  }
+
   // private updateNomination = (category: string, nomination: any) => {
   //   const newAwards = [...this.state.awards];
 
@@ -346,6 +371,7 @@ class Awards extends React.Component<any, IAwardsStates> {
               path={"/awards/nomination/" + this.state.selectedNomination}
               render={this.openModal}
             />
+            <button onClick={this.filterNominationsByName} />
           </div>
         )}
       </div>
