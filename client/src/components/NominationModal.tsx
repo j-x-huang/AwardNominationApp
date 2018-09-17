@@ -314,7 +314,7 @@ class NominationModal extends React.Component<any, any> {
                     <div className="nomination-info wrap-text">
                       <h2>{nominee.name}</h2>
                       <h6>
-                        Nomination: <b>{category}</b>
+                        Category: <b>{category}</b>
                       </h6>
                       <p style={{ paddingTop: "0.25em" }}>{justification}</p>
                     </div>
@@ -391,6 +391,13 @@ class NominationModal extends React.Component<any, any> {
     if (this.state.newComment.trim() !== "") {
       this.makeComment(this.state.newComment);
       this.setState({ newComment: "" });
+
+      // scroll to the end of the modal
+      const awardModal = document.getElementsByClassName("award-modal")[0];
+      awardModal.scrollTo({
+        top: awardModal.clientHeight,
+        behavior: "smooth"
+      });
     }
   };
 
