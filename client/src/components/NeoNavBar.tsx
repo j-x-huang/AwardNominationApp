@@ -25,6 +25,10 @@ class NavBar extends React.Component<any, any> {
 
   public render() {
     const user = getUser();
+
+    // TODO: Should be pulling from a variable somewhere
+    const isAdmin = false;
+
     const profileName = user.profile.name
       .split(" ")
       .slice(0, -1)
@@ -84,15 +88,16 @@ class NavBar extends React.Component<any, any> {
                 <span>MY NOMINATIONS</span>
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                activeClassName="activeLink"
-                to="/admin"
-                className="nav-link"
-              >
-                <span>ADMIN</span>
-              </NavLink>
-            </li>
+            {isAdmin ?
+              <li className="nav-item">
+                <NavLink
+                  activeClassName="activeLink"
+                  to="/admin"
+                  className="nav-link"
+                >
+                  <span>ADMIN</span>
+                </NavLink>
+              </li> : null}
           </ul>
           <ul className="nav navbar-nav ml-auto">
             <li className="dropdown links nav-item">
