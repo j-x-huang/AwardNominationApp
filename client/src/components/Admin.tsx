@@ -15,31 +15,42 @@ class Admin extends React.Component<any, any> {
   public render() {
     return (
       <div id="adminDiv">
-        <div className="adminOption">
-          <div className="float-left">
-          <span className="adminOptionTitle">Lockdown Site</span>
-            <span>Prevent further award nominations</span>
+        <h4 id="adminTitle">Administrator Control Panel</h4>
+        <div className="adminOptions">
+          <div className="adminOption">
+            <div className="float-left">
+              <span className="adminOptionTitle">Tally Nominations</span>
+              <span className="adminOptionDesc">
+                Export sorted nominations of each category
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn btn-success float-right adminButton"
+              onClick={this.filterTally}
+            >
+              Export Results
+            </button>
           </div>
-          <button
-            type="button"
-            className="btn btn-primary float-right"
-            onClick={this.lockDown}
-          >
-            Initiate Lockdown
-          </button>
         </div>
-        <div className="adminOption">
-          <div className="float-left">
-          <span className="adminOptionTitle">Tally Nominations</span>
-            <span>Export sorted nominations of each category</span>
+        <h4>Danger Zone</h4>
+
+        <div className="adminOptions adminOptionsDanger">
+          <div className="adminOption">
+            <div className="float-left">
+              <span className="adminOptionTitle">Lockdown Site</span>
+              <span className="adminOptionDesc">
+                Prevent further award nominations
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-danger float-right adminButton"
+              onClick={this.lockDown}
+            >
+              Initiate Lockdown
+            </button>
           </div>
-          <button
-            type="button"
-            className="btn btn-primary float-right"
-            onClick={this.filterTally}
-          >
-            Export Results
-          </button>
         </div>
       </div>
     );
@@ -54,18 +65,18 @@ class Admin extends React.Component<any, any> {
   private readLockState = () => {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once('value').then(value => {
-        console.log(value.val().lockState);
-        this.setState({ isLocked: value.val().lockState});
-        return value.val().lockState;
-    })
-  }
+    lockPath.once("value").then(value => {
+      console.log(value.val().lockState);
+      this.setState({ isLocked: value.val().lockState });
+      return value.val().lockState;
+    });
+  };
 
   private writeLockState = (lockState: boolean) => {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
-    return lockPath.set({lockState});
-  }
+    return lockPath.set({ lockState });
+  };
   private filterTally = () => {
     console.log("I will filter and tally");
   };

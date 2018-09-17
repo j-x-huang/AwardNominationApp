@@ -21,7 +21,7 @@ class LoginPage extends React.Component<any, any> {
           <p id="loginDesc">MYOB staff, come this way please.</p>
           <Redirect to="/home" />
           <button
-            className="btn btn-primary btn-lg"
+            className="btn btn-primary btn-purple btn-lg"
             id="loginButton"
             onClick={logInUser}
           >
