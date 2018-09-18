@@ -3,15 +3,14 @@ import "./../App.css";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Input from '@material-ui/core/Input';
-import SearchIcon from '@material-ui/icons/Search';
+import Input from "@material-ui/core/Input";
+import SearchIcon from "@material-ui/icons/Search";
 import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
@@ -27,11 +26,11 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: "#f9f9f9",
       display: "block",
       marginLeft: "auto",
       marginRight: "auto",
-      marginTop: "2%",
+      marginTop: "1em",
       padding: 0
     },
     tabBar: {
@@ -53,73 +52,43 @@ const styles = (theme: Theme) =>
       },
       "&:focus": {
         color: "#8241aa",
-        outline: "none",
+        outline: "none"
       }
     },
-    grow: {
-      flexGrow: 1,
-    },
-    search: {
-      position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
-      },
-      marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing.unit,
-        width: 'auto',
-      },
-    },
-    searchIcon: {
-      width: theme.spacing.unit * 9,
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     inputRoot: {
-      color: 'inherit',
-      width: '100%',
+      color: "inherit",
+      width: "100%"
     },
     inputInput: {
       paddingTop: theme.spacing.unit,
       paddingRight: theme.spacing.unit,
       paddingBottom: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit * 10,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: 120,
-        '&:focus': {
-          width: 200,
-        },
-      },
-    },
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: 120,
-      backgroundColor: "#f9f9f9",
+      paddingLeft: theme.spacing.unit * 7,
+      transition: theme.transitions.create("width"),
+      fontFamily: "PT Sans",
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        width: 250,
+        "&:focus": {
+          width: 400
+        }
+      }
     },
     selectEmpty: {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing.unit * 2
     },
     tabSelected: {}
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> { }
+export interface IAwardsProps extends WithStyles<typeof styles> {}
 
 export interface IAwardsStates {
   value: number;
   selectedNomination: string;
   allAwards: any[];
   awards: any[];
-  filterText: string,
-  sortBy: string,
+  filterText: string;
+  sortBy: string;
   isLoading: boolean;
 }
 
@@ -190,30 +159,6 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   public getCategoryNomination(str: string) {
     this.props.awardsContent.getTabNomination(str, this.retrieveUserDetails);
-
-    // const defaultDatabase = firebase.database();
-    // const nomRef = defaultDatabase.ref();
-
-    // if (str === "All") {
-    //   nomRef
-    //     .child("nominations")
-    //     .orderByChild("category")
-    //     .once("value", snapshot => {
-    //       if (snapshot != null) {
-    //         console.log(this.retrieveUserDetails(snapshot, str));
-    //       }
-    //     });
-    // } else {
-    //   nomRef
-    //     .child("nominations")
-    //     .orderByChild("category")
-    //     .equalTo(str)
-    //     .once("value", snapshot => {
-    //       if (snapshot != null) {
-    //         console.log(this.retrieveUserDetails(snapshot, str));
-    //       }
-    //     });
-    // }
   }
 
   public retrieveUserDetails = (
@@ -294,13 +239,11 @@ class Awards extends React.Component<any, IAwardsStates> {
           });
 
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
-          console.log(newAwards)
-          this.setState({ awards: newAwards, allAwards: newAwards },
-            () => {
-              // this ensures that the loading of pictures doesn't affect the filtering and sorting
-              this.sortNominationsByName(this.state.sortBy);
-            }
-          );
+          console.log(newAwards);
+          this.setState({ awards: newAwards, allAwards: newAwards }, () => {
+            // this ensures that the loading of pictures doesn't affect the filtering and sorting
+            this.sortNominationsByName(this.state.sortBy);
+          });
         }
       });
     });
@@ -333,12 +276,12 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   private handleSearch = (event: any) => {
     this.filterNominationsByName(event.target.value);
-  }
+  };
 
   private handleSort = (event: any) => {
     this.setState({ sortBy: event.target.value });
     this.sortNominationsByName(event.target.value);
-  }
+  };
 
   private sortNominationsByName(nameType: string) {
     if (nameType === "Firstname" || nameType === "Lastname") {
@@ -348,36 +291,44 @@ class Awards extends React.Component<any, IAwardsStates> {
       awards.forEach(awardCategory => {
         const newAwardCategory = {
           award: awardCategory.award,
-          nominations: [],
+          nominations: []
         };
         let newNominations;
         if (nameType === "Firstname") {
-        newNominations = awardCategory.nominations.sort((a: any, b: any) => {
-          return (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : ((b.title.toLowerCase() > a.title.toLowerCase()) ? -1 : 0);
-        })
-      } else if (nameType === "Lastname") {
-        newNominations = awardCategory.nominations.sort((a: any, b: any) => {
-          const aName = a.title.split(" ");
-          const aLast = aName[aName.length - 1];
+          newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+            return a.title.toLowerCase() > b.title.toLowerCase()
+              ? 1
+              : b.title.toLowerCase() > a.title.toLowerCase()
+                ? -1
+                : 0;
+          });
+        } else if (nameType === "Lastname") {
+          newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+            const aName = a.title.split(" ");
+            const aLast = aName[aName.length - 1];
 
-          const bName = b.title.split(" ");
-          const bLast = bName[bName.length - 1];
+            const bName = b.title.split(" ");
+            const bLast = bName[bName.length - 1];
 
-          return (aLast.toLowerCase() > bLast.toLowerCase()) ? 1 : ((bLast.toLowerCase() > aLast.toLowerCase()) ? -1 : 0);
-        })
-      }
+            return aLast.toLowerCase() > bLast.toLowerCase()
+              ? 1
+              : bLast.toLowerCase() > aLast.toLowerCase()
+                ? -1
+                : 0;
+          });
+        }
 
         newAwardCategory.nominations = newNominations;
-        sortedAwards.push(newAwardCategory)
-      })
-      console.log(sortedAwards)
+        sortedAwards.push(newAwardCategory);
+      });
+      console.log(sortedAwards);
       this.setState({ allAwards: sortedAwards, awards: sortedAwards }, () => {
         this.filterNominationsByName(this.state.filterText);
-      })
-   } else {
-     // ensures filtering is still applied even if no sorting option is selected
-    this.filterNominationsByName(this.state.filterText);
-   }
+      });
+    } else {
+      // ensures filtering is still applied even if no sorting option is selected
+      this.filterNominationsByName(this.state.filterText);
+    }
   }
 
   /**
@@ -392,20 +343,22 @@ class Awards extends React.Component<any, IAwardsStates> {
     awards.forEach(awardCategory => {
       const newAwardCategory = {
         award: awardCategory.award,
-        nominations: [],
+        nominations: []
       };
 
       // checks whether or not the nomination contains the filtering text string
-      const newNominations = awardCategory.nominations.filter((nomination: any) => {
-        return nomination.title.toLowerCase().includes(name.toLowerCase());
-      });
+      const newNominations = awardCategory.nominations.filter(
+        (nomination: any) => {
+          return nomination.title.toLowerCase().includes(name.toLowerCase());
+        }
+      );
 
       newAwardCategory.nominations = newNominations;
       filteredAwards.push(newAwardCategory);
     });
 
     this.setState({ awards: filteredAwards, filterText: name });
-  }
+  };
 
   public render() {
     const { classes } = this.props;
@@ -425,85 +378,89 @@ class Awards extends React.Component<any, IAwardsStates> {
             <MDSpinner singleColor="#8241aa" size="50%" />
           </div>
         ) : (
-            <div className={classes.root} id="awardsContainer">
-              <AppBar
-                position="static"
-                color="default"
-                className={classes.tabBar}
+          <div className={classes.root} id="awardsContainer">
+            <AppBar
+              position="static"
+              color="default"
+              className={classes.tabBar}
+            >
+              <Tabs
+                value={value}
+                onChange={this.handleChange}
+                centered={true}
+                classes={{
+                  indicator: classes.tabsIndicator
+                }}
               >
-                <Tabs
-                  value={value}
-                  onChange={this.handleChange}
-                  centered={true}
-                  classes={{
-                    indicator: classes.tabsIndicator
+                {awards.map((award, i) => (
+                  <Tab
+                    key={i}
+                    label={award.award}
+                    classes={{
+                      root: classes.tabRoot,
+                      selected: classes.tabSelected
+                    }}
+                  />
+                ))}
+              </Tabs>
+            </AppBar>
+            <form autoComplete="off" id="filterBar">
+              <FormControl className="formControl">
+                <div className="grow" />
+                <div className="searchBar">
+                  <div className="searchIcon">
+                    <SearchIcon />
+                  </div>
+                  <Input
+                    placeholder="Search…"
+                    disableUnderline={true}
+                    onChange={this.handleSearch}
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput
+                    }}
+                  />
+                </div>
+              </FormControl>
+              <FormControl className="formControl" style={{ float: "right" }}>
+                <InputLabel
+                  style={{
+                    fontFamily: "PT Sans"
                   }}
                 >
-                  {awards.map((award, i) => (
-                    <Tab
-                      key={i}
-                      label={award.award}
-                      classes={{
-                        root: classes.tabRoot,
-                        selected: classes.tabSelected
-                      }}
-                    />
-                  ))}
-                </Tabs>
-              </AppBar>
-              <form autoComplete="off" className={classes.tabBar}>
-                <FormControl className={classes.formControl}>
-                  <div className={classes.grow} />
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon />
-                    </div>
-                    <Input
-                      placeholder="Search…"
-                      disableUnderline={true}
-                      onChange={this.handleSearch}
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }
-                      }
-                    />
-                  </div>
-                </ FormControl>
-                <FormControl className={classes.formControl}>
-                  <InputLabel>Sort By</InputLabel>
-                  <Select
-                    value={this.state.sortBy}
-                    onChange={this.handleSort}
-                    inputProps={{
-                      name: 'sortBy',
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="Popular">Popular</MenuItem>
-                    <MenuItem value="Firstname">First Name</MenuItem>
-                    <MenuItem value="Lastname">Last Name</MenuItem>
-                  </Select>
-                </FormControl>
-              </form>
-              {awards.map(
-                (award, i) =>
-                  value === i && (
-                    <CardContainer
-                      key={i}
-                      cards={award.nominations}
-                      onSelect={this.handleSelect}
-                    />
-                  )
-              )}
-              <Route
-                path={"/awards/nomination/" + this.state.selectedNomination}
-                render={this.openModal}
-              />
-            </div>
-          )}
+                  Sort By
+                </InputLabel>
+                <Select
+                  value={this.state.sortBy}
+                  onChange={this.handleSort}
+                  inputProps={{
+                    name: "sortBy"
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="Firstname">First Name</MenuItem>
+                  <MenuItem value="Lastname">Last Name</MenuItem>
+                </Select>
+              </FormControl>
+            </form>
+            {awards.map(
+              (award, i) =>
+                value === i && (
+                  <CardContainer
+                    key={i}
+                    cards={award.nominations}
+                    onSelect={this.handleSelect}
+                  />
+                )
+            )}
+            <Route
+              path={"/awards/nomination/" + this.state.selectedNomination}
+              render={this.openModal}
+            />
+          </div>
+        )}
       </div>
     );
   }

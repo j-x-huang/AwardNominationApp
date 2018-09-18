@@ -13,7 +13,7 @@ const styles = (theme: Theme) =>
     },
     root: {
       flexGrow: 1,
-      paddingTop: "20px",
+      paddingTop: "1em",
       backgroundColor: "#f9f9f9"
     }
   });

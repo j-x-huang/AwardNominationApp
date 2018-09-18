@@ -716,6 +716,42 @@ a:visited {
   background: #8241aa !important;
 } */
 
+#filterBar {
+  overflow: visible;
+}
+
+.formControl {
+  min-width: 120px !important;
+  font-family: "PT Sans" !important;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.searchBar {
+  position: relative;
+  margin-left: 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 4px;
+  padding: 0.25em;
+  color: #586069;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+}
+
+.searchIcon {
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #586069;
+  margin-left: 1em;
+  margin-top: -3px;
+}
+
 @media (min-width: 1496px) {
   #nominateDiv,
   #adminDiv {
