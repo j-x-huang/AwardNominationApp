@@ -9,10 +9,26 @@ import AwardsContent from "./Support/AwardsContent";
 import AwardCategories from "./Support/AwardCategories";
 import AwardMyNominations from "./Support/AwardMyNominations";
 
-class Router extends React.Component {
-  public render() {
-    const isAdmin = true;
+import { getAdminStatus} from "./MicrosoftGraphClient";
 
+class Router extends React.Component {
+  
+    public componentDidMount() {
+      getAdminStatus((isAdmin, err) => {
+        if (err) {
+          // todo
+        } else {
+          this.setState({ isAdmin });
+        }
+      })
+    }
+  
+    public state = {
+      isAdmin : false
+    }
+  
+  public render() {
+    
     const getAwardComponent = (awardsContent: AwardsContent) => (
       props: RouteComponentProps<{}>
     ) => (
@@ -37,7 +53,7 @@ class Router extends React.Component {
           render={getAwardComponent(new AwardMyNominations())}
         />
         {/* TODO: Should be pulling from a variable somewhere */}
-        {isAdmin ? (
+        {this.state.isAdmin ? (
           <Route path="/admin" component={Admin} />
         ) : (
           <Redirect to="/home" />

@@ -3,6 +3,8 @@ import "../App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
+// import * as XLSX from 'xlsx';
+import { saveAs } from "file-saver/FileSaver";
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -115,7 +117,17 @@ class Admin extends React.Component<any, any> {
     return lockPath.set({ lockState });
   };
   private filterTally = () => {
-    console.log("I will filter and tally");
+    // const users = [["First Name", "Last Name", "Age"]]
+
+    // // console.log("I will filter and tally");
+    // const wb = XLSX.utils.book_new()
+    // const wsAll = XLSX.utils.aoa_to_sheet(users)
+    // XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
+    // XLSX.writeFile(wb, "export-demo.csv")
+    const blob = new Blob(["Hello, world!"], {
+      type: "text/plain;charset=utf-8"
+    });
+    saveAs(blob, "hello world.txt");
   };
 }
 
