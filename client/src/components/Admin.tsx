@@ -36,7 +36,13 @@ class Admin extends React.Component<any, any> {
         <h4>Danger Zone</h4>
 
         <div className="adminOptions adminOptionsDanger">
-          <div className="adminOption">
+          <div
+            className={
+              this.state.isLocked
+                ? "adminOption adminOptionDisabled"
+                : "adminOption"
+            }
+          >
             <div className="float-left">
               <span className="adminOptionTitle">Lockdown Site</span>
               <span className="adminOptionDesc">
@@ -46,9 +52,49 @@ class Admin extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-outline-danger float-right adminButton"
+              disabled={this.state.isLocked}
               onClick={this.lockDown}
             >
               Initiate Lockdown
+            </button>
+          </div>
+          <hr className="adminHr" />
+          <div
+            className={
+              !this.state.isLocked
+                ? "adminOption adminOptionDisabled"
+                : "adminOption"
+            }
+          >
+            <div className="float-left">
+              <span className="adminOptionTitle">Reenable Nominations</span>
+              <span className="adminOptionDesc">
+                Allow nominations to take place again
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-danger float-right adminButton"
+              disabled={!this.state.isLocked}
+              onClick={this.lockDown}
+            >
+              Abort Lockdown
+            </button>
+          </div>
+          <hr className="adminHr" />
+
+          <div className="adminOption">
+            <div className="float-left">
+              <span className="adminOptionTitle">Clean Restart</span>
+              <span className="adminOptionDesc">
+                Reset the state of award nominations
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-danger float-right adminButton"
+            >
+              Reswt Nominations
             </button>
           </div>
         </div>
@@ -60,7 +106,6 @@ class Admin extends React.Component<any, any> {
     console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
-    location.reload();
   };
 
   private readLockState = () => {
