@@ -115,7 +115,10 @@ export interface IAwardsProps extends WithStyles<typeof styles> { }
 export interface IAwardsStates {
   value: number;
   selectedNomination: string;
+  allAwards: any[];
   awards: any[];
+  filterText: string,
+  sortBy: string,
   isLoading: boolean;
 }
 
@@ -135,8 +138,11 @@ class Awards extends React.Component<any, IAwardsStates> {
   public state = {
     value: 0,
     selectedNomination: "",
+    allAwards: [] as any[],
     awards: [] as any[],
-    isLoading: true
+    filterText: '',
+    sortBy: "",
+    isLoading: true,
   };
 
   private handleChange = (
@@ -265,7 +271,7 @@ class Awards extends React.Component<any, IAwardsStates> {
 
     awards[index].nominations = nominations;
 
-    this.setState({ awards, isLoading: false }, () => {
+    this.setState({ awards, isLoading: false, allAwards: awards }, () => {
       // fetch all images for the nominees and reupdate the state
       getPhotosByObjectId(nominees, (err, photos) => {
         if (err) {
@@ -286,7 +292,13 @@ class Awards extends React.Component<any, IAwardsStates> {
           });
 
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
-          this.setState({ awards: newAwards });
+          console.log(newAwards)
+          this.setState({ awards: newAwards, allAwards: newAwards },
+            () => {
+              // this ensures that the loading of pictures doesn't affect the filtering
+              this.filterNominationsByName(this.state.filterText);
+            }
+          );
         }
       });
     });
@@ -301,30 +313,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       }
     });
   };
-
-  // private updateNomination = (category: string, nomination: any) => {
-  //   const newAwards = [...this.state.awards];
-
-  //   const index = newAwards.findIndex(c => {
-  //     return c.award === category;
-  //   });
-
-  //   console.log("Index: " + index);
-
-  //   console.log(newAwards[index].nominations);
-
-  //   const nominationIndex = newAwards[index].nominations.findIndex((x: any) => x.id === nomination.id);
-
-  //   if (nominationIndex >= 0) {
-  //     newAwards[index].nominations[nominationIndex] = nomination;
-  //   } else {
-  //     newAwards[index].nominations.push(nomination);
-  //   }
-
-  //   console.log(newAwards[index].nominations);
-
-  //   this.setState({ awards: newAwards });
-  // };
 
   public goBack = () => {
     if (this.props.isMyNomination) {
@@ -345,9 +333,62 @@ class Awards extends React.Component<any, IAwardsStates> {
     );
   };
 
-  private handleSearch = () => {
-    console.log("on change")
+  private handleSearch = (event: any) => {
+    this.filterNominationsByName(event.target.value);
+  }
 
+  private handleSort = (event: any) => {
+    this.setState({ sortBy: event.target.value });
+
+    if (event.target.value  === "Name") {
+      const awards = this.state.allAwards;
+      const sortedAwards = new Array<any>();
+
+      awards.forEach(awardCategory => {
+        const newAwardCategory = {
+          award: awardCategory.award,
+          nominations: [],
+        };
+
+        const newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+          return (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : ((b.title.toLowerCase() > a.title.toLowerCase()) ? -1 : 0);
+        })
+
+        newAwardCategory.nominations = newNominations;
+        sortedAwards.push(newAwardCategory)
+      })
+      console.log(sortedAwards)
+      this.setState({ awards: sortedAwards }, () => {
+        this.filterNominationsByName(this.state.filterText);
+      })
+    }
+  }
+
+  /**
+   * Filters the awards by name
+   */
+  private filterNominationsByName = (name: string) => {
+    const awards = this.state.allAwards;
+
+    const filteredAwards = new Array<any>();
+
+    // applies filtering to every award category
+    awards.forEach(awardCategory => {
+      const newAwardCategory = {
+        award: awardCategory.award,
+        nominations: [],
+      };
+
+      // checks whether or not the nomination contains the filtering text string
+      const newNominations = awardCategory.nominations.filter((nomination: any) => {
+        return nomination.title.toLowerCase().includes(name.toLowerCase());
+      });
+
+      newAwardCategory.nominations = newNominations;
+      filteredAwards.push(newAwardCategory);
+    });
+
+    this.setState({ awards: filteredAwards, filterText: name });
   }
 
   public render() {
@@ -398,23 +439,40 @@ class Awards extends React.Component<any, IAwardsStates> {
               </AppBar>
               <form autoComplete="off" className={classes.tabBar}>
                 <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="age-simple">Filter</InputLabel>
+                  <div className={classes.grow} />
+                  <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                      <SearchIcon />
+                    </div>
+                    <Input
+                      placeholder="Search…"
+                      disableUnderline={true}
+                      onChange={this.handleSearch}
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }
+                      }
+                    />
+                  </div>
+                </ FormControl>
+                <FormControl className={classes.formControl}>
+                  <InputLabel>Sort By</InputLabel>
                   <Select
-                    // value={this.state.age}
-                    // onChange={this.handleChange}
+                    value={this.state.sortBy}
+                    onChange={this.handleSort}
                     inputProps={{
-                      name: 'age',
-                      id: 'age-simple',
+                      name: 'sortBy',
                     }}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Popular</MenuItem>
-                    <MenuItem value={20}>Name</MenuItem>
+                    <MenuItem value="Popular">Popular</MenuItem>
+                    <MenuItem value="Name">Name</MenuItem>
                   </Select>
                 </FormControl>
-                </form>
+              </form>
               {awards.map(
                 (award, i) =>
                   value === i && (
@@ -425,22 +483,6 @@ class Awards extends React.Component<any, IAwardsStates> {
                     />
                   )
               )}
-              <div className={classes.grow} />
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <Input
-                  placeholder="Search…"
-                  disableUnderline={true}
-                  onChange={this.handleSearch}
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }
-                  }
-                />
-              </div>
               <Route
                 path={"/awards/nomination/" + this.state.selectedNomination}
                 render={this.openModal}
