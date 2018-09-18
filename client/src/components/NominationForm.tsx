@@ -194,44 +194,44 @@ class NominationForm extends React.Component<any, any> {
             onClick={this.redirectToNomination}
           />
         ) : (
-            <form className="feelix-card" id="nominateDiv">
-              <h5> Nominate a deserving candidate </h5>
-              <hr />
-              <div id="categorySelect">{options}</div>
-              <div className="form-group">
-                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-                <Select
-                  isDisabled={category === ""}
-                  isSearchable={true}
-                  onChange={this.nomineeChange}
-                  options={nominees}
-                  value={this.state.nominee}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="justificationSelect">Justify your decision</label>
-                <textarea
-                  className="form-control"
-                  style={{ resize: "none" }}
-                  id="justificationSelect"
-                  rows={5}
-                  value={this.state.justification}
-                  onChange={this.justificationChange}
-                />
-              </div>
-              <div className="overflowHid">
-                <button
-                  type="button"
-                  className="btn btn-primary btn-purple float-right"
-                  disabled={this.checkFieldsFilled() ? false : true}
-                  onClick={this.handleClick}
-                  style={this.state.isLocked ? { display: "none" } : {}}
-                >
-                  Nominate
+          <form className="feelix-card" id="nominateDiv">
+            <h5> Nominate a deserving candidate </h5>
+            <hr />
+            <div id="categorySelect">{options}</div>
+            <div className="form-group">
+              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+              <Select
+                isDisabled={category === ""}
+                isSearchable={true}
+                onChange={this.nomineeChange}
+                options={nominees}
+                value={this.state.nominee}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="justificationSelect">Justify your decision</label>
+              <textarea
+                className="form-control"
+                style={{ resize: "none" }}
+                id="justificationSelect"
+                rows={5}
+                value={this.state.justification}
+                onChange={this.justificationChange}
+              />
+            </div>
+            <div className="overflowHid">
+              <button
+                type="button"
+                className="btn btn-primary btn-purple float-right"
+                disabled={this.checkFieldsFilled() ? false : true}
+                onClick={this.handleClick}
+                style={this.state.isLocked ? { display: "none" } : {}}
+              >
+                Nominate
               </button>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
+        )}
         <Route
           path={"/nominate/nomination/" + this.state.nominationID}
           render={this.openModal}
@@ -447,16 +447,20 @@ class NominationForm extends React.Component<any, any> {
       nominee: nomineeid,
       upvoters: {
         [userid]: true
-      }
+      },
+      key: newPostKey
     };
-    updates["/nominators/" + userid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominee: this.state.nominee.value
-    };
-    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominator: userid
-    };
+
+    if (newPostKey != null) {
+      const nomination = {
+        [newPostKey]: true
+      };
+      const nominatorPath = defaultDatabase.ref("nominators/" + userid);
+      const nomineePath = defaultDatabase.ref("nominees/" + nomineeid);
+
+      nominatorPath.update(nomination);
+      nomineePath.update(nomination);
+    }
 
     const nomCat = {
       [nomineeid]: true
@@ -514,6 +518,13 @@ class NominationForm extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref(
       "/nominations/" + nominationid + "/upvoters/"
     );
+
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [nominationPostKey]: true
+    };
+
+    nominatorPath.update(nomination);
 
     return upvoterPath.update(upvoter);
   };

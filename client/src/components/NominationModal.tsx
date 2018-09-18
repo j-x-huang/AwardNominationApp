@@ -429,6 +429,13 @@ class NominationModal extends React.Component<any, any> {
       "/nominations/" + this.props.nominationID + "/upvoters/"
     );
 
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [this.props.nominationID]: true
+    };
+
+    nominatorPath.update(nomination);
+
     return upvoterPath.update(upvoter);
   };
 
@@ -441,6 +448,11 @@ class NominationModal extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref(
       "/nominations/" + this.props.nominationID + "/upvoters/" + uid
     );
+
+    const nominatorPath = defaultDatabase.ref(
+      "nominators/" + uid + "/" + this.props.nominationID
+    );
+    nominatorPath.remove();
 
     return upvoterPath.remove();
   };
