@@ -9,7 +9,7 @@ import "../node_modules/popper.js/dist/popper.min.js";
 import { authContext } from "./auth";
 import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 const DO_NOT_LOGIN = true;
@@ -28,9 +28,9 @@ runWithAdal(
   authContext,
   () => {
     ReactDOM.render(
-      <HashRouter>
+      <BrowserRouter>
         <App />
-      </HashRouter>,
+      </BrowserRouter>,
       document.getElementById("root") as HTMLElement
     );
     registerServiceWorker();
