@@ -5,7 +5,7 @@
   "dependencies": {
     "@githubprimer/octicons-react": "^8.0.0",
     "@material-ui/core": "latest",
-    "@material-ui/icons": "^3.0.1",
+    "@material-ui/icons": "latest",
     "@microsoft/microsoft-graph-client": "^1.2.0",
     "@types/react-adal": "^0.4.1",
     "@types/react-bootstrap": "^0.32.11",
