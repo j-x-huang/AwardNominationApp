@@ -280,6 +280,7 @@ class Awards extends React.Component<any, IAwardsStates> {
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
           this.setState({ awards: newAwards, allAwards: newAwards },
             () => {
+              // this ensures that the loading of pictures doesn't affect the filtering
               this.filterNominationsByName(this.state.filterText);
             }
           );
@@ -297,30 +298,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       }
     });
   };
-
-  // private updateNomination = (category: string, nomination: any) => {
-  //   const newAwards = [...this.state.awards];
-
-  //   const index = newAwards.findIndex(c => {
-  //     return c.award === category;
-  //   });
-
-  //   console.log("Index: " + index);
-
-  //   console.log(newAwards[index].nominations);
-
-  //   const nominationIndex = newAwards[index].nominations.findIndex((x: any) => x.id === nomination.id);
-
-  //   if (nominationIndex >= 0) {
-  //     newAwards[index].nominations[nominationIndex] = nomination;
-  //   } else {
-  //     newAwards[index].nominations.push(nomination);
-  //   }
-
-  //   console.log(newAwards[index].nominations);
-
-  //   this.setState({ awards: newAwards });
-  // };
 
   public goBack = () => {
     if (this.props.isMyNomination) {
@@ -346,20 +323,22 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.filterNominationsByName(event.target.value);
   }
 
+  /**
+   * Filters the awards by name
+   */
   private filterNominationsByName = (name: string) => {
     const awards = this.state.allAwards;
     const filteredAwards = new Array<any>();
 
+    // applies filtering to every award category
     awards.forEach(awardCategory => {
-      console.log("Category Nominations");
-      console.log(awardCategory);
       const newAwardCategory = {
         award: awardCategory.award,
         nominations: [],
       };
 
+      // checks whether or not the nomination contains the filtering text string
       const newNominations = awardCategory.nominations.filter((nomination: any) => {
-        console.log(nomination.title.toLowerCase());
         return nomination.title.toLowerCase().includes(name.toLowerCase());
       });
 
@@ -367,7 +346,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       filteredAwards.push(newAwardCategory);
     });
 
-    console.log(filteredAwards);
     this.setState({ awards: filteredAwards, filterText: name });
   }
 
