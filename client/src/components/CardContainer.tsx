@@ -24,16 +24,18 @@ export interface ICardContent {
   title: string;
   objectId: string;
   description: string;
+  category:  string;
 }
 
 export interface ICardContainerProps extends WithStyles<typeof styles> {
   cards: ICardContent[];
   onSelect: (...args: any[]) => void;
+  category: string;
 }
 
 class CardContainer extends React.Component<ICardContainerProps> {
   public render() {
-    const { classes, cards, onSelect } = this.props;
+    const { classes, cards, onSelect} = this.props;
 
     return (
       <Grid
@@ -50,6 +52,7 @@ class CardContainer extends React.Component<ICardContainerProps> {
             justify="flex-start"
             spacing={32}
           >
+            {console.log("HELLO ", this.props.cards)}
             {this.props.cards.length ? (
               cards.map((card, i) => (
                 <Grid key={card.id} item={true}>
@@ -64,7 +67,7 @@ class CardContainer extends React.Component<ICardContainerProps> {
                 </Grid>
               ))
             ) : (
-              <div> There are currently no nominations </div>
+              <div id = "noNominations"> There are currently no nominations for {this.props.category} </div>
             )}
           </Grid>
         </Grid>

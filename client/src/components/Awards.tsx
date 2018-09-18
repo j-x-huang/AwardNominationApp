@@ -458,6 +458,7 @@ class Awards extends React.Component<any, IAwardsStates> {
                     key={i}
                     cards={award.nominations}
                     onSelect={this.handleSelect}
+                    category = {award.award}
                   />
                 )
             )}
