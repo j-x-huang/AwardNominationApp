@@ -1,6 +1,8 @@
 import * as React from "react";
 import "../App.css";
 import * as firebase from "firebase";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -53,7 +55,7 @@ class Admin extends React.Component<any, any> {
               type="button"
               className="btn btn-outline-danger float-right adminButton"
               disabled={this.state.isLocked}
-              onClick={this.lockDown}
+              onClick={this.showLockdownConfirmationModal}
             >
               Initiate Lockdown
             </button>
@@ -76,7 +78,7 @@ class Admin extends React.Component<any, any> {
               type="button"
               className="btn btn-outline-danger float-right adminButton"
               disabled={!this.state.isLocked}
-              onClick={this.lockDown}
+              onClick={this.showLockdownConfirmationModal}
             >
               Abort Lockdown
             </button>
@@ -93,6 +95,7 @@ class Admin extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-outline-danger float-right adminButton"
+              onClick={this.showLockdownConfirmationModal}
             >
               Reset Nominations
             </button>
@@ -101,6 +104,23 @@ class Admin extends React.Component<any, any> {
       </div>
     );
   }
+
+  private showLockdownConfirmationModal = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.lockDown()
+        },
+        {
+          label: "No"
+        }
+      ]
+    });
+  };
+
   private lockDown = () => {
     this.state.isLocked = !this.state.isLocked;
     console.log("Lock down " + this.state.isLocked);

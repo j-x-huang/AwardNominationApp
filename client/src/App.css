@@ -701,6 +701,21 @@ a:visited {
   width: 1496px;
 }
 
+.react-confirm-alert-body {
+  font-family: "PT Sans";
+  font-size: 14px;
+}
+
+.react-confirm-alert-body h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* .react-confirm-alert-button-group > button:first-child {
+  background: #8241aa !important;
+} */
+
 @media (min-width: 1496px) {
   #nominateDiv,
   #adminDiv {
