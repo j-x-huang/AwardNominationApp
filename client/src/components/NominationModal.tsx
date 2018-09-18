@@ -31,7 +31,8 @@ class NominationModal extends React.Component<any, any> {
     isLoading: true,
     isLocked: false,
     profilePic:
-      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+    lockPath: firebase.database().ref("/lockdown")
   };
 
   public static defaultProps = {
@@ -70,13 +71,6 @@ class NominationModal extends React.Component<any, any> {
     });
   }
 
-  /* public componentWillReceiveProps() {
-    console.log("console will receive props");
-
-    this.getNominationDetails(this.props.nominationID);
-    // Get the nomination info and
-  } */
-
   public getNominationDetails(nominationID: string) {
     console.log("Function called");
 
@@ -98,13 +92,9 @@ class NominationModal extends React.Component<any, any> {
   }
 
   private readLockState = () => {
-    const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
-      this.setState({ isLocked: value.val().lockState });
-      return value.val().lockState;
-    });
+    this.state.lockPath.on("value", snap => 
+      this.setState({ isLocked: snap!.val().lockState })
+    );
   };
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {

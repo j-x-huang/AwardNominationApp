@@ -11,6 +11,7 @@ class NavBar extends React.Component<any, any> {
       "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
       isLocked: false,
       isAdmin: false,
+      lockPath: firebase.database().ref("/lockdown")
   };
 
   public componentDidMount() {
@@ -34,13 +35,9 @@ class NavBar extends React.Component<any, any> {
     })
   }
   private readLockState = () => {
-    const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
-      this.setState({ isLocked: value.val().lockState });
-      return value.val().lockState;
-    });
+    this.state.lockPath.on("value", snap => 
+      this.setState({ isLocked: snap!.val().lockState })
+    );
   };
 
   public render() {

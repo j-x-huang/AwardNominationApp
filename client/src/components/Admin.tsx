@@ -12,7 +12,8 @@ class Admin extends React.Component<any, any> {
     this.readLockState();
   }
   public state = {
-    isLocked: false
+    isLocked: false,
+    lockPath: firebase.database().ref("/lockdown")
   };
   public render() {
     return (
@@ -134,17 +135,12 @@ class Admin extends React.Component<any, any> {
     console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
-    location.reload();
   };
 
   private readLockState = () => {
-    const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
-      this.setState({ isLocked: value.val().lockState });
-      return value.val().lockState;
-    });
+    this.state.lockPath.on("value", snap => 
+      this.setState({ isLocked: snap!.val().lockState })
+    );
   };
 
   private writeLockState = (lockState: boolean) => {
