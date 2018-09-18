@@ -94,7 +94,7 @@ class Admin extends React.Component<any, any> {
               type="button"
               className="btn btn-outline-danger float-right adminButton"
             >
-              Reswt Nominations
+              Reset Nominations
             </button>
           </div>
         </div>
@@ -106,6 +106,7 @@ class Admin extends React.Component<any, any> {
     console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
+    location.reload();
   };
 
   private readLockState = () => {
