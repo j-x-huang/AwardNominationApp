@@ -10,7 +10,8 @@ export interface ICommentAdderProps {
 
 class CommentAdder extends React.Component<any, any> {
   public state = {
-    isLocked: false
+    isLocked: false,
+    lockPath: firebase.database().ref("/lockdown")
   };
   public componentDidMount() {
     this.readLockState();
@@ -60,13 +61,9 @@ class CommentAdder extends React.Component<any, any> {
   };
 
   private readLockState = () => {
-    const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
-      this.setState({ isLocked: value.val().lockState });
-      return value.val().lockState;
-    });
+    this.state.lockPath.on("value", snap => 
+      this.setState({ isLocked: snap!.val().lockState })
+    );
   };
 }
 
