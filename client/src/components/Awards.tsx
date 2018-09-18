@@ -45,7 +45,8 @@ const styles = (theme: Theme) =>
         fontWeight: theme.typography.fontWeightMedium
       },
       "&:focus": {
-        color: "#8241aa"
+        color: "#8241aa",
+        outline: "none",
       }
     },
     tabSelected: {}

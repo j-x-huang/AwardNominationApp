@@ -3,14 +3,17 @@ import logo1 from "../images/logo1.png";
 import { getUser, logOutUser } from "../auth";
 import { getMyImage } from "../MicrosoftGraphClient";
 import { NavLink } from "react-router-dom";
+import * as firebase from "firebase";
 
 class NavBar extends React.Component<any, any> {
   public state = {
     profilePic:
-      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+      isLocked: false
   };
 
   public componentDidMount() {
+    this.readLockState();
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -22,6 +25,15 @@ class NavBar extends React.Component<any, any> {
       return;
     });
   }
+  private readLockState = () => {
+    const defaultDatabase = firebase.database();
+    const lockPath = defaultDatabase.ref("/lockdown");
+    lockPath.once("value").then(value => {
+      console.log(value.val().lockState);
+      this.setState({ isLocked: value.val().lockState });
+      return value.val().lockState;
+    });
+  };
 
   public render() {
     const user = getUser();
@@ -70,7 +82,7 @@ class NavBar extends React.Component<any, any> {
                 <span>AWARDS</span>
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li className="nav-item" style={this.state.isLocked ? { display: "none" } : {}}>
               <NavLink
                 activeClassName="activeLink"
                 to="/nominate"
