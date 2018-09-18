@@ -55,7 +55,7 @@ class Admin extends React.Component<any, any> {
               type="button"
               className="btn btn-outline-danger float-right adminButton"
               disabled={this.state.isLocked}
-              onClick={this.showLockdownConfirmationModal}
+              onClick={this.showLockdownConfirmation}
             >
               Initiate Lockdown
             </button>
@@ -78,7 +78,7 @@ class Admin extends React.Component<any, any> {
               type="button"
               className="btn btn-outline-danger float-right adminButton"
               disabled={!this.state.isLocked}
-              onClick={this.showLockdownConfirmationModal}
+              onClick={this.showLockdownConfirmation}
             >
               Abort Lockdown
             </button>
@@ -95,7 +95,7 @@ class Admin extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-outline-danger float-right adminButton"
-              onClick={this.showLockdownConfirmationModal}
+              onClick={this.showLockdownConfirmation}
             >
               Reset Nominations
             </button>
@@ -105,14 +105,22 @@ class Admin extends React.Component<any, any> {
     );
   }
 
-  private showLockdownConfirmationModal = () => {
+  private showLockdownConfirmation = () => {
+    let msg = "Are you sure you want to lock down nominations";
+    if (this.state.isLocked) {
+      msg = "Are you sure you want to reenable nominations";
+    }
+    this.showConfirmationModal(msg, this.lockDown);
+  };
+
+  private showConfirmationModal = (dMsg: string, dYes: any) => {
     confirmAlert({
-      title: "Confirm to submit",
-      message: "Are you sure to do this.",
+      title: "Confirm Action",
+      message: dMsg,
       buttons: [
         {
           label: "Yes",
-          onClick: () => this.lockDown()
+          onClick: () => dYes()
         },
         {
           label: "No"

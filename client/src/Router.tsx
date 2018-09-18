@@ -11,7 +11,7 @@ import AwardMyNominations from "./Support/AwardMyNominations";
 
 class Router extends React.Component {
   public render() {
-    const isAdmin = false;
+    const isAdmin = true;
 
     const getAwardComponent = (awardsContent: AwardsContent) => (
       props: RouteComponentProps<{}>
