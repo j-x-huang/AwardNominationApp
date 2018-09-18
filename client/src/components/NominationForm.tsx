@@ -45,7 +45,7 @@ class NominationForm extends React.Component<any, any> {
     justification: "",
     nominator: "",
     nominee: { value: "", name: "", label: "", isDisabled: false },
-    nominationID: "-LM4wBg-yv0zNphsbcMz",
+    nominationID: "",
     score: 1,
     nominees: new Array<any>(),
     completed: false,
@@ -260,9 +260,9 @@ class NominationForm extends React.Component<any, any> {
     // });
   };
 
-  private setNominationID = (id: string | null) => {
+  private setNominationID = (ID: string) => {
     this.setState({
-      nominationID: id
+      nominationID: ID
     });
   };
 
@@ -317,10 +317,12 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private redirectToNomination = () => {
+    console.log(this.state.nominationID)
     this.props.history.push({
       pathname: "/nominate/nomination/" + this.state.nominationID,
       state: { modal: true }
     });
+    console.log(this.state.nominationID)
   };
 
   public goBack = () => {
@@ -356,26 +358,36 @@ class NominationForm extends React.Component<any, any> {
             existingNomination.nominee === nominee
           ) {
             console.log(existingNominationPostKey);
+            this.setNominationID(existingNominationPostKey);
+            console.log(this.state.nominationID);
             this.showDuplicateNominationConfirmationModal(existingNominationPostKey);
             duplicateNomination = true;
+            break;
           }
         }
         if (!duplicateNomination) {
-          this.showNominationConfirmationModal()
+          const newPostKey = defaultDatabase
+            .ref()
+            .child("nominations")
+            .push().key;
+
+          if (newPostKey != null) {
+            this.setNominationID(newPostKey);
+            this.showNominationConfirmationModal(newPostKey);
+          }
         }
       });
   };
 
-  private showNominationConfirmationModal = () => {
+  private showNominationConfirmationModal = (newPostKey: string) => {
     const defaultDatabase = firebase.database();
-
     confirmAlert({
-      title: "Nomination Confirmation",
+      title: "Confirm your Nomination",
       message: "Are you sure you want to nominate?",
       buttons: [
         {
           label: "Nominate",
-          onClick: () => this.createNewNomination(defaultDatabase)
+          onClick: () => this.createNewNomination(defaultDatabase, newPostKey)
         },
         {
           label: "Cancel"
@@ -383,16 +395,6 @@ class NominationForm extends React.Component<any, any> {
       ]
     });
   };
-
-  private duplicateNominationToComment(existingNominationPostKey: string) {
-    this.makeComment(
-      existingNominationPostKey,
-      this.state.justification
-    );
-    this.makeUpvote(existingNominationPostKey);
-    this.setNominationID(existingNominationPostKey);
-    this.redirectToNomination();
-  }
 
   private showDuplicateNominationConfirmationModal = (existingNominationPostKey: string) => {
     confirmAlert({
@@ -400,8 +402,8 @@ class NominationForm extends React.Component<any, any> {
       message: "Do you want to put your justification as a comment?",
       buttons: [
         {
-          label: "Nominate",
-          onClick: () => this.duplicateNominationToComment(existingNominationPostKey)
+          label: "Comment",
+          onClick: () => this.duplicateNominationJustificationToComment(existingNominationPostKey)
         },
         {
           label: "Cancel"
@@ -410,14 +412,26 @@ class NominationForm extends React.Component<any, any> {
     });
   };
 
-  private createNewNomination = (
-    defaultDatabase: firebase.database.Database
-  ) => {
+  private duplicateNominationJustificationToComment(existingNominationPostKey: string) {
+    // console.log("existing: " + existingNominationPostKey);
+    // this.setNominationID(existingNominationPostKey);
+    this.makeComment(
+      existingNominationPostKey,
+      this.state.justification
+    );
+    this.makeUpvote(existingNominationPostKey);
+    this.setState({
+      completed: true
+    });
+    this.redirectToNomination();
+  }
+
+  private createNewNomination = (defaultDatabase: firebase.database.Database, newPostKey: string) => {
     // Get a key for a new Post.
-    const newPostKey = defaultDatabase
-      .ref()
-      .child("nominations")
-      .push().key;
+    // const newPostKey = defaultDatabase
+    //   .ref()
+    //   .child("nominations")
+    //   .push().key;
 
     const nomineeid = this.state.nominee.value;
     const user = getUser();
@@ -453,7 +467,9 @@ class NominationForm extends React.Component<any, any> {
 
     nomCatPath.update(nomCat);
 
-    this.setNominationID(newPostKey);
+    // if (newPostKey != null) {
+    //   this.setNominationID(newPostKey);
+    // }
 
     defaultDatabase.ref().update(updates);
     this.setState({
