@@ -105,6 +105,7 @@ export interface IAwardsStates {
   selectedNomination: string;
   allAwards: any[];
   awards: any[];
+  filterText: string,
   isLoading: boolean;
 }
 
@@ -126,7 +127,8 @@ class Awards extends React.Component<any, IAwardsStates> {
     selectedNomination: "",
     allAwards: [] as any[],
     awards: [] as any[],
-    isLoading: true
+    filterText: '',
+    isLoading: true,
   };
 
   private handleChange = (
@@ -276,7 +278,11 @@ class Awards extends React.Component<any, IAwardsStates> {
           });
 
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
-          this.setState({ awards: newAwards, allAwards: newAwards });
+          this.setState({ awards: newAwards, allAwards: newAwards },
+            () => {
+              this.filterNominationsByName(this.state.filterText);
+            }
+          );
         }
       });
     });
@@ -362,7 +368,7 @@ class Awards extends React.Component<any, IAwardsStates> {
     });
 
     console.log(filteredAwards);
-    this.setState({ awards: filteredAwards });
+    this.setState({ awards: filteredAwards, filterText: name });
   }
 
   public render() {
