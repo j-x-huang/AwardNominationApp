@@ -32,6 +32,7 @@ class AwardMyNominations extends AwardsContent {
   public getNominations = () => {
     let path = "nominees";
 
+    console.log(this.tab);
     switch (this.tab) {
       case "My Nominations":
         path = "nominators";

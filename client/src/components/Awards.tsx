@@ -218,7 +218,13 @@ class Awards extends React.Component<any, IAwardsStates> {
     const nominees: string[] = [];
 
     snapshot.forEach(childSnapshot => {
-      const item = childSnapshot;
+      let item: any;
+      try {
+        item = childSnapshot.val();
+      } catch (err) {
+        item = childSnapshot;
+      }
+
       console.log(item);
       if (nominees.indexOf(item.nominee) === -1) {
         nominees.push(item.nominee);
@@ -230,7 +236,12 @@ class Awards extends React.Component<any, IAwardsStates> {
         // todo
       } else {
         snapshot.forEach(childSnapshot => {
-          const item = childSnapshot;
+          let item: any;
+          try {
+            item = childSnapshot.val();
+          } catch (err) {
+            item = childSnapshot;
+          }
           const name =
             users[item.nominee] === undefined ? "" : users[item.nominee].name;
           let nomination;
