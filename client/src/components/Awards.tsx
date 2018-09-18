@@ -77,7 +77,22 @@ const styles = (theme: Theme) =>
     selectEmpty: {
       marginTop: theme.spacing.unit * 2
     },
-    tabSelected: {}
+    tabSelected: {},
+    select: {
+      // I hate material-ui ahhhh
+      "&:hover:not(.dummy):not(.dummy):not(.dummy):before": {
+        borderBottom: "2px solid #8241aa"
+      },
+      "&:before": {
+        borderBottom: "1px solid #a476c1",
+      },
+      "&:after": {
+        "&$focused": {
+          color: "#8241aa"
+        },
+        borderBottom: "1px solid #a476c1",
+      }
+    }
   });
 
 export interface IAwardsProps extends WithStyles<typeof styles> {}
@@ -431,12 +446,13 @@ class Awards extends React.Component<any, IAwardsStates> {
               <FormControl className="formControl" style={{ float: "right" }}>
                 <InputLabel
                   style={{
-                    fontFamily: "PT Sans"
+                    fontFamily: "PT Sans",
                   }}
                 >
                   Sort By
                 </InputLabel>
                 <Select
+                  className={classes.select}
                   value={this.state.sortBy}
                   onChange={this.handleSort}
                   inputProps={{
