@@ -84,16 +84,22 @@ const styles = (theme: Theme) =>
         borderBottom: "2px solid #8241aa"
       },
       "&:before": {
-        borderBottom: "1px solid #a476c1",
+        borderBottom: "1px solid #a476c1"
       },
       "&:after": {
         "&$focused": {
           color: "#8241aa"
         },
-        borderBottom: "1px solid #a476c1",
+        borderBottom: "1px solid #a476c1"
       }
     }
   });
+
+const StyledInputLabel = withStyles({
+  shrink: {
+    color: "#B9BCC0 !important"
+  }
+})(InputLabel);
 
 export interface IAwardsProps extends WithStyles<typeof styles> {}
 
@@ -417,9 +423,7 @@ class Awards extends React.Component<any, IAwardsStates> {
                 value={value}
                 onChange={this.handleChange}
                 centered={true}
-                classes={{
-                  indicator: classes.tabsIndicator
-                }}
+                classes={{ indicator: classes.tabsIndicator }}
               >
                 {awards.map((award, i) => (
                   <Tab
@@ -456,20 +460,17 @@ class Awards extends React.Component<any, IAwardsStates> {
                 </div>
               </FormControl>
               <FormControl className="formControl" style={{ float: "right" }}>
-                <InputLabel
-                  style={{
-                    fontFamily: "PT Sans",
-                  }}
+                <StyledInputLabel
+                  style={{ fontFamily: "PT Sans" }}
+                  className={classes.select}
                 >
                   Sort By
-                </InputLabel>
+                </StyledInputLabel>
                 <Select
                   className={classes.select}
                   value={this.state.sortBy}
                   onChange={this.handleSort}
-                  inputProps={{
-                    name: "sortBy"
-                  }}
+                  inputProps={{ name: "sortBy" }}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -486,7 +487,7 @@ class Awards extends React.Component<any, IAwardsStates> {
                     key={i}
                     cards={award.nominations}
                     onSelect={this.handleSelect}
-                    category = {award.award}
+                    category={award.award}
                   />
                 )
             )}

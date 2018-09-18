@@ -6,8 +6,7 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 import Modal from "./NominationModal";
 import { Route } from "react-router-dom";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
 
 class NominationForm extends React.Component<any, any> {
   public previousLocation = this.props.location;

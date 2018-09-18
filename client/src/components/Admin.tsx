@@ -1,8 +1,8 @@
 import * as React from "react";
 import "../App.css";
 import * as firebase from "firebase";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
+import AdminOption from "./AdminOption";
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -20,87 +20,53 @@ class Admin extends React.Component<any, any> {
       <div id="adminDiv">
         <h4 id="adminTitle">Administrator Control Panel</h4>
         <div className="adminOptions">
-          <div className="adminOption">
-            <div className="float-left">
-              <span className="adminOptionTitle">Tally Nominations</span>
-              <span className="adminOptionDesc">
-                Export sorted nominations of each category
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-success float-right adminButton"
-              onClick={this.filterTally}
-            >
-              Export Results
-            </button>
-          </div>
+          <AdminOption
+            title="Tally Nominations"
+            desc="Export top nominations of each category"
+            buttonDesc="Export Results"
+            onBtnClick={this.filterTally}
+            disabled={false}
+            dangerous={false}
+          />
+          <hr className="adminHr" />
+          <AdminOption
+            title="Export Database Locally"
+            desc="Save Firebase JSON table"
+            buttonDesc="Export Database"
+            onBtnClick={this.filterTally}
+            disabled={false}
+            dangerous={false}
+          />
         </div>
         <h4>Danger Zone</h4>
 
         <div className="adminOptions adminOptionsDanger">
-          <div
-            className={
-              this.state.isLocked
-                ? "adminOption adminOptionDisabled"
-                : "adminOption"
-            }
-          >
-            <div className="float-left">
-              <span className="adminOptionTitle">Lockdown Site</span>
-              <span className="adminOptionDesc">
-                Prevent further award nominations
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-danger float-right adminButton"
-              disabled={this.state.isLocked}
-              onClick={this.showLockdownConfirmation}
-            >
-              Initiate Lockdown
-            </button>
-          </div>
+          <AdminOption
+            title="Lockdown Site"
+            desc="Prevent further award nominations"
+            buttonDesc="Initiate Lockdown"
+            onBtnClick={this.showLockdownConfirmation}
+            disabled={this.state.isLocked}
+            dangerous={true}
+          />
           <hr className="adminHr" />
-          <div
-            className={
-              !this.state.isLocked
-                ? "adminOption adminOptionDisabled"
-                : "adminOption"
-            }
-          >
-            <div className="float-left">
-              <span className="adminOptionTitle">Reenable Nominations</span>
-              <span className="adminOptionDesc">
-                Allow nominations to take place again
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-danger float-right adminButton"
-              disabled={!this.state.isLocked}
-              onClick={this.showLockdownConfirmation}
-            >
-              Abort Lockdown
-            </button>
-          </div>
+          <AdminOption
+            title="Reenable Nominations"
+            desc="Allow nominations to take place again"
+            buttonDesc="Abort Lockdown"
+            onBtnClick={this.showLockdownConfirmation}
+            disabled={!this.state.isLocked}
+            dangerous={true}
+          />
           <hr className="adminHr" />
-
-          <div className="adminOption">
-            <div className="float-left">
-              <span className="adminOptionTitle">Clean Restart</span>
-              <span className="adminOptionDesc">
-                Reset the state of award nominations
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-danger float-right adminButton"
-              onClick={this.showLockdownConfirmation}
-            >
-              Reset Nominations
-            </button>
-          </div>
+          <AdminOption
+            title="Clean Restart"
+            desc="Reset the state of award nominations"
+            buttonDesc="Reset Nominations"
+            onBtnClick={this.showLockdownConfirmation}
+            disabled={false}
+            dangerous={true}
+          />
         </div>
       </div>
     );
@@ -138,7 +104,7 @@ class Admin extends React.Component<any, any> {
   };
 
   private readLockState = () => {
-    this.state.lockPath.on("value", snap => 
+    this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
     );
   };
