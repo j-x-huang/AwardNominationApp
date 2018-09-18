@@ -6,6 +6,8 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 import Modal from "./NominationModal";
 import { Route } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class NominationForm extends React.Component<any, any> {
   public previousLocation = this.props.location;
@@ -43,7 +45,7 @@ class NominationForm extends React.Component<any, any> {
     justification: "",
     nominator: "",
     nominee: { value: "", name: "", label: "", isDisabled: false },
-    nominationID: "-LM4wBg-yv0zNphsbcMz",
+    nominationID: "",
     score: 1,
     nominees: new Array<any>(),
     completed: false,
@@ -252,14 +254,15 @@ class NominationForm extends React.Component<any, any> {
 
   private handleClick = () => {
     this.makeNomination();
-    this.setState({
-      completed: true
-    });
+    // console.log("SADFASDFSA");
+    // this.setState({
+    //   completed: true
+    // });
   };
 
-  private setNominationID = (id: string | null) => {
+  private setNominationID = (ID: string) => {
     this.setState({
-      nominationID: id
+      nominationID: ID
     });
   };
 
@@ -314,10 +317,12 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private redirectToNomination = () => {
+    console.log(this.state.nominationID)
     this.props.history.push({
       pathname: "/nominate/nomination/" + this.state.nominationID,
       state: { modal: true }
     });
+    console.log(this.state.nominationID)
   };
 
   public goBack = () => {
@@ -337,6 +342,8 @@ class NominationForm extends React.Component<any, any> {
     const category = this.state.category;
     const nominee = this.state.nominee.value;
 
+    let duplicateNomination = false;
+
     // Check if nomination exist
     defaultDatabase
       .ref("nominations/")
@@ -351,28 +358,80 @@ class NominationForm extends React.Component<any, any> {
             existingNomination.nominee === nominee
           ) {
             console.log(existingNominationPostKey);
-            this.makeComment(
-              existingNominationPostKey,
-              this.state.justification
-            );
-            this.makeUpvote(existingNominationPostKey);
             this.setNominationID(existingNominationPostKey);
-            this.redirectToNomination();
-            // TODO: redirect to comment page
+            console.log(this.state.nominationID);
+            this.showDuplicateNominationConfirmationModal(existingNominationPostKey);
+            duplicateNomination = true;
+            break;
           }
         }
-        this.createNewNomination(defaultDatabase);
+        if (!duplicateNomination) {
+          const newPostKey = defaultDatabase
+            .ref()
+            .child("nominations")
+            .push().key;
+
+          if (newPostKey != null) {
+            this.setNominationID(newPostKey);
+            this.showNominationConfirmationModal(newPostKey);
+          }
+        }
       });
   };
 
-  private createNewNomination = (
-    defaultDatabase: firebase.database.Database
-  ) => {
+  private showNominationConfirmationModal = (newPostKey: string) => {
+    const defaultDatabase = firebase.database();
+    confirmAlert({
+      title: "Confirm your Nomination",
+      message: "Are you sure you want to nominate?",
+      buttons: [
+        {
+          label: "Nominate",
+          onClick: () => this.createNewNomination(defaultDatabase, newPostKey)
+        },
+        {
+          label: "Cancel"
+        }
+      ]
+    });
+  };
+
+  private showDuplicateNominationConfirmationModal = (existingNominationPostKey: string) => {
+    confirmAlert({
+      title: "Nomination Already Exist",
+      message: "Do you want to put your justification as a comment?",
+      buttons: [
+        {
+          label: "Comment",
+          onClick: () => this.duplicateNominationJustificationToComment(existingNominationPostKey)
+        },
+        {
+          label: "Cancel"
+        }
+      ]
+    });
+  };
+
+  private duplicateNominationJustificationToComment(existingNominationPostKey: string) {
+    // console.log("existing: " + existingNominationPostKey);
+    // this.setNominationID(existingNominationPostKey);
+    this.makeComment(
+      existingNominationPostKey,
+      this.state.justification
+    );
+    this.makeUpvote(existingNominationPostKey);
+    this.setState({
+      completed: true
+    });
+    this.redirectToNomination();
+  }
+
+  private createNewNomination = (defaultDatabase: firebase.database.Database, newPostKey: string) => {
     // Get a key for a new Post.
-    const newPostKey = defaultDatabase
-      .ref()
-      .child("nominations")
-      .push().key;
+    // const newPostKey = defaultDatabase
+    //   .ref()
+    //   .child("nominations")
+    //   .push().key;
 
     const nomineeid = this.state.nominee.value;
     const user = getUser();
@@ -408,9 +467,14 @@ class NominationForm extends React.Component<any, any> {
 
     nomCatPath.update(nomCat);
 
-    this.setNominationID(newPostKey);
+    // if (newPostKey != null) {
+    //   this.setNominationID(newPostKey);
+    // }
 
-    return defaultDatabase.ref().update(updates);
+    defaultDatabase.ref().update(updates);
+    this.setState({
+      completed: true
+    });
   };
 
   private makeComment = (nominationPostKey: string, justification: string) => {
@@ -467,6 +531,9 @@ class NominationForm extends React.Component<any, any> {
   
       return upvoterPath.remove();
     };*/
+
+
+
 }
 
 export default NominationForm;

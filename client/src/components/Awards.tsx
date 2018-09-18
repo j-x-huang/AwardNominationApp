@@ -276,8 +276,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         if (err) {
           // todo
         } else {
-          const newAwards = [...this.state.awards];
-
+          const newAwards = [...this.state.allAwards];
           const categoryIndex = awards.findIndex(c => {
             return c.award === category;
           });
@@ -412,6 +411,12 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.setState({ awards: filteredAwards, filterText: name });
   };
 
+  private preventEnter = (event: any) => {
+    if (event.keyCode === 13 || event.charCode === 13) {
+      event.preventDefault();
+    }
+  }
+
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
@@ -456,7 +461,7 @@ class Awards extends React.Component<any, IAwardsStates> {
                 ))}
               </Tabs>
             </AppBar>
-            <form autoComplete="off" className={classes.tabBar}>
+            <form autoComplete="off" className={classes.tabBar} onKeyPress={this.preventEnter}>
               <FormControl className={classes.formControl}>
                 <div className={classes.grow} />
                 <div className={classes.search}>
