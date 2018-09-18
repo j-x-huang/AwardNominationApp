@@ -3,15 +3,15 @@ import "./../App.css";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Input from '@material-ui/core/Input';
-import SearchIcon from '@material-ui/icons/Search';
+import Input from "@material-ui/core/Input";
+import SearchIcon from "@material-ui/icons/Search";
 import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+import { fade } from "@material-ui/core/styles/colorManipulator";
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
@@ -53,73 +53,73 @@ const styles = (theme: Theme) =>
       },
       "&:focus": {
         color: "#8241aa",
-        outline: "none",
+        outline: "none"
       }
     },
     grow: {
-      flexGrow: 1,
+      flexGrow: 1
     },
     search: {
-      position: 'relative',
+      position: "relative",
       borderRadius: theme.shape.borderRadius,
       backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+      "&:hover": {
+        backgroundColor: fade(theme.palette.common.white, 0.25)
       },
       marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
         marginLeft: theme.spacing.unit,
-        width: 'auto',
-      },
+        width: "auto"
+      }
     },
     searchIcon: {
       width: theme.spacing.unit * 9,
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      height: "100%",
+      position: "absolute",
+      pointerEvents: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
     },
     inputRoot: {
-      color: 'inherit',
-      width: '100%',
+      color: "inherit",
+      width: "100%"
     },
     inputInput: {
       paddingTop: theme.spacing.unit,
       paddingRight: theme.spacing.unit,
       paddingBottom: theme.spacing.unit,
       paddingLeft: theme.spacing.unit * 10,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
+      transition: theme.transitions.create("width"),
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
         width: 120,
-        '&:focus': {
-          width: 200,
-        },
-      },
+        "&:focus": {
+          width: 200
+        }
+      }
     },
     formControl: {
       margin: theme.spacing.unit,
       minWidth: 120,
-      backgroundColor: "#f9f9f9",
+      backgroundColor: "#f9f9f9"
     },
     selectEmpty: {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing.unit * 2
     },
     tabSelected: {}
   });
 
-export interface IAwardsProps extends WithStyles<typeof styles> { }
+export interface IAwardsProps extends WithStyles<typeof styles> {}
 
 export interface IAwardsStates {
   value: number;
   selectedNomination: string;
   allAwards: any[];
   awards: any[];
-  filterText: string,
-  sortBy: string,
+  filterText: string;
+  sortBy: string;
   isLoading: boolean;
 }
 
@@ -141,9 +141,9 @@ class Awards extends React.Component<any, IAwardsStates> {
     selectedNomination: "",
     allAwards: [] as any[],
     awards: [] as any[],
-    filterText: '',
+    filterText: "",
     sortBy: "",
-    isLoading: true,
+    isLoading: true
   };
 
   private handleChange = (
@@ -156,16 +156,13 @@ class Awards extends React.Component<any, IAwardsStates> {
   private handleSelect = (id: string, name: string) => {
     this.setState({ selectedNomination: id });
     this.props.history.push({
-      pathname: "/awards/nomination/" + id,
+      pathname:
+        "/" + this.props.awardsContent.getReturnURL() + "/nomination/" + id,
       state: { modal: true }
     });
   };
 
   public componentDidMount() {
-    console.log("Logging content for awards");
-    console.log(this.props.awardsContent.getAwardTabs());
-    console.log(this.props.awardsContent.getReturnURL());
-
     const awardCategories = this.props.awardsContent.getAwardTabs();
 
     this.createAwardCategories(awardCategories);
@@ -279,8 +276,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         if (err) {
           // todo
         } else {
-          const newAwards = [...this.state.awards];
-
+          const newAwards = [...this.state.allAwards];
           const categoryIndex = awards.findIndex(c => {
             return c.award === category;
           });
@@ -294,13 +290,11 @@ class Awards extends React.Component<any, IAwardsStates> {
           });
 
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
-          console.log(newAwards)
-          this.setState({ awards: newAwards, allAwards: newAwards },
-            () => {
-              // this ensures that the loading of pictures doesn't affect the filtering and sorting
-              this.sortNominationsByName(this.state.sortBy);
-            }
-          );
+          console.log(newAwards);
+          this.setState({ awards: newAwards, allAwards: newAwards }, () => {
+            // this ensures that the loading of pictures doesn't affect the filtering and sorting
+            this.sortNominationsByName(this.state.sortBy);
+          });
         }
       });
     });
@@ -333,12 +327,12 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   private handleSearch = (event: any) => {
     this.filterNominationsByName(event.target.value);
-  }
+  };
 
   private handleSort = (event: any) => {
     this.setState({ sortBy: event.target.value });
     this.sortNominationsByName(event.target.value);
-  }
+  };
 
   private sortNominationsByName(nameType: string) {
     if (nameType === "Firstname" || nameType === "Lastname") {
@@ -348,36 +342,44 @@ class Awards extends React.Component<any, IAwardsStates> {
       awards.forEach(awardCategory => {
         const newAwardCategory = {
           award: awardCategory.award,
-          nominations: [],
+          nominations: []
         };
         let newNominations;
         if (nameType === "Firstname") {
-        newNominations = awardCategory.nominations.sort((a: any, b: any) => {
-          return (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : ((b.title.toLowerCase() > a.title.toLowerCase()) ? -1 : 0);
-        })
-      } else if (nameType === "Lastname") {
-        newNominations = awardCategory.nominations.sort((a: any, b: any) => {
-          const aName = a.title.split(" ");
-          const aLast = aName[aName.length - 1];
+          newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+            return a.title.toLowerCase() > b.title.toLowerCase()
+              ? 1
+              : b.title.toLowerCase() > a.title.toLowerCase()
+                ? -1
+                : 0;
+          });
+        } else if (nameType === "Lastname") {
+          newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+            const aName = a.title.split(" ");
+            const aLast = aName[aName.length - 1];
 
-          const bName = b.title.split(" ");
-          const bLast = bName[bName.length - 1];
+            const bName = b.title.split(" ");
+            const bLast = bName[bName.length - 1];
 
-          return (aLast.toLowerCase() > bLast.toLowerCase()) ? 1 : ((bLast.toLowerCase() > aLast.toLowerCase()) ? -1 : 0);
-        })
-      }
+            return aLast.toLowerCase() > bLast.toLowerCase()
+              ? 1
+              : bLast.toLowerCase() > aLast.toLowerCase()
+                ? -1
+                : 0;
+          });
+        }
 
         newAwardCategory.nominations = newNominations;
-        sortedAwards.push(newAwardCategory)
-      })
-      console.log(sortedAwards)
+        sortedAwards.push(newAwardCategory);
+      });
+      console.log(sortedAwards);
       this.setState({ allAwards: sortedAwards, awards: sortedAwards }, () => {
         this.filterNominationsByName(this.state.filterText);
-      })
-   } else {
-     // ensures filtering is still applied even if no sorting option is selected
-    this.filterNominationsByName(this.state.filterText);
-   }
+      });
+    } else {
+      // ensures filtering is still applied even if no sorting option is selected
+      this.filterNominationsByName(this.state.filterText);
+    }
   }
 
   /**
@@ -392,19 +394,27 @@ class Awards extends React.Component<any, IAwardsStates> {
     awards.forEach(awardCategory => {
       const newAwardCategory = {
         award: awardCategory.award,
-        nominations: [],
+        nominations: []
       };
 
       // checks whether or not the nomination contains the filtering text string
-      const newNominations = awardCategory.nominations.filter((nomination: any) => {
-        return nomination.title.toLowerCase().includes(name.toLowerCase());
-      });
+      const newNominations = awardCategory.nominations.filter(
+        (nomination: any) => {
+          return nomination.title.toLowerCase().includes(name.toLowerCase());
+        }
+      );
 
       newAwardCategory.nominations = newNominations;
       filteredAwards.push(newAwardCategory);
     });
 
     this.setState({ awards: filteredAwards, filterText: name });
+  };
+
+  private preventEnter = (event: any) => {
+    if (event.keyCode === 13 || event.charCode === 13) {
+      event.preventDefault();
+    }
   }
 
   public render() {
@@ -425,85 +435,89 @@ class Awards extends React.Component<any, IAwardsStates> {
             <MDSpinner singleColor="#8241aa" size="50%" />
           </div>
         ) : (
-            <div className={classes.root} id="awardsContainer">
-              <AppBar
-                position="static"
-                color="default"
-                className={classes.tabBar}
+          <div className={classes.root} id="awardsContainer">
+            <AppBar
+              position="static"
+              color="default"
+              className={classes.tabBar}
+            >
+              <Tabs
+                value={value}
+                onChange={this.handleChange}
+                centered={true}
+                classes={{
+                  indicator: classes.tabsIndicator
+                }}
               >
-                <Tabs
-                  value={value}
-                  onChange={this.handleChange}
-                  centered={true}
-                  classes={{
-                    indicator: classes.tabsIndicator
+                {awards.map((award, i) => (
+                  <Tab
+                    key={i}
+                    label={award.award}
+                    classes={{
+                      root: classes.tabRoot,
+                      selected: classes.tabSelected
+                    }}
+                  />
+                ))}
+              </Tabs>
+            </AppBar>
+            <form autoComplete="off" className={classes.tabBar} onKeyPress={this.preventEnter}>
+              <FormControl className={classes.formControl}>
+                <div className={classes.grow} />
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <Input
+                    placeholder="Search…"
+                    disableUnderline={true}
+                    onChange={this.handleSearch}
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput
+                    }}
+                  />
+                </div>
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <InputLabel>Sort By</InputLabel>
+                <Select
+                  value={this.state.sortBy}
+                  onChange={this.handleSort}
+                  inputProps={{
+                    name: "sortBy"
                   }}
                 >
-                  {awards.map((award, i) => (
-                    <Tab
-                      key={i}
-                      label={award.award}
-                      classes={{
-                        root: classes.tabRoot,
-                        selected: classes.tabSelected
-                      }}
-                    />
-                  ))}
-                </Tabs>
-              </AppBar>
-              <form autoComplete="off" className={classes.tabBar}>
-                <FormControl className={classes.formControl}>
-                  <div className={classes.grow} />
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon />
-                    </div>
-                    <Input
-                      placeholder="Search…"
-                      disableUnderline={true}
-                      onChange={this.handleSearch}
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }
-                      }
-                    />
-                  </div>
-                </ FormControl>
-                <FormControl className={classes.formControl}>
-                  <InputLabel>Sort By</InputLabel>
-                  <Select
-                    value={this.state.sortBy}
-                    onChange={this.handleSort}
-                    inputProps={{
-                      name: 'sortBy',
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="Popular">Popular</MenuItem>
-                    <MenuItem value="Firstname">First Name</MenuItem>
-                    <MenuItem value="Lastname">Last Name</MenuItem>
-                  </Select>
-                </FormControl>
-              </form>
-              {awards.map(
-                (award, i) =>
-                  value === i && (
-                    <CardContainer
-                      key={i}
-                      cards={award.nominations}
-                      onSelect={this.handleSelect}
-                    />
-                  )
-              )}
-              <Route
-                path={"/awards/nomination/" + this.state.selectedNomination}
-                render={this.openModal}
-              />
-            </div>
-          )}
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="Popular">Popular</MenuItem>
+                  <MenuItem value="Firstname">First Name</MenuItem>
+                  <MenuItem value="Lastname">Last Name</MenuItem>
+                </Select>
+              </FormControl>
+            </form>
+            {awards.map(
+              (award, i) =>
+                value === i && (
+                  <CardContainer
+                    key={i}
+                    cards={award.nominations}
+                    onSelect={this.handleSelect}
+                  />
+                )
+            )}
+            <Route
+              path={
+                "/" +
+                this.props.awardsContent.getReturnURL() +
+                "/nomination/" +
+                this.state.selectedNomination
+              }
+              render={this.openModal}
+            />
+          </div>
+        )}
       </div>
     );
   }

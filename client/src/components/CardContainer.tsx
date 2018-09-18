@@ -50,18 +50,22 @@ class CardContainer extends React.Component<ICardContainerProps> {
             justify="flex-start"
             spacing={32}
           >
-            {cards.map((card, i) => (
-              <Grid key={card.id} item={true}>
-                <Card
-                  id={card.id}
-                  img={card.img}
-                  title={card.title}
-                  description={card.description}
-                  objectId={card.objectId}
-                  onSelect={onSelect}
-                />
-              </Grid>
-            ))}
+            {this.props.cards.length ? (
+              cards.map((card, i) => (
+                <Grid key={card.id} item={true}>
+                  <Card
+                    id={card.id}
+                    img={card.img}
+                    title={card.title}
+                    description={card.description}
+                    objectId={card.objectId}
+                    onSelect={onSelect}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <div> There are currently no nominations </div>
+            )}
           </Grid>
         </Grid>
       </Grid>

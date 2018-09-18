@@ -291,4 +291,43 @@ export const getPhotosByObjectId = (objectIds: string[], callback: (err: any, ph
   })
 }
 
+export const getAdminStatus = (callback: (isAdmin: boolean, err: any) => void) => {
+  let hasAdminPrivs = false;
+  acquireToken((error, token) => {
+
+    if (error) {
+      callback(false, error);
+      return;
+    }
+
+    // Initialises the Microsoft Graph Client using our acquired token
+    const client = MicrosoftGraph.Client.init({
+      authProvider: (done) => {
+        done(null, token);
+      }
+    });
+
+    client
+      .api("/me/memberOf")
+      .get((err, res) => {
+        if (err) {
+          callback(false, err)
+          return;
+        }
+        console.log(err)
+        console.log(res)
+        const roles = res.value 
+
+        roles.forEach((data: any) => {
+          if (data.displayName === "Company Administrator") {
+            hasAdminPrivs = true;
+          }
+        })
+        callback(hasAdminPrivs, null);
+        return
+      })
+
+  })
+}
+
 
