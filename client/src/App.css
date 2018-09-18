@@ -350,6 +350,10 @@ a:visited {
   overflow: hidden;
 }
 
+#nominationComplete h3 {
+  font-size: 1.5rem;
+}
+
 .complete-card-top {
   font-family: "PT Sans" !important;
   background-color: #8241aa;
@@ -384,6 +388,11 @@ a:visited {
 
 #nominationComplete > h2 > i {
   font-size: 2.6em;
+}
+
+#nominationCompleteLogo {
+  padding: 0.5em;
+  width: 6.5em;
 }
 
 #nominationComplete p {

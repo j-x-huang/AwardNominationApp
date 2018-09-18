@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import logo1white from "../images/logo1white.png";
 // import { Route } from "react-router-dom";
 
 export interface INominationCompleteProps {
@@ -21,7 +21,7 @@ class NominationComplete extends React.Component<
     return (
       <div id="nominationComplete">
         <h2 className="complete-card-top">
-          <i className="material-icons">insert_emoticon</i>
+          <img id="nominationCompleteLogo" src={logo1white} alt="logo" />
         </h2>
         <div className="complete-card-bottom">
           <h3> Thanks for the Nomination </h3>
