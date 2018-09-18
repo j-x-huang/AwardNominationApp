@@ -398,7 +398,7 @@ class NominationForm extends React.Component<any, any> {
 
   private showDuplicateNominationConfirmationModal = (existingNominationPostKey: string) => {
     confirmAlert({
-      title: "Nomination Already Exist",
+      title: "Nomination Already Exists!",
       message: "Do you want to put your justification as a comment?",
       buttons: [
         {

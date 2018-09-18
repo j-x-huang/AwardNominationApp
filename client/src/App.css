@@ -113,6 +113,12 @@ a:visited {
   margin-right: 5%;
 }
 
+.navbar-collapse {
+  background-color: white !important;
+  z-index: 999;
+  border-radius: 0.2em;
+}
+
 .nav-link,
 .nav-link:visited {
   font-size: 14.5px;
@@ -566,8 +572,8 @@ a:visited {
 }
 
 .octism {
-  width: 24px;
-  height: 24px;
+  padding-top: 6px;
+  font-size: 2.2em;
 }
 
 .octiocti {
@@ -792,4 +798,21 @@ a:visited {
   #awardsContainer {
     width: 350px;
   }
+}
+
+#noNominations {
+
+  font-size: 3vw;
+  text-align: center;
+  display: inline-block;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100px;
+  margin: auto;
+  color: #929497;
+
 }

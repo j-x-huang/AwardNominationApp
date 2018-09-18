@@ -1,5 +1,5 @@
 import * as React from "react";
-import Octicon, { ChevronLeft, Thumbsup } from "@githubprimer/octicons-react";
+import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
 import {
   getUsersByObjectId,
@@ -349,14 +349,15 @@ class NominationModal extends React.Component<any, any> {
                       onClick={this.handleUpvoteClicked}
                       style={this.state.isLocked ? { display: "none" } : {}}
                     >
-                      <Octicon
+                      <i
                         className={
                           this.state.hasBeenNominated
-                            ? "octiocti octism"
-                            : "octigrey octism"
+                            ? "material-icons octiocti octism"
+                            : "material-icons octigrey octism"
                         }
-                        icon={Thumbsup}
-                      />
+                      >
+                        thumb_up_alt
+                      </i>
                     </button>
                   </div>
                 </div>
