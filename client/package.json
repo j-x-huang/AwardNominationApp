@@ -2,7 +2,9 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://hbao448.github.io/AwardNominationApp/",
   "dependencies": {
+    "gh-pages": "^2.0.0",
     "@githubprimer/octicons-react": "^8.0.0",
     "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
@@ -33,6 +35,8 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {

@@ -22,6 +22,7 @@ class AwardCategories extends AwardsContent {
         .orderByChild("category")
         .once("value", snapshot => {
           if (snapshot != null) {
+            console.log(snapshot.val());
             console.log(retrieveUserDetails(snapshot, tab));
           }
         });
