@@ -5,16 +5,14 @@ import { getUser } from "../auth";
 class AwardMyNominations extends AwardsContent {
   protected url = "mynominations";
   protected awardTabs = ["My Nominations", "Nominations For Me"];
-  private tab = "";
-  private retrieveUserDetails: any;
-  private snapshots: any[] = [];
-  private size = 0;
-  private numChildren = 0;
+  // private myNomiationsSnapshot: any[] = [];
+  // private nominationsForMeSnapshot: any[] = [];
+  // private snapshots: any[] = [];
+  // private size = 0;
+  // private numChildren = 0;
 
   public getTabNomination(tab: string, retrieveUserDetails: any) {
-    this.tab = tab;
-    this.retrieveUserDetails = retrieveUserDetails;
-
+    this.getNominations(tab, retrieveUserDetails);
     // const defaultDatabase = firebase.database();
     // const nomRef = defaultDatabase.ref();
     // nomRef
@@ -26,14 +24,14 @@ class AwardMyNominations extends AwardsContent {
     //       console.log(retrieveUserDetails(snapshot));
     //     }
     //   });
-    this.getNominations();
   }
 
-  public getNominations = () => {
+  public getNominations = (tab: string, retrieveUserDetails: any) => {
     let path = "nominees";
 
-    console.log(this.tab);
-    switch (this.tab) {
+    console.log("Tab:");
+    console.log(tab);
+    switch (tab) {
       case "My Nominations":
         path = "nominators";
         break;
@@ -41,51 +39,87 @@ class AwardMyNominations extends AwardsContent {
         path = "nominees";
         break;
     }
+    console.log("path:");
     console.log(path);
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase
       .ref()
       .child(path)
       .child(getUser().profile.oid);
-    this.getMyNominations(nomRef);
+    this.getMyNominations(nomRef, tab, retrieveUserDetails);
   };
 
-  public getMyNominations = (nomRef: firebase.database.Reference) => {
+  public getMyNominations = (
+    nomRef: firebase.database.Reference,
+    tab: string,
+    retrieveUserDetails: any
+  ) => {
     nomRef.once("value", snapshot => {
+      console.log("Nominations fetch successful:");
+      console.log(tab);
       console.log(snapshot);
       const data = snapshot.val();
 
       if (data != null) {
-        this.numChildren = snapshot.numChildren();
+        const snapshots: any[] = [];
+        const numChildren = snapshot.numChildren();
+        let size = 0;
         Object.keys(data).forEach(key => {
           console.log(key);
-          this.getNominationDetails(key);
+          // this.getNominationDetails(key, tab, retrieveUserDetails);
+          const defaultDatabase = firebase.database();
+          const nomRef2 = defaultDatabase.ref();
+          nomRef2
+            .child("nominations")
+            .child(key)
+            .once("value", snapshotChild => {
+              if (snapshotChild != null) {
+                if (retrieveUserDetails != null) {
+                  snapshots.push(snapshotChild.val());
+                  console.log("Snapshots:");
+                  console.log(snapshots);
+                  size++;
+                  console.log(size);
+                  if (size === numChildren) {
+                    console.log("Getting nomination details:");
+                    console.log(tab);
+                    console.log(snapshotChild.val());
+                    console.log(snapshots);
+                    console.log(retrieveUserDetails(snapshots, tab));
+                  }
+                }
+              }
+            });
         });
       }
     });
   };
 
-  public getNominationDetails(nominationID: string) {
-    console.log("Function called");
-
-    const defaultDatabase = firebase.database();
-    const nomRef = defaultDatabase.ref();
-    nomRef
-      .child("nominations")
-      .child(nominationID)
-      .once("value", snapshot => {
-        if (snapshot != null) {
-          if (this.retrieveUserDetails != null) {
-            this.snapshots.push(snapshot.val());
-            this.size++;
-          }
-          if (this.size === this.numChildren) {
-            console.log(this.snapshots);
-            console.log(this.retrieveUserDetails(this.snapshots, this.tab));
-          }
-        }
-      });
-  }
+  // public getNominationDetails(
+  //   nominationID: string,
+  //   tab: string,
+  //   retrieveUserDetails: any
+  // ) {
+  //   const defaultDatabase = firebase.database();
+  //   const nomRef = defaultDatabase.ref();
+  //   nomRef
+  //     .child("nominations")
+  //     .child(nominationID)
+  //     .once("value", snapshot => {
+  //       if (snapshot != null) {
+  //         if (retrieveUserDetails != null) {
+  //           this.snapshots.push(snapshot.val());
+  //           this.size++;
+  //         }
+  //         if (this.size === this.numChildren) {
+  //           console.log("Getting nomination details:");
+  //           console.log(tab);
+  //           console.log(this.snapshots);
+  //           console.log(retrieveUserDetails(this.snapshots, tab));
+  //         }
+  //       }
+  //     });
+  // }
 }
 
 export default AwardMyNominations;

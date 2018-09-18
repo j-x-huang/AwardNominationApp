@@ -185,6 +185,8 @@ class Awards extends React.Component<any, IAwardsStates> {
         item = childSnapshot;
       }
 
+      console.log("Nomination details:");
+      console.log(category);
       console.log(item);
       if (nominees.indexOf(item.nominee) === -1) {
         nominees.push(item.nominee);
@@ -394,6 +396,9 @@ class Awards extends React.Component<any, IAwardsStates> {
       location.state.modal &&
       this.previousLocation !== location
     ); */
+
+    console.log("Award state:");
+    console.log(this.state.awards);
 
     return (
       <div>
