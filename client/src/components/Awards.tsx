@@ -8,6 +8,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import createStyles from "@material-ui/core/styles/createStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import CardContainer from "./CardContainer";
 import * as firebase from "firebase";
@@ -94,6 +98,14 @@ const styles = (theme: Theme) =>
           width: 200,
         },
       },
+    },
+    formControl: {
+      margin: theme.spacing.unit,
+      minWidth: 120,
+      backgroundColor: "#f9f9f9",
+    },
+    selectEmpty: {
+      marginTop: theme.spacing.unit * 2,
     },
     tabSelected: {}
   });
@@ -333,7 +345,7 @@ class Awards extends React.Component<any, IAwardsStates> {
     );
   };
 
-  private handleSearch= () => {
+  private handleSearch = () => {
     console.log("on change")
 
   }
@@ -384,6 +396,25 @@ class Awards extends React.Component<any, IAwardsStates> {
                   ))}
                 </Tabs>
               </AppBar>
+              <form autoComplete="off" className={classes.tabBar}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="age-simple">Filter</InputLabel>
+                  <Select
+                    // value={this.state.age}
+                    // onChange={this.handleChange}
+                    inputProps={{
+                      name: 'age',
+                      id: 'age-simple',
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Popular</MenuItem>
+                    <MenuItem value={20}>Name</MenuItem>
+                  </Select>
+                </FormControl>
+                </form>
               {awards.map(
                 (award, i) =>
                   value === i && (
@@ -407,7 +438,7 @@ class Awards extends React.Component<any, IAwardsStates> {
                     root: classes.inputRoot,
                     input: classes.inputInput,
                   }
-                }
+                  }
                 />
               </div>
               <Route
