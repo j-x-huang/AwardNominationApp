@@ -107,7 +107,7 @@ class NominationForm extends React.Component<any, any> {
 
     actualNominees.forEach(nom => {
       console.log(nom);
-      nom.label = nom.name + " (nominated) ";
+      nom.label = nom.name + " (nominated)";
       nom.isDisabled = false;
       // nom.isDisabled = true;
     });
@@ -190,48 +190,52 @@ class NominationForm extends React.Component<any, any> {
         {completed ? (
           <NominationComplete
             category={category}
-            nominee={nominee.label}
+            nominee={
+              nominee.label.includes(" (nominated)")
+                ? nominee.label.replace(" (nominated)", "")
+                : nominee.label
+            }
             onClick={this.redirectToNomination}
           />
         ) : (
-            <form className="feelix-card" id="nominateDiv">
-              <h5> Nominate a deserving candidate </h5>
-              <hr />
-              <div id="categorySelect">{options}</div>
-              <div className="form-group">
-                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-                <Select
-                  isDisabled={category === ""}
-                  isSearchable={true}
-                  onChange={this.nomineeChange}
-                  options={nominees}
-                  value={this.state.nominee}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="justificationSelect">Justify your decision</label>
-                <textarea
-                  className="form-control"
-                  style={{ resize: "none" }}
-                  id="justificationSelect"
-                  rows={5}
-                  value={this.state.justification}
-                  onChange={this.justificationChange}
-                />
-              </div>
-              <div className="overflowHid">
-                <button
-                  type="button"
-                  className="btn btn-primary btn-purple float-right"
-                  disabled={this.checkFieldsFilled() ? false : true}
-                  onClick={this.handleClick}
-                  style={this.state.isLocked ? { display: "none" } : {}}
-                >
-                  Nominate
+          <form className="feelix-card" id="nominateDiv">
+            <h5> Nominate a deserving candidate </h5>
+            <hr />
+            <div id="categorySelect">{options}</div>
+            <div className="form-group">
+              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+              <Select
+                isDisabled={category === ""}
+                isSearchable={true}
+                onChange={this.nomineeChange}
+                options={nominees}
+                value={this.state.nominee}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="justificationSelect">Justify your decision</label>
+              <textarea
+                className="form-control"
+                style={{ resize: "none" }}
+                id="justificationSelect"
+                rows={5}
+                value={this.state.justification}
+                onChange={this.justificationChange}
+              />
+            </div>
+            <div className="overflowHid">
+              <button
+                type="button"
+                className="btn btn-primary btn-purple float-right"
+                disabled={this.checkFieldsFilled() ? false : true}
+                onClick={this.handleClick}
+                style={this.state.isLocked ? { display: "none" } : {}}
+              >
+                Nominate
               </button>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
+        )}
         <Route
           path={"/nominate/nomination/" + this.state.nominationID}
           render={this.openModal}
@@ -317,12 +321,12 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private redirectToNomination = () => {
-    console.log(this.state.nominationID)
+    console.log(this.state.nominationID);
     this.props.history.push({
       pathname: "/nominate/nomination/" + this.state.nominationID,
       state: { modal: true }
     });
-    console.log(this.state.nominationID)
+    console.log(this.state.nominationID);
   };
 
   public goBack = () => {
@@ -360,7 +364,9 @@ class NominationForm extends React.Component<any, any> {
             console.log(existingNominationPostKey);
             this.setNominationID(existingNominationPostKey);
             console.log(this.state.nominationID);
-            this.showDuplicateNominationConfirmationModal(existingNominationPostKey);
+            this.showDuplicateNominationConfirmationModal(
+              existingNominationPostKey
+            );
             duplicateNomination = true;
             break;
           }
@@ -396,14 +402,19 @@ class NominationForm extends React.Component<any, any> {
     });
   };
 
-  private showDuplicateNominationConfirmationModal = (existingNominationPostKey: string) => {
+  private showDuplicateNominationConfirmationModal = (
+    existingNominationPostKey: string
+  ) => {
     confirmAlert({
       title: "Nomination Already Exists!",
       message: "Do you want to put your justification as a comment?",
       buttons: [
         {
           label: "Comment",
-          onClick: () => this.duplicateNominationJustificationToComment(existingNominationPostKey)
+          onClick: () =>
+            this.duplicateNominationJustificationToComment(
+              existingNominationPostKey
+            )
         },
         {
           label: "Cancel"
@@ -412,13 +423,12 @@ class NominationForm extends React.Component<any, any> {
     });
   };
 
-  private duplicateNominationJustificationToComment(existingNominationPostKey: string) {
+  private duplicateNominationJustificationToComment(
+    existingNominationPostKey: string
+  ) {
     // console.log("existing: " + existingNominationPostKey);
     // this.setNominationID(existingNominationPostKey);
-    this.makeComment(
-      existingNominationPostKey,
-      this.state.justification
-    );
+    this.makeComment(existingNominationPostKey, this.state.justification);
     this.makeUpvote(existingNominationPostKey);
     this.setState({
       completed: true
@@ -426,7 +436,10 @@ class NominationForm extends React.Component<any, any> {
     this.redirectToNomination();
   }
 
-  private createNewNomination = (defaultDatabase: firebase.database.Database, newPostKey: string) => {
+  private createNewNomination = (
+    defaultDatabase: firebase.database.Database,
+    newPostKey: string
+  ) => {
     // Get a key for a new Post.
     // const newPostKey = defaultDatabase
     //   .ref()
@@ -531,9 +544,6 @@ class NominationForm extends React.Component<any, any> {
   
       return upvoterPath.remove();
     };*/
-
-
-
 }
 
 export default NominationForm;

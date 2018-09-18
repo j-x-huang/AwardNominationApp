@@ -339,41 +339,63 @@ a:visited {
 }
 
 #nominationComplete {
-  display: inline-block;
   text-align: center;
   background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  box-shadow: 0 1px 8px 0 rgba(46, 62, 79, 0.1);
   border-radius: 0.4rem;
-  margin-left: 25%;
-  width: 50%;
-  margin-right: 25%;
+  width: 400px;
+  margin: auto;
   margin-top: 1.5em;
   margin-bottom: 1.5em;
   overflow: hidden;
 }
 
 .complete-card-top {
+  font-family: "PT Sans" !important;
   background-color: #8241aa;
   color: white;
-  font-family: "Unica One";
   padding: 1.2em;
 }
 
 .complete-card-bottom {
-  font-family: "Unica One";
+  font-family: "PT Sans" !important;
   padding: 1em;
   padding-bottom: 2.6em;
 }
 
+.complete-card-bottom button {
+  margin: 1.2em;
+  margin-bottom: 1.4em;
+}
+
+.complete-card-bottom > button:nth-last-child(2) {
+  margin-left: 1.5em;
+  margin-right: 0.9em;
+}
+
+.complete-card-bottom > button:last-child {
+  margin-left: 0.9em;
+  margin-right: 1.5em;
+}
+
+#nominationComplete > h2 {
+  padding: 0.6em;
+}
+
+#nominationComplete > h2 > i {
+  font-size: 2.6em;
+}
+
 #nominationComplete p {
+  font-family: "PT Sans" !important;
   padding-left: 15%;
   padding-right: 15%;
-  margin-top: 0.8em;
-  margin-bottom: 0.8em;
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
 }
 
 #nominationComplete p span {
-  font-family: NeutroMYOB-Med;
+  font-weight: bold;
 }
 
 #spinner {
@@ -801,7 +823,6 @@ a:visited {
 }
 
 #noNominations {
-
   font-size: 3vw;
   text-align: center;
   display: inline-block;
@@ -814,5 +835,4 @@ a:visited {
   height: 100px;
   margin: auto;
   color: #929497;
-
 }
