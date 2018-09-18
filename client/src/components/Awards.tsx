@@ -370,7 +370,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         sortedAwards.push(newAwardCategory)
       })
       console.log(sortedAwards)
-      this.setState({ awards: sortedAwards }, () => {
+      this.setState({ allAwards: sortedAwards, awards: sortedAwards }, () => {
         this.filterNominationsByName(this.state.filterText);
       })
     }
