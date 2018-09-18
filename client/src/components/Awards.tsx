@@ -276,8 +276,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         if (err) {
           // todo
         } else {
-          const newAwards = [...this.state.awards];
-
+          const newAwards = [...this.state.allAwards];
           const categoryIndex = awards.findIndex(c => {
             return c.award === category;
           });
