@@ -60,6 +60,7 @@ class Admin extends React.Component<any, any> {
     console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
+    location.reload();
   };
 
   private readLockState = () => {
