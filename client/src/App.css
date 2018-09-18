@@ -672,6 +672,19 @@ a:visited {
   color: #586069;
 }
 
+.adminOptionDisabled .adminOptionTitle {
+  color: #929497;
+}
+
+.adminOptionDisabled .adminOptionDesc {
+  color: #b5b9be;
+}
+
+.adminOptionDisabled .adminButton {
+  color: #929497;
+  border-color: #929497;
+}
+
 .adminButton {
   margin-top: 0.2em;
 }
