@@ -11,6 +11,7 @@ import CommentAdder from "./CommentAdder";
 import { Redirect } from "react-router-dom";
 import { getUser } from "../auth";
 import MDSpinner from "react-md-spinner";
+import { withRouter } from "react-router-dom";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -45,7 +46,12 @@ class NominationModal extends React.Component<any, any> {
 
   public componentDidMount() {
     this.readLockState();
-    console.log("Modal mounted! Location: " + this.props.location);
+    console.log("Modal mounted! Location: ");
+    console.log(this.props.history);
+    console.log(this.props.location);
+    console.log("Modal path name:");
+    console.log(this.props.location.pathname);
+    console.log("Nomination ID:" + this.props.nominationID);
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -77,22 +83,22 @@ class NominationModal extends React.Component<any, any> {
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
 
-    try {
-      nomRef
-        .child("nominations")
-        .child(nominationID)
-        .once("value", snapshot => {
-          if (snapshot != null) {
-            this.saveSnapshot(snapshot);
-          }
-        });
-    } catch (error) {
-      this.setState({ failed: true });
-    }
+    // try {
+    nomRef
+      .child("nominations")
+      .child(nominationID)
+      .once("value", snapshot => {
+        if (snapshot != null) {
+          this.saveSnapshot(snapshot);
+        }
+      });
+    // } catch (error) {
+    //   this.setState({ failed: true });
+    // }
   }
 
   private readLockState = () => {
-    this.state.lockPath.on("value", snap => 
+    this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
     );
   };
@@ -287,7 +293,7 @@ class NominationModal extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-light bold-this"
-              onClick={this.props.onClose || this.onClose}
+              onClick={this.onClose}
             >
               <div className="div-centre">
                 <Octicon
@@ -482,4 +488,4 @@ class NominationModal extends React.Component<any, any> {
   };
 }
 
-export default NominationModal;
+export default withRouter(NominationModal);

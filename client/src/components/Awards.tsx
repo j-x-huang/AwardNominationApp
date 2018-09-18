@@ -285,17 +285,10 @@ class Awards extends React.Component<any, IAwardsStates> {
     });
   };
 
-  public goBack = () => {
-    this.props.history.push("/" + this.props.awardsContent.getReturnURL());
-  };
-
   public openModal = () => {
     return (
       <div>
-        <Modal
-          nominationID={this.state.selectedNomination}
-          onClose={this.goBack}
-        />
+        <Modal nominationID={this.state.selectedNomination} />
       </div>
     );
   };
@@ -492,7 +485,12 @@ class Awards extends React.Component<any, IAwardsStates> {
                 )
             )}
             <Route
-              path={"/awards/nomination/" + this.state.selectedNomination}
+              path={
+                "/" +
+                this.props.awardsContent.getReturnURL() +
+                "/nomination/" +
+                this.state.selectedNomination
+              }
               render={this.openModal}
             />
           </div>
