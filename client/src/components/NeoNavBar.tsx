@@ -1,7 +1,7 @@
 import * as React from "react";
 import logo1 from "../images/logo1.png";
 import { getUser, logOutUser } from "../auth";
-import { getMyImage } from "../MicrosoftGraphClient";
+import { getAdminStatus, getMyImage } from "../MicrosoftGraphClient";
 import { NavLink } from "react-router-dom";
 import * as firebase from "firebase";
 
@@ -9,7 +9,8 @@ class NavBar extends React.Component<any, any> {
   public state = {
     profilePic:
       "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
-      isLocked: false
+      isLocked: false,
+      isAdmin: false,
   };
 
   public componentDidMount() {
@@ -24,6 +25,13 @@ class NavBar extends React.Component<any, any> {
       }
       return;
     });
+    getAdminStatus((isAdmin, err) => {
+      if (err) {
+        // todo
+      } else {
+        this.setState({ isAdmin });
+      }
+    })
   }
   private readLockState = () => {
     const defaultDatabase = firebase.database();
@@ -38,8 +46,7 @@ class NavBar extends React.Component<any, any> {
   public render() {
     const user = getUser();
 
-    // TODO: Should be pulling from a variable somewhere
-    const isAdmin = true;
+    const isAdmin = this.state.isAdmin;
 
     const profileName = user.profile.name
       .split(" ")
