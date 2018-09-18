@@ -116,17 +116,13 @@ class Admin extends React.Component<any, any> {
     return lockPath.set({ lockState });
   };
   private filterTally = () => {
-    // const users = [["First Name", "Last Name", "Age"]]
-    
-    const users = [[
-      "hello" , "there" , "hi"
-    ]];
-    
+    const users = [["First Name", "Last Name", "Age"]]
+
     // console.log("I will filter and tally");
     const wb = XLSX.utils.book_new()
-     const wsAll = XLSX.utils.aoa_to_sheet(users)
-         XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
-         XLSX.writeFile(wb, "export-demo.csv")
+    const wsAll = XLSX.utils.aoa_to_sheet(users)
+    XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
+    XLSX.writeFile(wb, "export-demo.csv")
   };
 }
 
