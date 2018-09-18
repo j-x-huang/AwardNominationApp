@@ -340,7 +340,7 @@ class Awards extends React.Component<any, IAwardsStates> {
   private handleSort = (event: any) => {
     this.setState({ sortBy: event.target.value });
 
-    if (event.target.value  === "Name") {
+    if (event.target.value  === "Firstname" || event.target.value === "Lastname") {
       const awards = this.state.allAwards;
       const sortedAwards = new Array<any>();
 
@@ -349,10 +349,22 @@ class Awards extends React.Component<any, IAwardsStates> {
           award: awardCategory.award,
           nominations: [],
         };
-
-        const newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+        let newNominations;
+        if (event.target.value === "Firstname") {
+        newNominations = awardCategory.nominations.sort((a: any, b: any) => {
           return (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : ((b.title.toLowerCase() > a.title.toLowerCase()) ? -1 : 0);
         })
+      } else if (event.target.value === "Lastname") {
+        newNominations = awardCategory.nominations.sort((a: any, b: any) => {
+          const aName = a.title.split(" ");
+          const aLast = aName[aName.length - 1];
+
+          const bName = b.title.split(" ");
+          const bLast = bName[bName.length - 1];
+
+          return (aLast.toLowerCase() > bLast.toLowerCase()) ? 1 : ((bLast.toLowerCase() > aLast.toLowerCase()) ? -1 : 0);
+        })
+      }
 
         newAwardCategory.nominations = newNominations;
         sortedAwards.push(newAwardCategory)
@@ -469,7 +481,8 @@ class Awards extends React.Component<any, IAwardsStates> {
                       <em>None</em>
                     </MenuItem>
                     <MenuItem value="Popular">Popular</MenuItem>
-                    <MenuItem value="Name">Name</MenuItem>
+                    <MenuItem value="Firstname">First Name</MenuItem>
+                    <MenuItem value="Lastname">Last Name</MenuItem>
                   </Select>
                 </FormControl>
               </form>
