@@ -6,6 +6,8 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 import Modal from "./NominationModal";
 import { Route } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class NominationForm extends React.Component<any, any> {
   public previousLocation = this.props.location;
@@ -252,9 +254,10 @@ class NominationForm extends React.Component<any, any> {
 
   private handleClick = () => {
     this.makeNomination();
-    this.setState({
-      completed: true
-    });
+    // console.log("SADFASDFSA");
+    // this.setState({
+    //   completed: true
+    // });
   };
 
   private setNominationID = (id: string | null) => {
@@ -337,6 +340,8 @@ class NominationForm extends React.Component<any, any> {
     const category = this.state.category;
     const nominee = this.state.nominee.value;
 
+    let duplicateNomination = false;
+
     // Check if nomination exist
     defaultDatabase
       .ref("nominations/")
@@ -351,18 +356,58 @@ class NominationForm extends React.Component<any, any> {
             existingNomination.nominee === nominee
           ) {
             console.log(existingNominationPostKey);
-            this.makeComment(
-              existingNominationPostKey,
-              this.state.justification
-            );
-            this.makeUpvote(existingNominationPostKey);
-            this.setNominationID(existingNominationPostKey);
-            this.redirectToNomination();
-            // TODO: redirect to comment page
+            this.showDuplicateNominationConfirmationModal(existingNominationPostKey);
+            duplicateNomination = true;
           }
         }
-        this.createNewNomination(defaultDatabase);
+        if (!duplicateNomination) {
+          this.showNominationConfirmationModal()
+        }
       });
+  };
+
+  private showNominationConfirmationModal = () => {
+    const defaultDatabase = firebase.database();
+
+    confirmAlert({
+      title: "Nomination Confirmation",
+      message: "Are you sure you want to nominate?",
+      buttons: [
+        {
+          label: "Nominate",
+          onClick: () => this.createNewNomination(defaultDatabase)
+        },
+        {
+          label: "Cancel"
+        }
+      ]
+    });
+  };
+
+  private duplicateNominationToComment(existingNominationPostKey: string) {
+    this.makeComment(
+      existingNominationPostKey,
+      this.state.justification
+    );
+    this.makeUpvote(existingNominationPostKey);
+    this.setNominationID(existingNominationPostKey);
+    this.redirectToNomination();
+  }
+
+  private showDuplicateNominationConfirmationModal = (existingNominationPostKey: string) => {
+    confirmAlert({
+      title: "Nomination Already Exist",
+      message: "Do you want to put your justification as a comment?",
+      buttons: [
+        {
+          label: "Nominate",
+          onClick: () => this.duplicateNominationToComment(existingNominationPostKey)
+        },
+        {
+          label: "Cancel"
+        }
+      ]
+    });
   };
 
   private createNewNomination = (
@@ -410,7 +455,10 @@ class NominationForm extends React.Component<any, any> {
 
     this.setNominationID(newPostKey);
 
-    return defaultDatabase.ref().update(updates);
+    defaultDatabase.ref().update(updates);
+    this.setState({
+      completed: true
+    });
   };
 
   private makeComment = (nominationPostKey: string, justification: string) => {
@@ -467,6 +515,9 @@ class NominationForm extends React.Component<any, any> {
   
       return upvoterPath.remove();
     };*/
+
+
+
 }
 
 export default NominationForm;
