@@ -213,16 +213,13 @@ class Awards extends React.Component<any, IAwardsStates> {
     // }
   }
 
-  public retrieveUserDetails = (
-    snapshot: firebase.database.DataSnapshot,
-    category: string
-  ) => {
+  public retrieveUserDetails = (snapshot: any[], category: string) => {
     const nominations: object[] = [];
     const nominees: string[] = [];
 
     snapshot.forEach(childSnapshot => {
-      const item = childSnapshot.val();
-
+      const item = childSnapshot;
+      console.log(item);
       if (nominees.indexOf(item.nominee) === -1) {
         nominees.push(item.nominee);
       }
@@ -233,7 +230,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         // todo
       } else {
         snapshot.forEach(childSnapshot => {
-          const item = childSnapshot.val();
+          const item = childSnapshot;
           const name =
             users[item.nominee] === undefined ? "" : users[item.nominee].name;
           let nomination;
@@ -241,14 +238,14 @@ class Awards extends React.Component<any, IAwardsStates> {
           nomination = {
             img:
               "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
-            id: childSnapshot.key,
+            id: item.key,
             description: item.justification,
             objectId: item.nominee,
             title: name
           };
           nominations.push(nomination);
         });
-
+        console.log(nominations);
         this.updateAllNominations(category, nominations, nominees);
       }
     });
@@ -261,7 +258,6 @@ class Awards extends React.Component<any, IAwardsStates> {
     nominees: any[]
   ) => {
     console.log("updateAllNominations called");
-
     const awards = [...this.state.awards];
 
     const index = awards.findIndex(c => {
