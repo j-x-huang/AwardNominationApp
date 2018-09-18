@@ -110,9 +110,9 @@ class Awards extends React.Component<any, IAwardsStates> {
     selectedNomination: "",
     allAwards: [] as any[],
     awards: [] as any[],
-    filterText: '',
+    filterText: "",
     sortBy: "",
-    isLoading: true,
+    isLoading: true
   };
 
   private handleChange = (
@@ -125,16 +125,13 @@ class Awards extends React.Component<any, IAwardsStates> {
   private handleSelect = (id: string, name: string) => {
     this.setState({ selectedNomination: id });
     this.props.history.push({
-      pathname: "/awards/nomination/" + id,
+      pathname:
+        "/" + this.props.awardsContent.getReturnURL() + "/nomination/" + id,
       state: { modal: true }
     });
   };
 
   public componentDidMount() {
-    console.log("Logging content for awards");
-    console.log(this.props.awardsContent.getAwardTabs());
-    console.log(this.props.awardsContent.getReturnURL());
-
     const awardCategories = this.props.awardsContent.getAwardTabs();
 
     this.createAwardCategories(awardCategories);
@@ -224,8 +221,7 @@ class Awards extends React.Component<any, IAwardsStates> {
         if (err) {
           // todo
         } else {
-          const newAwards = [...this.state.awards];
-
+          const newAwards = [...this.state.allAwards];
           const categoryIndex = awards.findIndex(c => {
             return c.award === category;
           });
@@ -360,6 +356,12 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.setState({ awards: filteredAwards, filterText: name });
   };
 
+  private preventEnter = (event: any) => {
+    if (event.keyCode === 13 || event.charCode === 13) {
+      event.preventDefault();
+    }
+  };
+
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
@@ -404,7 +406,11 @@ class Awards extends React.Component<any, IAwardsStates> {
                 ))}
               </Tabs>
             </AppBar>
-            <form autoComplete="off" id="filterBar">
+            <form
+              autoComplete="off"
+              id="filterBar"
+              onKeyPress={this.preventEnter}
+            >
               <FormControl className="formControl">
                 <div className="grow" />
                 <div className="searchBar">

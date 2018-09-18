@@ -723,6 +723,7 @@ a:visited {
 .formControl {
   min-width: 120px !important;
   font-family: "PT Sans" !important;
+  margin-right: 0.4em !important;
 }
 
 .grow {
