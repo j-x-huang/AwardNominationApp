@@ -460,16 +460,20 @@ class NominationForm extends React.Component<any, any> {
       nominee: nomineeid,
       upvoters: {
         [userid]: true
-      }
+      },
+      key: newPostKey
     };
-    updates["/nominators/" + userid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominee: this.state.nominee.value
-    };
-    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominator: userid
-    };
+
+    if (newPostKey != null) {
+      const nomination = {
+        [newPostKey]: true
+      };
+      const nominatorPath = defaultDatabase.ref("nominators/" + userid);
+      const nomineePath = defaultDatabase.ref("nominees/" + nomineeid);
+
+      nominatorPath.update(nomination);
+      nomineePath.update(nomination);
+    }
 
     const nomCat = {
       [nomineeid]: true
@@ -527,6 +531,13 @@ class NominationForm extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref(
       "/nominations/" + nominationid + "/upvoters/"
     );
+
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [nominationPostKey]: true
+    };
+
+    nominatorPath.update(nomination);
 
     return upvoterPath.update(upvoter);
   };
