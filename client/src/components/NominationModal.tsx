@@ -100,12 +100,12 @@ class NominationModal extends React.Component<any, any> {
   private readLockState = () => {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once('value').then(value => {
-        console.log(value.val().lockState);
-        this.setState({ isLocked: value.val().lockState});
-        return value.val().lockState;
-    })
-  }
+    lockPath.once("value").then(value => {
+      console.log(value.val().lockState);
+      this.setState({ isLocked: value.val().lockState });
+      return value.val().lockState;
+    });
+  };
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
     const data = snapshot.val();
@@ -347,7 +347,7 @@ class NominationModal extends React.Component<any, any> {
                       type="button"
                       className="btn btn-light float-right btn-top-round inline-components"
                       onClick={this.handleUpvoteClicked}
-                      style={this.state.isLocked ? { display: 'none' } : {} }
+                      style={this.state.isLocked ? { display: "none" } : {}}
                     >
                       <Octicon
                         className={
@@ -408,7 +408,7 @@ class NominationModal extends React.Component<any, any> {
       // scroll to the end of the modal
       const awardModal = document.getElementsByClassName("award-modal")[0];
       awardModal.scrollTo({
-        top: awardModal.clientHeight,
+        top: awardModal.scrollHeight,
         behavior: "smooth"
       });
     }

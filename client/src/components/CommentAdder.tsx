@@ -11,7 +11,7 @@ export interface ICommentAdderProps {
 class CommentAdder extends React.Component<any, any> {
   public state = {
     isLocked: false
-  }
+  };
   public componentDidMount() {
     this.readLockState();
   }
@@ -32,27 +32,42 @@ class CommentAdder extends React.Component<any, any> {
           rows={2}
           value={comment}
           onChange={onCommentChange}
+          onKeyPress={this.handleEnterKeyPress}
         />
         <button
           type="button"
+          id="commentBtn"
           className="btn btn-light float-right btn-top-round"
           onClick={onCommentAdd}
-          style={this.state.isLocked ? { display: 'none', alignSelf: "flex-start" } : {alignSelf: "flex-start"} }
+          style={
+            this.state.isLocked
+              ? { display: "none", alignSelf: "flex-start" }
+              : { alignSelf: "flex-start" }
+          }
         >
           <Octicon className="octigrey" size="medium" icon={PlusSmall} />
         </button>
       </div>
     );
   }
+
+  private handleEnterKeyPress = (event: any) => {
+    if (event.charCode === 13) {
+      event.preventDefault();
+      const commentBtn = document.getElementById("commentBtn")!;
+      commentBtn.click();
+    }
+  };
+
   private readLockState = () => {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once('value').then(value => {
-        console.log(value.val().lockState);
-        this.setState({ isLocked: value.val().lockState});
-        return value.val().lockState;
-    })
-  }
+    lockPath.once("value").then(value => {
+      console.log(value.val().lockState);
+      this.setState({ isLocked: value.val().lockState });
+      return value.val().lockState;
+    });
+  };
 }
 
 export default CommentAdder;
