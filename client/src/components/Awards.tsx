@@ -297,8 +297,8 @@ class Awards extends React.Component<any, IAwardsStates> {
           console.log(newAwards)
           this.setState({ awards: newAwards, allAwards: newAwards },
             () => {
-              // this ensures that the loading of pictures doesn't affect the filtering
-              this.filterNominationsByName(this.state.filterText);
+              // this ensures that the loading of pictures doesn't affect the filtering and sorting
+              this.sortNominationsByName(this.state.sortBy);
             }
           );
         }
@@ -337,8 +337,11 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   private handleSort = (event: any) => {
     this.setState({ sortBy: event.target.value });
+    this.sortNominationsByName(event.target.value);
+  }
 
-    if (event.target.value  === "Firstname" || event.target.value === "Lastname") {
+  private sortNominationsByName(nameType: string) {
+    if (nameType === "Firstname" || nameType === "Lastname") {
       const awards = this.state.allAwards;
       const sortedAwards = new Array<any>();
 
@@ -348,11 +351,11 @@ class Awards extends React.Component<any, IAwardsStates> {
           nominations: [],
         };
         let newNominations;
-        if (event.target.value === "Firstname") {
+        if (nameType === "Firstname") {
         newNominations = awardCategory.nominations.sort((a: any, b: any) => {
           return (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : ((b.title.toLowerCase() > a.title.toLowerCase()) ? -1 : 0);
         })
-      } else if (event.target.value === "Lastname") {
+      } else if (nameType === "Lastname") {
         newNominations = awardCategory.nominations.sort((a: any, b: any) => {
           const aName = a.title.split(" ");
           const aLast = aName[aName.length - 1];
@@ -371,7 +374,10 @@ class Awards extends React.Component<any, IAwardsStates> {
       this.setState({ allAwards: sortedAwards, awards: sortedAwards }, () => {
         this.filterNominationsByName(this.state.filterText);
       })
-    }
+   } else {
+     // ensures filtering is still applied even if no sorting option is selected
+    this.filterNominationsByName(this.state.filterText);
+   }
   }
 
   /**
