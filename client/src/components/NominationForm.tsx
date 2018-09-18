@@ -328,14 +328,10 @@ class NominationForm extends React.Component<any, any> {
     console.log(this.state.nominationID);
   };
 
-  public goBack = () => {
-    this.props.history.push("/nominate");
-  };
-
   public openModal = () => {
     return (
       <div>
-        <Modal nominationID={this.state.nominationID} onClose={this.goBack} />
+        <Modal nominationID={this.state.nominationID} />
       </div>
     );
   };
