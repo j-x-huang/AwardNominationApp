@@ -1,6 +1,8 @@
 import * as React from "react";
 import "../App.css";
 import * as firebase from "firebase";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -36,7 +38,13 @@ class Admin extends React.Component<any, any> {
         <h4>Danger Zone</h4>
 
         <div className="adminOptions adminOptionsDanger">
-          <div className="adminOption">
+          <div
+            className={
+              this.state.isLocked
+                ? "adminOption adminOptionDisabled"
+                : "adminOption"
+            }
+          >
             <div className="float-left">
               <span className="adminOptionTitle">Lockdown Site</span>
               <span className="adminOptionDesc">
@@ -46,20 +54,79 @@ class Admin extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-outline-danger float-right adminButton"
-              onClick={this.lockDown}
+              disabled={this.state.isLocked}
+              onClick={this.showLockdownConfirmationModal}
             >
               Initiate Lockdown
+            </button>
+          </div>
+          <hr className="adminHr" />
+          <div
+            className={
+              !this.state.isLocked
+                ? "adminOption adminOptionDisabled"
+                : "adminOption"
+            }
+          >
+            <div className="float-left">
+              <span className="adminOptionTitle">Reenable Nominations</span>
+              <span className="adminOptionDesc">
+                Allow nominations to take place again
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-danger float-right adminButton"
+              disabled={!this.state.isLocked}
+              onClick={this.showLockdownConfirmationModal}
+            >
+              Abort Lockdown
+            </button>
+          </div>
+          <hr className="adminHr" />
+
+          <div className="adminOption">
+            <div className="float-left">
+              <span className="adminOptionTitle">Clean Restart</span>
+              <span className="adminOptionDesc">
+                Reset the state of award nominations
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn btn-outline-danger float-right adminButton"
+              onClick={this.showLockdownConfirmationModal}
+            >
+              Reset Nominations
             </button>
           </div>
         </div>
       </div>
     );
   }
+
+  private showLockdownConfirmationModal = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.lockDown()
+        },
+        {
+          label: "No"
+        }
+      ]
+    });
+  };
+
   private lockDown = () => {
     this.state.isLocked = !this.state.isLocked;
     console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
+    location.reload();
   };
 
   private readLockState = () => {

@@ -52,7 +52,8 @@ const styles = (theme: Theme) =>
         fontWeight: theme.typography.fontWeightMedium
       },
       "&:focus": {
-        color: "#8241aa"
+        color: "#8241aa",
+        outline: "none",
       }
     },
     grow: {
@@ -161,18 +162,15 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   public componentDidMount() {
-    const awardCategories = [
-      "All",
-      "Being Purple",
-      "One Small Step",
-      "New Horizon",
-      "Sky High",
-      "Star Crew"
-    ];
+    console.log("Logging content for awards");
+    console.log(this.props.awardsContent.getAwardTabs());
+    console.log(this.props.awardsContent.getReturnURL());
+
+    const awardCategories = this.props.awardsContent.getAwardTabs();
 
     this.createAwardCategories(awardCategories);
 
-    awardCategories.forEach(c => {
+    awardCategories.forEach((c: string) => {
       this.getCategoryNomination(c);
     });
   }
@@ -191,29 +189,31 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   public getCategoryNomination(str: string) {
-    const defaultDatabase = firebase.database();
-    const nomRef = defaultDatabase.ref();
+    this.props.awardsContent.getTabNomination(str, this.retrieveUserDetails);
 
-    if (str === "All") {
-      nomRef
-        .child("nominations")
-        .orderByChild("category")
-        .once("value", snapshot => {
-          if (snapshot != null) {
-            console.log(this.retrieveUserDetails(snapshot, str));
-          }
-        });
-    } else {
-      nomRef
-        .child("nominations")
-        .orderByChild("category")
-        .equalTo(str)
-        .once("value", snapshot => {
-          if (snapshot != null) {
-            console.log(this.retrieveUserDetails(snapshot, str));
-          }
-        });
-    }
+    // const defaultDatabase = firebase.database();
+    // const nomRef = defaultDatabase.ref();
+
+    // if (str === "All") {
+    //   nomRef
+    //     .child("nominations")
+    //     .orderByChild("category")
+    //     .once("value", snapshot => {
+    //       if (snapshot != null) {
+    //         console.log(this.retrieveUserDetails(snapshot, str));
+    //       }
+    //     });
+    // } else {
+    //   nomRef
+    //     .child("nominations")
+    //     .orderByChild("category")
+    //     .equalTo(str)
+    //     .once("value", snapshot => {
+    //       if (snapshot != null) {
+    //         console.log(this.retrieveUserDetails(snapshot, str));
+    //       }
+    //     });
+    // }
   }
 
   public retrieveUserDetails = (
@@ -263,6 +263,8 @@ class Awards extends React.Component<any, IAwardsStates> {
     nominations: any[],
     nominees: any[]
   ) => {
+    console.log("updateAllNominations called");
+
     const awards = [...this.state.awards];
 
     const index = awards.findIndex(c => {
@@ -315,11 +317,7 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   public goBack = () => {
-    if (this.props.isMyNomination) {
-      this.props.history.push("/mynominations");
-    } else {
-      this.props.history.push("/awards");
-    }
+    this.props.history.push("/" + this.props.awardsContent.getReturnURL());
   };
 
   public openModal = () => {
@@ -404,7 +402,7 @@ class Awards extends React.Component<any, IAwardsStates> {
   }
 
   public render() {
-    const { classes, isMyNomination } = this.props;
+    const { classes } = this.props;
     const { value, awards } = this.state;
     // const { location } = this.props;
 
@@ -413,8 +411,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       location.state.modal &&
       this.previousLocation !== location
     ); */
-
-    console.log(isMyNomination);
 
     return (
       <div>

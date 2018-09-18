@@ -20,7 +20,7 @@ class NominationForm extends React.Component<any, any> {
     }
   }
 
-  public allNominees = [{ value: "", label: "", isDisabled: false }];
+  public allNominees = [{ value: "", name: "", label: "", isDisabled: false }];
   public categories = [
     "Being Purple",
     "One Small Step",
@@ -42,7 +42,7 @@ class NominationForm extends React.Component<any, any> {
     category: "",
     justification: "",
     nominator: "",
-    nominee: { value: "", label: "", isDisabled: false },
+    nominee: { value: "", name: "", label: "", isDisabled: false },
     nominationID: "-LM4wBg-yv0zNphsbcMz",
     score: 1,
     nominees: new Array<any>(),
@@ -61,7 +61,7 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public updateNomineeList = (category: string) => {
-    let neoNominees = [{ value: "", label: "", isDisabled: false }];
+    let neoNominees = [{ value: "", name: "", label: "", isDisabled: false }];
     let actualNominees = new Array<any>();
 
     const selection = this.categories.indexOf(category);
@@ -104,12 +104,15 @@ class NominationForm extends React.Component<any, any> {
     }
 
     actualNominees.forEach(nom => {
-      nom.label = nom.label + " (nominated) ";
+      console.log(nom);
+      nom.label = nom.name + " (nominated) ";
       nom.isDisabled = false;
+      // nom.isDisabled = true;
     });
 
     neoNominees.forEach(nom => {
       nom.isDisabled = false;
+      nom.label = nom.name;
     });
 
     const superNominees = actualNominees.concat(neoNominees);
@@ -120,7 +123,7 @@ class NominationForm extends React.Component<any, any> {
   public categoryChange = (event: any) => {
     const cat = event.target.value;
     this.setState({ category: cat });
-    this.setState({ nominee: { value: "", label: "" } });
+    this.setState({ nominee: { value: "", name: "", label: "" } });
     this.updateNomineeList(cat);
   };
 
@@ -141,6 +144,7 @@ class NominationForm extends React.Component<any, any> {
       } else {
         this.allNominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
+          name: suggestion.name,
           label: suggestion.name,
           isDisabled: false
         }));
@@ -188,44 +192,44 @@ class NominationForm extends React.Component<any, any> {
             onClick={this.redirectToNomination}
           />
         ) : (
-          <form className="feelix-card" id="nominateDiv">
-            <h5> Nominate a deserving candidate </h5>
-            <hr />
-            <div id="categorySelect">{options}</div>
-            <div className="form-group">
-              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-              <Select
-                isDisabled={category === ""}
-                isSearchable={true}
-                onChange={this.nomineeChange}
-                options={nominees}
-                value={this.state.nominee}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="justificationSelect">Justify your decision</label>
-              <textarea
-                className="form-control"
-                style={{ resize: "none" }}
-                id="justificationSelect"
-                rows={5}
-                value={this.state.justification}
-                onChange={this.justificationChange}
-              />
-            </div>
-            <div className="overflowHid">
-              <button
-                type="button"
-                className="btn btn-primary btn-purple float-right"
-                disabled={this.checkFieldsFilled() ? false : true}
-                onClick={this.handleClick}
-                style={this.state.isLocked ? { display: "none" } : {}}
-              >
-                Nominate
+            <form className="feelix-card" id="nominateDiv">
+              <h5> Nominate a deserving candidate </h5>
+              <hr />
+              <div id="categorySelect">{options}</div>
+              <div className="form-group">
+                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+                <Select
+                  isDisabled={category === ""}
+                  isSearchable={true}
+                  onChange={this.nomineeChange}
+                  options={nominees}
+                  value={this.state.nominee}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="justificationSelect">Justify your decision</label>
+                <textarea
+                  className="form-control"
+                  style={{ resize: "none" }}
+                  id="justificationSelect"
+                  rows={5}
+                  value={this.state.justification}
+                  onChange={this.justificationChange}
+                />
+              </div>
+              <div className="overflowHid">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-purple float-right"
+                  disabled={this.checkFieldsFilled() ? false : true}
+                  onClick={this.handleClick}
+                  style={this.state.isLocked ? { display: "none" } : {}}
+                >
+                  Nominate
               </button>
-            </div>
-          </form>
-        )}
+              </div>
+            </form>
+          )}
         <Route
           path={"/nominate/nomination/" + this.state.nominationID}
           render={this.openModal}

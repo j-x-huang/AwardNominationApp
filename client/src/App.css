@@ -672,6 +672,19 @@ a:visited {
   color: #586069;
 }
 
+.adminOptionDisabled .adminOptionTitle {
+  color: #929497;
+}
+
+.adminOptionDisabled .adminOptionDesc {
+  color: #b5b9be;
+}
+
+.adminOptionDisabled .adminButton {
+  color: #929497;
+  border-color: #929497;
+}
+
 .adminButton {
   margin-top: 0.2em;
 }
@@ -687,6 +700,21 @@ a:visited {
 #awardsContainer {
   width: 1496px;
 }
+
+.react-confirm-alert-body {
+  font-family: "PT Sans";
+  font-size: 14px;
+}
+
+.react-confirm-alert-body h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* .react-confirm-alert-button-group > button:first-child {
+  background: #8241aa !important;
+} */
 
 @media (min-width: 1496px) {
   #nominateDiv,
