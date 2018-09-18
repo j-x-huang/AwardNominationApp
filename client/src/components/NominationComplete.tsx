@@ -1,5 +1,6 @@
 import * as React from "react";
 import Octicon, { Flame } from "@githubprimer/octicons-react";
+
 // import { Route } from "react-router-dom";
 
 export interface INominationCompleteProps {
@@ -11,9 +12,16 @@ export interface INominationCompleteProps {
 class NominationComplete extends React.Component<
   INominationCompleteProps,
   any
-> {
+  > {
+
+
+  private handleClick = () => {
+    location.reload();
+  }
+
   public render() {
     const { category, nominee, onClick } = this.props;
+
     if (nominee == null) {
       return (
         <div id="nominationComplete">
@@ -49,8 +57,12 @@ class NominationComplete extends React.Component<
             <a href="javascript:void(0);" onClick={onClick}>
               Click here to view your nomination.
             </a>
+            <button type="button"
+              className="btn btn-primary btn-purple"
+              onClick={this.handleClick}>Nominate Again</button>
           </div>
         </div>
+
       );
     }
   }
