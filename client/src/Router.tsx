@@ -5,22 +5,37 @@ import NominationForm from "./components/NominationForm";
 import Home from "./components/Home";
 import NominationComplete from "./components/NominationComplete";
 import Admin from "./components/Admin";
+import AwardsContent from "./Support/AwardsContent";
+import AwardCategories from "./Support/AwardCategories";
+import AwardMyNominations from "./Support/AwardMyNominations";
 
 class Router extends React.Component {
   public render() {
-    const isAdmin = true;
+    const isAdmin = false;
 
-    const getNominationComponent = (isMyNomination: boolean) => (
+    const getAwardComponent = (awardsContent: AwardsContent) => (
       props: RouteComponentProps<{}>
-    ) => <Awards {...props} isMyNomination={isMyNomination} />;
+    ) => (
+      <Awards
+        {...props}
+        key={awardsContent.getReturnURL()}
+        awardsContent={awardsContent}
+      />
+    );
 
     return (
       <Switch>
         <Route exact={true} path="/home" component={Home} />
-        <Route path="/awards" render={getNominationComponent(false)} />
+        <Route
+          path="/awards"
+          render={getAwardComponent(new AwardCategories())}
+        />
         <Route path="/nominate" component={NominationForm} />
         <Route path="/nominationscomplete" component={NominationComplete} />
-        <Route path="/mynominations" render={getNominationComponent(true)} />
+        <Route
+          path="/mynominations"
+          render={getAwardComponent(new AwardMyNominations())}
+        />
         {/* TODO: Should be pulling from a variable somewhere */}
         {isAdmin ? (
           <Route path="/admin" component={Admin} />
