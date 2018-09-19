@@ -171,6 +171,7 @@ class Admin extends React.Component<any, any> {
           this.csvLine(category, name, tally);
         });
 
+        this.state.finalTally.sort(this.sortByTally);
         const blob = new Blob(this.state.finalTally, {
           type: "text/plain;charset=utf-8"
         });
@@ -179,6 +180,17 @@ class Admin extends React.Component<any, any> {
     });
   };
 
+  private sortByTally(a: string,b: string) {
+    const aArr = a.split(',');
+    const bArr = b.split(',');
+    if (aArr[2] < bArr[2]) {
+        return 1;
+    } else if (aArr[2] > bArr[2] ){
+        return -1;
+    } else {
+        return 0;
+    }
+  }
   private exportDatabase = () => {
     const defaultDatabase = firebase.database();
     const ref = defaultDatabase.ref();
