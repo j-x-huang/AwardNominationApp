@@ -64,7 +64,7 @@ class Admin extends React.Component<any, any> {
           <hr className="adminHr" />
           <AdminOption
             title="Reenable Nominations"
-            desc="Allow nominations to take place again"
+            desc="Allow employees to make nominations again"
             buttonDesc="Abort Lockdown"
             onBtnClick={this.showLockdownConfirmation}
             disabled={!this.state.isLocked}
@@ -73,9 +73,9 @@ class Admin extends React.Component<any, any> {
           <hr className="adminHr" />
           <AdminOption
             title="Clean Restart"
-            desc="Reset the state of award nominations"
+            desc="Clear all award nominations"
             buttonDesc="Reset Nominations"
-            onBtnClick={this.resetDatabase}
+            onBtnClick={this.showResetConfirmation}
             disabled={false}
             dangerous={true}
           />
@@ -84,23 +84,29 @@ class Admin extends React.Component<any, any> {
     );
   }
 
-  private resetDatabase = () => {
-    const defaultDatabase = firebase.database();
-    const root = defaultDatabase.ref();
+  private showResetConfirmation = () => {
+    this.showConfirmationModal(
+      "Are you sure you want to reset the state of award nominations?",
+      this.resetDatabase
+    );
+  };
 
+  private resetDatabase = () => {
     const data = {
       lockdown: {
         lockState: false
       }
     };
-
-    root.set(data);
+    firebase
+      .database()
+      .ref()
+      .set(data);
   };
 
   private showLockdownConfirmation = () => {
-    let msg = "Are you sure you want to lock down nominations";
+    let msg = "Are you sure you want to lock down nominations?";
     if (this.state.isLocked) {
-      msg = "Are you sure you want to reenable nominations";
+      msg = "Are you sure you want to reenable nominations?";
     }
     this.showConfirmationModal(msg, this.lockDown);
   };
