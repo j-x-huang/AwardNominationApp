@@ -3,8 +3,8 @@ import "../App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
-// import * as XLSX from 'xlsx';
 import { saveAs } from "file-saver/FileSaver";
+import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -16,15 +16,13 @@ class Admin extends React.Component<any, any> {
   public state = {
     isLocked: false,
     lockPath: firebase.database().ref("/lockdown"),
-    finalTally : ["Category,Name,Tally\n"] as any
+    finalTally: ["Category,Name,Tally\n"] as any
   };
 
-  public csvLine(category : string, name : string, tally : number) {
-
+  public csvLine(category: string, name: string, tally: number) {
     const data = category + "," + name + "," + tally + "\n";
 
     this.state.finalTally.push(data);
-
   }
 
   public render() {
@@ -146,15 +144,39 @@ class Admin extends React.Component<any, any> {
     return lockPath.set({ lockState });
   };
 
-
   private filterTally = () => {
-  
-    const blob = new Blob(
-        this.state.finalTally
-      , {
-      type: "text/plain;charset=utf-8"
+    const defaultDatabase = firebase.database();
+    const ref = defaultDatabase.ref("nominations");
+    ref.once("value", snapshot => {
+      const nominees: string[] = [];
+
+      snapshot.forEach(nomination => {
+        const item = nomination.val();
+
+        if (nominees.indexOf(item.nominee) === -1) {
+          nominees.push(item.nominee);
+        }
+      });
+
+      getUsersByObjectId(nominees, (err, users) => {
+        console.log(users);
+        snapshot.forEach(nomination => {
+          const item = nomination.val();
+          const category = item.category;
+          const name = users[item.nominee].name;
+          let tally = 0;
+          if (item.upvoters != null) {
+            tally = Object.keys(item.upvoters).length;
+          }
+          this.csvLine(category, name, tally);
+        });
+
+        const blob = new Blob(this.state.finalTally, {
+          type: "text/plain;charset=utf-8"
+        });
+        saveAs(blob, "Tally.csv");
+      });
     });
-    saveAs(blob, "Tally.csv");
   };
 
   private exportDatabase = () => {
