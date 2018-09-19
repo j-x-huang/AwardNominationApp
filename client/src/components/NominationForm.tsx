@@ -349,21 +349,22 @@ class NominationForm extends React.Component<any, any> {
       .once("value")
       .then(snap => {
         const array = snap.val();
-        // console.log(array);
-        for (const existingNominationPostKey of Object.keys(array)) {
-          const existingNomination = array[existingNominationPostKey];
-          if (
-            existingNomination.category === category &&
-            existingNomination.nominee === nominee
-          ) {
-            console.log(existingNominationPostKey);
-            this.setNominationID(existingNominationPostKey);
-            console.log(this.state.nominationID);
-            this.showDuplicateNominationConfirmationModal(
-              existingNominationPostKey
-            );
-            duplicateNomination = true;
-            break;
+        if (array != null) {
+          for (const existingNominationPostKey of Object.keys(array)) {
+            const existingNomination = array[existingNominationPostKey];
+            if (
+              existingNomination.category === category &&
+              existingNomination.nominee === nominee
+            ) {
+              console.log(existingNominationPostKey);
+              this.setNominationID(existingNominationPostKey);
+              console.log(this.state.nominationID);
+              this.showDuplicateNominationConfirmationModal(
+                existingNominationPostKey
+              );
+              duplicateNomination = true;
+              break;
+            }
           }
         }
         if (!duplicateNomination) {

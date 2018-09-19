@@ -65,7 +65,7 @@ class Admin extends React.Component<any, any> {
             title="Clean Restart"
             desc="Reset the state of award nominations"
             buttonDesc="Reset Nominations"
-            onBtnClick={this.showLockdownConfirmation}
+            onBtnClick={this.resetDatabase}
             disabled={false}
             dangerous={true}
           />
@@ -73,6 +73,19 @@ class Admin extends React.Component<any, any> {
       </div>
     );
   }
+
+  private resetDatabase = () => {
+    const defaultDatabase = firebase.database();
+    const root = defaultDatabase.ref();
+
+    const data = {
+      lockdown: {
+        lockState: false
+      }
+    };
+
+    root.set(data);
+  };
 
   private showLockdownConfirmation = () => {
     let msg = "Are you sure you want to lock down nominations";
