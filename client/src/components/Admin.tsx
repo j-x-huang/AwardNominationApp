@@ -5,6 +5,7 @@ import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
 // import * as XLSX from 'xlsx';
 import { saveAs } from "file-saver/FileSaver";
+import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -143,6 +144,35 @@ class Admin extends React.Component<any, any> {
     // const wsAll = XLSX.utils.aoa_to_sheet(users)
     // XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
     // XLSX.writeFile(wb, "export-demo.csv")
+
+    const defaultDatabase = firebase.database();
+    const ref = defaultDatabase.ref("nominations");
+    ref.once("value", snapshot => {
+      const nominees: string[] = [];
+
+      snapshot.forEach(nomination => {
+        const item = nomination.val();
+
+        if (nominees.indexOf(item.nominee) === -1) {
+          nominees.push(item.nominee);
+        }
+      });
+
+      getUsersByObjectId(nominees, (err, users) => {
+        console.log(users);
+        snapshot.forEach(nomination => {
+          const item = nomination.val();
+          console.log(item.category);
+          console.log(users[item.nominee].name);
+          if (item.upvoters != null) {
+            console.log(Object.keys(item.upvoters).length);
+          } else {
+            console.log(0);
+          }
+        });
+      });
+    });
+
     const blob = new Blob(["Hello, world!"], {
       type: "text/plain;charset=utf-8"
     });
