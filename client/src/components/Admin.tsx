@@ -15,8 +15,18 @@ class Admin extends React.Component<any, any> {
   }
   public state = {
     isLocked: false,
-    lockPath: firebase.database().ref("/lockdown")
+    lockPath: firebase.database().ref("/lockdown"),
+    finalTally : ["Category,Name,Tally\n"] as any
   };
+
+  public csvLine(category : string, name : string, tally : number) {
+
+    const data = category + "," + name + "," + tally + "\n";
+
+    this.state.finalTally.push(data);
+
+  }
+
   public render() {
     return (
       <div id="adminDiv">
@@ -129,18 +139,16 @@ class Admin extends React.Component<any, any> {
     const lockPath = defaultDatabase.ref("/lockdown");
     return lockPath.set({ lockState });
   };
-  private filterTally = () => {
-    // const users = [["First Name", "Last Name", "Age"]]
 
-    // // console.log("I will filter and tally");
-    // const wb = XLSX.utils.book_new()
-    // const wsAll = XLSX.utils.aoa_to_sheet(users)
-    // XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
-    // XLSX.writeFile(wb, "export-demo.csv")
-    const blob = new Blob(["Hello, world!"], {
+
+  private filterTally = () => {
+  
+    const blob = new Blob(
+        this.state.finalTally
+      , {
       type: "text/plain;charset=utf-8"
     });
-    saveAs(blob, "hello world.txt");
+    saveAs(blob, "Tally.csv");
   };
 
   private exportDatabase = () => {
