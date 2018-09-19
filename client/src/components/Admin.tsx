@@ -183,14 +183,26 @@ class Admin extends React.Component<any, any> {
   private sortByTally(a: string,b: string) {
     const aArr = a.split(',');
     const bArr = b.split(',');
+    // Sorting by tally number
     if (aArr[2] < bArr[2]) {
         return 1;
     } else if (aArr[2] > bArr[2] ){
         return -1;
-    } else {
-        return 0;
-    }
+    // Sorting by Category in Alphabetical order
+    } else if (aArr[2] === bArr[2] && aArr[0] < bArr[0]){
+        return -1;
+    } else if (aArr[2] === bArr[2] && aArr[0] > bArr[0]){
+      return 1;
+    // Sorting by Name in Alphabetical order 
+  } else if (aArr[2] === bArr[2] && aArr[1] < bArr[1]){
+    return -1;
+  } else if (aArr[2] === bArr[2] && aArr[1] > bArr[1]){
+      return 1;
+  } else {
+    return 0;
   }
+}
+
   private exportDatabase = () => {
     const defaultDatabase = firebase.database();
     const ref = defaultDatabase.ref();
