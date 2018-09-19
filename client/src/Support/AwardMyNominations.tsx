@@ -54,43 +54,45 @@ class AwardMyNominations extends AwardsContent {
     tab: string,
     retrieveUserDetails: any
   ) => {
-    nomRef.once("value", snapshot => {
-      console.log("Nominations fetch successful:");
-      console.log(tab);
-      console.log(snapshot);
-      const data = snapshot.val();
+    nomRef.on("value", snapshot => {
+      if (snapshot != null) {
+        console.log("Nominations fetch successful:");
+        console.log(tab);
+        console.log(snapshot);
+        const data = snapshot.val();
 
-      if (data != null) {
-        const snapshots: any[] = [];
-        const numChildren = snapshot.numChildren();
-        let size = 0;
-        Object.keys(data).forEach(key => {
-          console.log(key);
-          // this.getNominationDetails(key, tab, retrieveUserDetails);
-          const defaultDatabase = firebase.database();
-          const nomRef2 = defaultDatabase.ref();
-          nomRef2
-            .child("nominations")
-            .child(key)
-            .once("value", snapshotChild => {
-              if (snapshotChild != null) {
-                if (retrieveUserDetails != null) {
-                  snapshots.push(snapshotChild.val());
-                  console.log("Snapshots:");
-                  console.log(snapshots);
-                  size++;
-                  console.log(size);
-                  if (size === numChildren) {
-                    console.log("Getting nomination details:");
-                    console.log(tab);
-                    console.log(snapshotChild.val());
+        if (data != null) {
+          const snapshots: any[] = [];
+          const numChildren = snapshot.numChildren();
+          let size = 0;
+          Object.keys(data).forEach(key => {
+            console.log(key);
+            // this.getNominationDetails(key, tab, retrieveUserDetails);
+            const defaultDatabase = firebase.database();
+            const nomRef2 = defaultDatabase.ref();
+            nomRef2
+              .child("nominations")
+              .child(key)
+              .on("value", snapshotChild => {
+                if (snapshotChild != null) {
+                  if (retrieveUserDetails != null) {
+                    snapshots.push(snapshotChild.val());
+                    console.log("Snapshots:");
                     console.log(snapshots);
-                    console.log(retrieveUserDetails(snapshots, tab));
+                    size++;
+                    console.log(size);
+                    if (size === numChildren) {
+                      console.log("Getting nomination details:");
+                      console.log(tab);
+                      console.log(snapshotChild.val());
+                      console.log(snapshots);
+                      console.log(retrieveUserDetails(snapshots, tab));
+                    }
                   }
                 }
-              }
-            });
-        });
+              });
+          });
+        }
       }
     });
   };
