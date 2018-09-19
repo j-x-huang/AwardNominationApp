@@ -33,7 +33,8 @@ class NominationModal extends React.Component<any, any> {
     isLocked: false,
     profilePic:
       "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
-    lockPath: firebase.database().ref("/lockdown")
+    lockPath: firebase.database().ref("/lockdown"),
+    nominationID: this.props.nominationID
   };
 
   public static defaultProps = {
@@ -46,12 +47,28 @@ class NominationModal extends React.Component<any, any> {
 
   public componentDidMount() {
     this.readLockState();
-    console.log("Modal mounted! Location: ");
-    console.log(this.props.history);
-    console.log(this.props.location);
-    console.log("Modal path name:");
-    console.log(this.props.location.pathname);
-    console.log("Nomination ID:" + this.props.nominationID);
+
+    if (
+      this.state.nominationID === "" ||
+      this.state.nominationID === undefined
+    ) {
+      const pathname = this.props.location.pathname;
+      const index = pathname.lastIndexOf("/");
+      const currentNominationID = pathname.substring(index + 1);
+      console.log(currentNominationID);
+
+      this.setState(
+        {
+          nominationID: currentNominationID
+        },
+        this.initModal
+      );
+    } else {
+      this.initModal();
+    }
+  }
+
+  private initModal = () => {
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -64,7 +81,7 @@ class NominationModal extends React.Component<any, any> {
       }
       return;
     });
-    this.getNominationDetails(this.props.nominationID);
+    this.getNominationDetails(this.state.nominationID);
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -75,26 +92,24 @@ class NominationModal extends React.Component<any, any> {
       }
       return;
     });
-  }
+  };
 
   public getNominationDetails(nominationID: string) {
-    console.log("Function called");
-
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
 
-    // try {
-    nomRef
-      .child("nominations")
-      .child(nominationID)
-      .once("value", snapshot => {
-        if (snapshot != null) {
-          this.saveSnapshot(snapshot);
-        }
-      });
-    // } catch (error) {
-    //   this.setState({ failed: true });
-    // }
+    try {
+      nomRef
+        .child("nominations")
+        .child(nominationID)
+        .once("value", snapshot => {
+          if (snapshot != null) {
+            this.saveSnapshot(snapshot);
+          }
+        });
+    } catch (error) {
+      this.setState({ failed: true });
+    }
   }
 
   private readLockState = () => {
@@ -276,6 +291,9 @@ class NominationModal extends React.Component<any, any> {
       comments
     } = this.state;
 
+    console.log("State ID:");
+    console.log(this.state.nominationID);
+
     return (
       <div
         className="modal award-modal"
@@ -422,12 +440,12 @@ class NominationModal extends React.Component<any, any> {
     };
 
     const upvoterPath = defaultDatabase.ref(
-      "/nominations/" + this.props.nominationID + "/upvoters/"
+      "/nominations/" + this.state.nominationID + "/upvoters/"
     );
 
     const nominatorPath = defaultDatabase.ref("nominators/" + uid);
     const nomination = {
-      [this.props.nominationID]: true
+      [this.state.nominationID]: true
     };
 
     nominatorPath.update(nomination);
@@ -442,11 +460,11 @@ class NominationModal extends React.Component<any, any> {
     const uid = user.profile.oid;
 
     const upvoterPath = defaultDatabase.ref(
-      "/nominations/" + this.props.nominationID + "/upvoters/" + uid
+      "/nominations/" + this.state.nominationID + "/upvoters/" + uid
     );
 
     const nominatorPath = defaultDatabase.ref(
-      "nominators/" + uid + "/" + this.props.nominationID
+      "nominators/" + uid + "/" + this.state.nominationID
     );
     nominatorPath.remove();
 
@@ -458,7 +476,7 @@ class NominationModal extends React.Component<any, any> {
 
     const newPostKey = defaultDatabase
       .ref()
-      .child("/nominations/" + this.props.nominationID + "/comments/")
+      .child("/nominations/" + this.state.nominationID + "/comments/")
       .push().key;
 
     const user = getUser();
@@ -478,7 +496,7 @@ class NominationModal extends React.Component<any, any> {
     this.setState({ comments: commentsArray });
     const updates = {};
     updates[
-      "/nominations/" + this.props.nominationID + "/comments/" + newPostKey
+      "/nominations/" + this.state.nominationID + "/comments/" + newPostKey
     ] = comment;
     return defaultDatabase.ref().update(updates);
   };

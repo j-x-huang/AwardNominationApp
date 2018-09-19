@@ -3,7 +3,6 @@ import "../App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
-// import * as XLSX from 'xlsx';
 import { saveAs } from "file-saver/FileSaver";
 import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
@@ -16,8 +15,16 @@ class Admin extends React.Component<any, any> {
   }
   public state = {
     isLocked: false,
-    lockPath: firebase.database().ref("/lockdown")
+    lockPath: firebase.database().ref("/lockdown"),
+    finalTally: ["Category,Name,Tally\n"] as any
   };
+
+  public csvLine(category: string, name: string, tally: number) {
+    const data = category + "," + name + "," + tally + "\n";
+
+    this.state.finalTally.push(data);
+  }
+
   public render() {
     return (
       <div id="adminDiv">
@@ -55,7 +62,7 @@ class Admin extends React.Component<any, any> {
           <hr className="adminHr" />
           <AdminOption
             title="Reenable Nominations"
-            desc="Allow nominations to take place again"
+            desc="Allow employees to make nominations again"
             buttonDesc="Abort Lockdown"
             onBtnClick={this.showLockdownConfirmation}
             disabled={!this.state.isLocked}
@@ -64,7 +71,7 @@ class Admin extends React.Component<any, any> {
           <hr className="adminHr" />
           <AdminOption
             title="Clean Restart"
-            desc="Reset the state of award nominations"
+            desc="Clear all award nominations"
             buttonDesc="Reset Nominations"
             onBtnClick={this.showResetConfirmation}
             disabled={false}
@@ -77,7 +84,7 @@ class Admin extends React.Component<any, any> {
 
   private showResetConfirmation = () => {
     this.showConfirmationModal(
-      "Are you sure you want to reset the state of award nominations.",
+      "Are you sure you want to reset the state of award nominations?",
       this.resetDatabase
     );
   };
@@ -95,9 +102,9 @@ class Admin extends React.Component<any, any> {
   };
 
   private showLockdownConfirmation = () => {
-    let msg = "Are you sure you want to lock down nominations";
+    let msg = "Are you sure you want to lock down nominations?";
     if (this.state.isLocked) {
-      msg = "Are you sure you want to reenable nominations";
+      msg = "Are you sure you want to reenable nominations?";
     }
     this.showConfirmationModal(msg, this.lockDown);
   };
@@ -136,6 +143,7 @@ class Admin extends React.Component<any, any> {
     const lockPath = defaultDatabase.ref("/lockdown");
     return lockPath.set({ lockState });
   };
+
   private filterTally = () => {
     // const users = [["First Name", "Last Name", "Age"]]
 
@@ -173,10 +181,10 @@ class Admin extends React.Component<any, any> {
       });
     });
 
-    const blob = new Blob(["Hello, world!"], {
+    const blob = new Blob(this.state.finalTally, {
       type: "text/plain;charset=utf-8"
     });
-    saveAs(blob, "hello world.txt");
+    saveAs(blob, "Tally.csv");
   };
 
   private exportDatabase = () => {
