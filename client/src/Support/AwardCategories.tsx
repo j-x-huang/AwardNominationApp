@@ -20,7 +20,7 @@ class AwardCategories extends AwardsContent {
       nomRef
         .child("nominations")
         .orderByChild("category")
-        .once("value", snapshot => {
+        .on("value", snapshot => {
           if (snapshot != null) {
             console.log(snapshot.val());
             console.log(retrieveUserDetails(snapshot, tab));
@@ -31,7 +31,7 @@ class AwardCategories extends AwardsContent {
         .child("nominations")
         .orderByChild("category")
         .equalTo(tab)
-        .once("value", snapshot => {
+        .on("value", snapshot => {
           if (snapshot != null) {
             console.log(retrieveUserDetails(snapshot, tab));
           }
