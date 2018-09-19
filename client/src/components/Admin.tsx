@@ -1,8 +1,10 @@
 import * as React from "react";
 import "../App.css";
 import * as firebase from "firebase";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
+import AdminOption from "./AdminOption";
+// import * as XLSX from 'xlsx';
+import { saveAs } from "file-saver/FileSaver";
 
 class Admin extends React.Component<any, any> {
   constructor(props: any) {
@@ -12,103 +14,89 @@ class Admin extends React.Component<any, any> {
     this.readLockState();
   }
   public state = {
-    isLocked: false
+    isLocked: false,
+    lockPath: firebase.database().ref("/lockdown")
   };
   public render() {
     return (
       <div id="adminDiv">
         <h4 id="adminTitle">Administrator Control Panel</h4>
         <div className="adminOptions">
-          <div className="adminOption">
-            <div className="float-left">
-              <span className="adminOptionTitle">Tally Nominations</span>
-              <span className="adminOptionDesc">
-                Export sorted nominations of each category
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-success float-right adminButton"
-              onClick={this.filterTally}
-            >
-              Export Results
-            </button>
-          </div>
+          <AdminOption
+            title="Tally Nominations"
+            desc="Export top nominations of each category"
+            buttonDesc="Export Results"
+            onBtnClick={this.filterTally}
+            disabled={false}
+            dangerous={false}
+          />
+          <hr className="adminHr" />
+          <AdminOption
+            title="Export Database Locally"
+            desc="Save Firebase JSON table"
+            buttonDesc="Export Database"
+            onBtnClick={this.exportDatabase}
+            disabled={false}
+            dangerous={false}
+          />
         </div>
         <h4>Danger Zone</h4>
 
         <div className="adminOptions adminOptionsDanger">
-          <div
-            className={
-              this.state.isLocked
-                ? "adminOption adminOptionDisabled"
-                : "adminOption"
-            }
-          >
-            <div className="float-left">
-              <span className="adminOptionTitle">Lockdown Site</span>
-              <span className="adminOptionDesc">
-                Prevent further award nominations
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-danger float-right adminButton"
-              disabled={this.state.isLocked}
-              onClick={this.showLockdownConfirmation}
-            >
-              Initiate Lockdown
-            </button>
-          </div>
+          <AdminOption
+            title="Lockdown Site"
+            desc="Prevent further award nominations"
+            buttonDesc="Initiate Lockdown"
+            onBtnClick={this.showLockdownConfirmation}
+            disabled={this.state.isLocked}
+            dangerous={true}
+          />
           <hr className="adminHr" />
-          <div
-            className={
-              !this.state.isLocked
-                ? "adminOption adminOptionDisabled"
-                : "adminOption"
-            }
-          >
-            <div className="float-left">
-              <span className="adminOptionTitle">Reenable Nominations</span>
-              <span className="adminOptionDesc">
-                Allow nominations to take place again
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-danger float-right adminButton"
-              disabled={!this.state.isLocked}
-              onClick={this.showLockdownConfirmation}
-            >
-              Abort Lockdown
-            </button>
-          </div>
+          <AdminOption
+            title="Reenable Nominations"
+            desc="Allow employees to make nominations again"
+            buttonDesc="Abort Lockdown"
+            onBtnClick={this.showLockdownConfirmation}
+            disabled={!this.state.isLocked}
+            dangerous={true}
+          />
           <hr className="adminHr" />
-
-          <div className="adminOption">
-            <div className="float-left">
-              <span className="adminOptionTitle">Clean Restart</span>
-              <span className="adminOptionDesc">
-                Reset the state of award nominations
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-danger float-right adminButton"
-              onClick={this.showLockdownConfirmation}
-            >
-              Reset Nominations
-            </button>
-          </div>
+          <AdminOption
+            title="Clean Restart"
+            desc="Clear all award nominations"
+            buttonDesc="Reset Nominations"
+            onBtnClick={this.showResetConfirmation}
+            disabled={false}
+            dangerous={true}
+          />
         </div>
       </div>
     );
   }
 
+  private showResetConfirmation = () => {
+    this.showConfirmationModal(
+      "Are you sure you want to reset the state of award nominations?",
+      this.resetDatabase
+    );
+  };
+
+  private resetDatabase = () => {
+    const data = {
+      lockdown: {
+        lockState: false
+      }
+    };
+    firebase
+      .database()
+      .ref()
+      .set(data);
+  };
+
   private showLockdownConfirmation = () => {
-    let msg = "Are you sure you want to lock down nominations";
+    let msg = "Are you sure you want to lock down nominations?";
     if (this.state.isLocked) {
-      msg = "Are you sure you want to reenable nominations";
+      msg = "Are you sure you want to reenable nominations?";
     }
     this.showConfirmationModal(msg, this.lockDown);
   };
@@ -134,17 +122,12 @@ class Admin extends React.Component<any, any> {
     console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
-    location.reload();
   };
 
   private readLockState = () => {
-    const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
-      this.setState({ isLocked: value.val().lockState });
-      return value.val().lockState;
-    });
+    this.state.lockPath.on("value", snap =>
+      this.setState({ isLocked: snap!.val().lockState })
+    );
   };
 
   private writeLockState = (lockState: boolean) => {
@@ -153,7 +136,28 @@ class Admin extends React.Component<any, any> {
     return lockPath.set({ lockState });
   };
   private filterTally = () => {
-    console.log("I will filter and tally");
+    // const users = [["First Name", "Last Name", "Age"]]
+
+    // // console.log("I will filter and tally");
+    // const wb = XLSX.utils.book_new()
+    // const wsAll = XLSX.utils.aoa_to_sheet(users)
+    // XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
+    // XLSX.writeFile(wb, "export-demo.csv")
+    const blob = new Blob(["Hello, world!"], {
+      type: "text/plain;charset=utf-8"
+    });
+    saveAs(blob, "hello world.txt");
+  };
+
+  private exportDatabase = () => {
+    const defaultDatabase = firebase.database();
+    const ref = defaultDatabase.ref();
+    ref.once("value", snapshot => {
+      const blob = new Blob([JSON.stringify(snapshot.val())], {
+        type: "application/json;charset=utf-8"
+      });
+      saveAs(blob, "award-nomination-export.json");
+    });
   };
 }
 

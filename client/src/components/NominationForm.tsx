@@ -6,8 +6,7 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 import Modal from "./NominationModal";
 import { Route } from "react-router-dom";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
 
 class NominationForm extends React.Component<any, any> {
   public previousLocation = this.props.location;
@@ -107,7 +106,7 @@ class NominationForm extends React.Component<any, any> {
 
     actualNominees.forEach(nom => {
       console.log(nom);
-      nom.label = nom.name + " (nominated) ";
+      nom.label = nom.name + " (nominated)";
       nom.isDisabled = false;
     });
 
@@ -189,48 +188,52 @@ class NominationForm extends React.Component<any, any> {
         {completed ? (
           <NominationComplete
             category={category}
-            nominee={nominee.label}
+            nominee={
+              nominee.label.includes(" (nominated)")
+                ? nominee.label.replace(" (nominated)", "")
+                : nominee.label
+            }
             onClick={this.redirectToNomination}
           />
         ) : (
-            <form className="feelix-card" id="nominateDiv">
-              <h5> Nominate a deserving candidate </h5>
-              <hr />
-              <div id="categorySelect">{options}</div>
-              <div className="form-group">
-                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-                <Select
-                  isDisabled={category === ""}
-                  isSearchable={true}
-                  onChange={this.nomineeChange}
-                  options={nominees}
-                  value={this.state.nominee}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="justificationSelect">Justify your decision</label>
-                <textarea
-                  className="form-control"
-                  style={{ resize: "none" }}
-                  id="justificationSelect"
-                  rows={5}
-                  value={this.state.justification}
-                  onChange={this.justificationChange}
-                />
-              </div>
-              <div className="overflowHid">
-                <button
-                  type="button"
-                  className="btn btn-primary btn-purple float-right"
-                  disabled={this.checkFieldsFilled() ? false : true}
-                  onClick={this.handleClick}
-                  style={this.state.isLocked ? { display: "none" } : {}}
-                >
-                  Nominate
+          <form className="feelix-card" id="nominateDiv">
+            <h5> Nominate a deserving candidate </h5>
+            <hr />
+            <div id="categorySelect">{options}</div>
+            <div className="form-group">
+              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+              <Select
+                isDisabled={category === ""}
+                isSearchable={true}
+                onChange={this.nomineeChange}
+                options={nominees}
+                value={this.state.nominee}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="justificationSelect">Justify your decision</label>
+              <textarea
+                className="form-control"
+                style={{ resize: "none" }}
+                id="justificationSelect"
+                rows={5}
+                value={this.state.justification}
+                onChange={this.justificationChange}
+              />
+            </div>
+            <div className="overflowHid">
+              <button
+                type="button"
+                className="btn btn-primary btn-purple float-right"
+                disabled={this.checkFieldsFilled() ? false : true}
+                onClick={this.handleClick}
+                style={this.state.isLocked ? { display: "none" } : {}}
+              >
+                Nominate
               </button>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
+        )}
         <Route
           path={"/nominate/nomination/" + this.state.nominationID}
           render={this.openModal}
@@ -316,22 +319,18 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private redirectToNomination = () => {
-    console.log(this.state.nominationID)
+    console.log(this.state.nominationID);
     this.props.history.push({
       pathname: "/nominate/nomination/" + this.state.nominationID,
       state: { modal: true }
     });
-    console.log(this.state.nominationID)
-  };
-
-  public goBack = () => {
-    this.props.history.push("/nominate");
+    console.log(this.state.nominationID);
   };
 
   public openModal = () => {
     return (
       <div>
-        <Modal nominationID={this.state.nominationID} onClose={this.goBack} />
+        <Modal nominationID={this.state.nominationID} />
       </div>
     );
   };
@@ -349,19 +348,22 @@ class NominationForm extends React.Component<any, any> {
       .once("value")
       .then(snap => {
         const array = snap.val();
-        // console.log(array);
-        for (const existingNominationPostKey of Object.keys(array)) {
-          const existingNomination = array[existingNominationPostKey];
-          if (
-            existingNomination.category === category &&
-            existingNomination.nominee === nominee
-          ) {
-            console.log(existingNominationPostKey);
-            this.setNominationID(existingNominationPostKey);
-            console.log(this.state.nominationID);
-            this.showDuplicateNominationConfirmationModal(existingNominationPostKey);
-            duplicateNomination = true;
-            break;
+        if (array != null) {
+          for (const existingNominationPostKey of Object.keys(array)) {
+            const existingNomination = array[existingNominationPostKey];
+            if (
+              existingNomination.category === category &&
+              existingNomination.nominee === nominee
+            ) {
+              console.log(existingNominationPostKey);
+              this.setNominationID(existingNominationPostKey);
+              console.log(this.state.nominationID);
+              this.showDuplicateNominationConfirmationModal(
+                existingNominationPostKey
+              );
+              duplicateNomination = true;
+              break;
+            }
           }
         }
         if (!duplicateNomination) {
@@ -395,14 +397,19 @@ class NominationForm extends React.Component<any, any> {
     });
   };
 
-  private showDuplicateNominationConfirmationModal = (existingNominationPostKey: string) => {
+  private showDuplicateNominationConfirmationModal = (
+    existingNominationPostKey: string
+  ) => {
     confirmAlert({
-      title: "Nomination Already Exist",
+      title: "Nomination Already Exists!",
       message: "Do you want to put your justification as a comment?",
       buttons: [
         {
           label: "Comment",
-          onClick: () => this.duplicateNominationJustificationToComment(existingNominationPostKey)
+          onClick: () =>
+            this.duplicateNominationJustificationToComment(
+              existingNominationPostKey
+            )
         },
         {
           label: "Cancel"
@@ -411,13 +418,12 @@ class NominationForm extends React.Component<any, any> {
     });
   };
 
-  private duplicateNominationJustificationToComment(existingNominationPostKey: string) {
+  private duplicateNominationJustificationToComment(
+    existingNominationPostKey: string
+  ) {
     // console.log("existing: " + existingNominationPostKey);
     // this.setNominationID(existingNominationPostKey);
-    this.makeComment(
-      existingNominationPostKey,
-      this.state.justification
-    );
+    this.makeComment(existingNominationPostKey, this.state.justification);
     this.makeUpvote(existingNominationPostKey);
     this.setState({
       completed: true
@@ -425,7 +431,10 @@ class NominationForm extends React.Component<any, any> {
     this.redirectToNomination();
   }
 
-  private createNewNomination = (defaultDatabase: firebase.database.Database, newPostKey: string) => {
+  private createNewNomination = (
+    defaultDatabase: firebase.database.Database,
+    newPostKey: string
+  ) => {
     // Get a key for a new Post.
     // const newPostKey = defaultDatabase
     //   .ref()
@@ -446,16 +455,20 @@ class NominationForm extends React.Component<any, any> {
       nominee: nomineeid,
       upvoters: {
         [userid]: true
-      }
+      },
+      key: newPostKey
     };
-    updates["/nominators/" + userid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominee: this.state.nominee.value
-    };
-    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominator: userid
-    };
+
+    if (newPostKey != null) {
+      const nomination = {
+        [newPostKey]: true
+      };
+      const nominatorPath = defaultDatabase.ref("nominators/" + userid);
+      const nomineePath = defaultDatabase.ref("nominees/" + nomineeid);
+
+      nominatorPath.update(nomination);
+      nomineePath.update(nomination);
+    }
 
     const nomCat = {
       [nomineeid]: true
@@ -514,6 +527,13 @@ class NominationForm extends React.Component<any, any> {
       "/nominations/" + nominationid + "/upvoters/"
     );
 
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [nominationPostKey]: true
+    };
+
+    nominatorPath.update(nomination);
+
     return upvoterPath.update(upvoter);
   };
   /*
@@ -530,9 +550,6 @@ class NominationForm extends React.Component<any, any> {
   
       return upvoterPath.remove();
     };*/
-
-
-
 }
 
 export default NominationForm;

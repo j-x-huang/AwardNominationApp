@@ -77,8 +77,29 @@ const styles = (theme: Theme) =>
     selectEmpty: {
       marginTop: theme.spacing.unit * 2
     },
-    tabSelected: {}
+    tabSelected: {},
+    select: {
+      // I hate material-ui ahhhh
+      "&:hover:not(.dummy):not(.dummy):not(.dummy):before": {
+        borderBottom: "2px solid #8241aa"
+      },
+      "&:before": {
+        borderBottom: "1px solid #a476c1"
+      },
+      "&:after": {
+        "&$focused": {
+          color: "#8241aa"
+        },
+        borderBottom: "1px solid #a476c1"
+      }
+    }
   });
+
+const StyledInputLabel = withStyles({
+  shrink: {
+    color: "#B9BCC0 !important"
+  }
+})(InputLabel);
 
 export interface IAwardsProps extends WithStyles<typeof styles> {}
 
@@ -158,16 +179,21 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.props.awardsContent.getTabNomination(str, this.retrieveUserDetails);
   }
 
-  public retrieveUserDetails = (
-    snapshot: firebase.database.DataSnapshot,
-    category: string
-  ) => {
+  public retrieveUserDetails = (snapshot: any[], category: string) => {
     const nominations: object[] = [];
     const nominees: string[] = [];
 
     snapshot.forEach(childSnapshot => {
-      const item = childSnapshot.val();
+      let item: any;
+      try {
+        item = childSnapshot.val();
+      } catch (err) {
+        item = childSnapshot;
+      }
 
+      console.log("Nomination details:");
+      console.log(category);
+      console.log(item);
       if (nominees.indexOf(item.nominee) === -1) {
         nominees.push(item.nominee);
       }
@@ -178,7 +204,12 @@ class Awards extends React.Component<any, IAwardsStates> {
         // todo
       } else {
         snapshot.forEach(childSnapshot => {
-          const item = childSnapshot.val();
+          let item: any;
+          try {
+            item = childSnapshot.val();
+          } catch (err) {
+            item = childSnapshot;
+          }
           const name =
             users[item.nominee] === undefined ? "" : users[item.nominee].name;
           let nomination;
@@ -186,14 +217,14 @@ class Awards extends React.Component<any, IAwardsStates> {
           nomination = {
             img:
               "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
-            id: childSnapshot.key,
+            id: item.key,
             description: item.justification,
             objectId: item.nominee,
             title: name
           };
           nominations.push(nomination);
         });
-
+        console.log(nominations);
         this.updateAllNominations(category, nominations, nominees);
       }
     });
@@ -206,7 +237,6 @@ class Awards extends React.Component<any, IAwardsStates> {
     nominees: any[]
   ) => {
     console.log("updateAllNominations called");
-
     const awards = [...this.state.awards];
 
     const index = awards.findIndex(c => {
@@ -255,17 +285,10 @@ class Awards extends React.Component<any, IAwardsStates> {
     });
   };
 
-  public goBack = () => {
-    this.props.history.push("/" + this.props.awardsContent.getReturnURL());
-  };
-
   public openModal = () => {
     return (
       <div>
-        <Modal
-          nominationID={this.state.selectedNomination}
-          onClose={this.goBack}
-        />
+        <Modal nominationID={this.state.selectedNomination} />
       </div>
     );
   };
@@ -373,6 +396,9 @@ class Awards extends React.Component<any, IAwardsStates> {
       this.previousLocation !== location
     ); */
 
+    console.log("Award state:");
+    console.log(this.state.awards);
+
     return (
       <div>
         {this.state.isLoading ? (
@@ -390,9 +416,7 @@ class Awards extends React.Component<any, IAwardsStates> {
                 value={value}
                 onChange={this.handleChange}
                 centered={true}
-                classes={{
-                  indicator: classes.tabsIndicator
-                }}
+                classes={{ indicator: classes.tabsIndicator }}
               >
                 {awards.map((award, i) => (
                   <Tab
@@ -429,19 +453,17 @@ class Awards extends React.Component<any, IAwardsStates> {
                 </div>
               </FormControl>
               <FormControl className="formControl" style={{ float: "right" }}>
-                <InputLabel
-                  style={{
-                    fontFamily: "PT Sans"
-                  }}
+                <StyledInputLabel
+                  style={{ fontFamily: "PT Sans" }}
+                  className={classes.select}
                 >
                   Sort By
-                </InputLabel>
+                </StyledInputLabel>
                 <Select
+                  className={classes.select}
                   value={this.state.sortBy}
                   onChange={this.handleSort}
-                  inputProps={{
-                    name: "sortBy"
-                  }}
+                  inputProps={{ name: "sortBy" }}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -458,11 +480,17 @@ class Awards extends React.Component<any, IAwardsStates> {
                     key={i}
                     cards={award.nominations}
                     onSelect={this.handleSelect}
+                    category={award.award}
                   />
                 )
             )}
             <Route
-              path={"/awards/nomination/" + this.state.selectedNomination}
+              path={
+                "/" +
+                this.props.awardsContent.getReturnURL() +
+                "/nomination/" +
+                this.state.selectedNomination
+              }
               render={this.openModal}
             />
           </div>

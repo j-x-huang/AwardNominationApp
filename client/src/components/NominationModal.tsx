@@ -11,6 +11,7 @@ import CommentAdder from "./CommentAdder";
 import { Redirect } from "react-router-dom";
 import { getUser } from "../auth";
 import MDSpinner from "react-md-spinner";
+import { withRouter } from "react-router-dom";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -31,7 +32,8 @@ class NominationModal extends React.Component<any, any> {
     isLoading: true,
     isLocked: false,
     profilePic:
-      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+    lockPath: firebase.database().ref("/lockdown")
   };
 
   public static defaultProps = {
@@ -44,7 +46,12 @@ class NominationModal extends React.Component<any, any> {
 
   public componentDidMount() {
     this.readLockState();
-    console.log("Modal mounted! Location: " + this.props.location);
+    console.log("Modal mounted! Location: ");
+    console.log(this.props.history);
+    console.log(this.props.location);
+    console.log("Modal path name:");
+    console.log(this.props.location.pathname);
+    console.log("Nomination ID:" + this.props.nominationID);
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -70,41 +77,30 @@ class NominationModal extends React.Component<any, any> {
     });
   }
 
-  /* public componentWillReceiveProps() {
-    console.log("console will receive props");
-
-    this.getNominationDetails(this.props.nominationID);
-    // Get the nomination info and
-  } */
-
   public getNominationDetails(nominationID: string) {
     console.log("Function called");
 
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
 
-    try {
-      nomRef
-        .child("nominations")
-        .child(nominationID)
-        .once("value", snapshot => {
-          if (snapshot != null) {
-            this.saveSnapshot(snapshot);
-          }
-        });
-    } catch (error) {
-      this.setState({ failed: true });
-    }
+    // try {
+    nomRef
+      .child("nominations")
+      .child(nominationID)
+      .once("value", snapshot => {
+        if (snapshot != null) {
+          this.saveSnapshot(snapshot);
+        }
+      });
+    // } catch (error) {
+    //   this.setState({ failed: true });
+    // }
   }
 
   private readLockState = () => {
-    const defaultDatabase = firebase.database();
-    const lockPath = defaultDatabase.ref("/lockdown");
-    lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
-      this.setState({ isLocked: value.val().lockState });
-      return value.val().lockState;
-    });
+    this.state.lockPath.on("value", snap =>
+      this.setState({ isLocked: snap!.val().lockState })
+    );
   };
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
@@ -297,7 +293,7 @@ class NominationModal extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-light bold-this"
-              onClick={this.props.onClose || this.onClose}
+              onClick={this.onClose}
             >
               <div className="div-centre">
                 <Octicon
@@ -429,6 +425,13 @@ class NominationModal extends React.Component<any, any> {
       "/nominations/" + this.props.nominationID + "/upvoters/"
     );
 
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [this.props.nominationID]: true
+    };
+
+    nominatorPath.update(nomination);
+
     return upvoterPath.update(upvoter);
   };
 
@@ -441,6 +444,11 @@ class NominationModal extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref(
       "/nominations/" + this.props.nominationID + "/upvoters/" + uid
     );
+
+    const nominatorPath = defaultDatabase.ref(
+      "nominators/" + uid + "/" + this.props.nominationID
+    );
+    nominatorPath.remove();
 
     return upvoterPath.remove();
   };
@@ -480,4 +488,4 @@ class NominationModal extends React.Component<any, any> {
   };
 }
 
-export default NominationModal;
+export default withRouter(NominationModal);
