@@ -32,7 +32,7 @@ class Admin extends React.Component<any, any> {
         <div className="adminOptions">
           <AdminOption
             title="Tally Nominations"
-            desc="Export top nominations of each category"
+            desc="Export nominations of each category"
             buttonDesc="Export Results"
             onBtnClick={this.filterTally}
             disabled={false}
