@@ -8,36 +8,44 @@ import Admin from "./components/Admin";
 import AwardsContent from "./Support/AwardsContent";
 import AwardCategories from "./Support/AwardCategories";
 import AwardMyNominations from "./Support/AwardMyNominations";
+import * as firebase from "firebase";
 
 import { getAdminStatus } from "./MicrosoftGraphClient";
 
 class Router extends React.Component {
-
   public componentDidMount() {
+    this.readLockState();
     getAdminStatus((isAdmin, err) => {
       if (err) {
         // todo
       } else {
         this.setState({ isAdmin });
       }
-    })
+    });
   }
 
   public state = {
-    isAdmin: false
-  }
+    isAdmin: false,
+    lockPath: firebase.database().ref("/lockdown"),
+    isLocked: false
+  };
+
+  private readLockState = () => {
+    this.state.lockPath.on("value", snap =>
+      this.setState({ isLocked: snap!.val().lockState })
+    );
+  };
 
   public render() {
-
     const getAwardComponent = (awardsContent: AwardsContent) => (
       props: RouteComponentProps<{}>
     ) => (
-        <Awards
-          {...props}
-          key={awardsContent.getReturnURL()}
-          awardsContent={awardsContent}
-        />
-      );
+      <Awards
+        {...props}
+        key={awardsContent.getReturnURL()}
+        awardsContent={awardsContent}
+      />
+    );
 
     return (
       <Switch>
@@ -46,19 +54,19 @@ class Router extends React.Component {
           path="/awards"
           render={getAwardComponent(new AwardCategories())}
         />
-        <Route path="/nominate" component={NominationForm} />
+        {!this.state.isLocked && (
+          <Route path="/nominate" component={NominationForm} />
+        )}
         <Route path="/nominationscomplete" component={NominationComplete} />
         <Route
           path="/mynominations"
           render={getAwardComponent(new AwardMyNominations())}
         />
-        {this.state.isAdmin && (
-          <Route path="/admin" component={Admin} />
-        )}
+        {this.state.isAdmin && <Route path="/admin" component={Admin} />}
 
         {/* Default page when all the other links fail */}
+        <Redirect to="/home" />
         <Route component={Home} />
-        <Redirect to ="/home" />
       </Switch>
     );
   }
