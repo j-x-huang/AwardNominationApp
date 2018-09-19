@@ -54,7 +54,7 @@ class AwardMyNominations extends AwardsContent {
     tab: string,
     retrieveUserDetails: any
   ) => {
-    nomRef.on("value", snapshot => {
+    nomRef.once("value", snapshot => {
       if (snapshot != null) {
         console.log("Nominations fetch successful:");
         console.log(tab);
@@ -73,7 +73,7 @@ class AwardMyNominations extends AwardsContent {
             nomRef2
               .child("nominations")
               .child(key)
-              .on("value", snapshotChild => {
+              .once("value", snapshotChild => {
                 if (snapshotChild != null) {
                   if (retrieveUserDetails != null) {
                     snapshots.push(snapshotChild.val());
