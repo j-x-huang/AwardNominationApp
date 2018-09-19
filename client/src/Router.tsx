@@ -65,8 +65,8 @@ class Router extends React.Component {
         {this.state.isAdmin && <Route path="/admin" component={Admin} />}
 
         {/* Default page when all the other links fail */}
-        <Redirect to="/home" />
         <Route component={Home} />
+        <Redirect to="/home" />
       </Switch>
     );
   }
