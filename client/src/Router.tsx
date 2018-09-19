@@ -1,4 +1,5 @@
 import * as React from "react";
+// import { Switch, Route, RouteComponentProps } from "react-router-dom";
 import { Switch, Route, Redirect, RouteComponentProps } from "react-router-dom";
 import Awards from "./components/Awards";
 import NominationForm from "./components/NominationForm";
@@ -29,6 +30,8 @@ class Router extends React.Component {
   
   public render() {
     
+    const isAdmin = this.state.isAdmin;
+
     const getAwardComponent = (awardsContent: AwardsContent) => (
       props: RouteComponentProps<{}>
     ) => (
@@ -52,11 +55,10 @@ class Router extends React.Component {
           path="/mynominations"
           render={getAwardComponent(new AwardMyNominations())}
         />
-        {/* TODO: Should be pulling from a variable somewhere */}
-        {this.state.isAdmin ? (
+        {isAdmin ? (
           <Route path="/admin" component={Admin} />
         ) : (
-          <Redirect to="/home" />
+          <Redirect to= "/home" />
         )}
         <Route component={Home} />
       </Switch>
