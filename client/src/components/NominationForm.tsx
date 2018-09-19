@@ -70,38 +70,38 @@ class NominationForm extends React.Component<any, any> {
     console.log(selection);
     if (selection === 0) {
       neoNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) === -1
+        staff => this.beingPurple.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) > -1
+        staff => this.beingPurple.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 1) {
       neoNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) === -1
+        staff => this.oneSmallStep.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) > -1
+        staff => this.oneSmallStep.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 2) {
       neoNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) === -1
+        staff => this.newHorizon.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) > -1
+        staff => this.newHorizon.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 3) {
       neoNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) === -1
+        staff => this.skyHigh.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) > -1
+        staff => this.skyHigh.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 4) {
       neoNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) === -1
+        staff => this.starCrew.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) > -1
+        staff => this.starCrew.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     }
 
@@ -109,12 +109,11 @@ class NominationForm extends React.Component<any, any> {
       console.log(nom);
       nom.label = nom.name + " (nominated) ";
       nom.isDisabled = false;
-      // nom.isDisabled = true;
     });
 
     neoNominees.forEach(nom => {
-      nom.isDisabled = false;
       nom.label = nom.name;
+      nom.isDisabled = false;
     });
 
     const superNominees = actualNominees.concat(neoNominees);
