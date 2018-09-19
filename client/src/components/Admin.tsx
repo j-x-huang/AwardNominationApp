@@ -35,7 +35,7 @@ class Admin extends React.Component<any, any> {
             title="Export Database Locally"
             desc="Save Firebase JSON table"
             buttonDesc="Export Database"
-            onBtnClick={this.filterTally}
+            onBtnClick={this.exportDatabase}
             disabled={false}
             dangerous={false}
           />
@@ -128,6 +128,17 @@ class Admin extends React.Component<any, any> {
       type: "text/plain;charset=utf-8"
     });
     saveAs(blob, "hello world.txt");
+  };
+
+  private exportDatabase = () => {
+    const defaultDatabase = firebase.database();
+    const ref = defaultDatabase.ref();
+    ref.once("value", snapshot => {
+      const blob = new Blob([JSON.stringify(snapshot.val())], {
+        type: "application/json;charset=utf-8"
+      });
+      saveAs(blob, "award-nomination-export.json");
+    });
   };
 }
 
