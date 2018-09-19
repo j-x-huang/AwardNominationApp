@@ -145,14 +145,6 @@ class Admin extends React.Component<any, any> {
   };
 
   private filterTally = () => {
-    // const users = [["First Name", "Last Name", "Age"]]
-
-    // // console.log("I will filter and tally");
-    // const wb = XLSX.utils.book_new()
-    // const wsAll = XLSX.utils.aoa_to_sheet(users)
-    // XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
-    // XLSX.writeFile(wb, "export-demo.csv")
-
     const defaultDatabase = firebase.database();
     const ref = defaultDatabase.ref("nominations");
     ref.once("value", snapshot => {
@@ -170,21 +162,21 @@ class Admin extends React.Component<any, any> {
         console.log(users);
         snapshot.forEach(nomination => {
           const item = nomination.val();
-          console.log(item.category);
-          console.log(users[item.nominee].name);
+          const category = item.category;
+          const name = users[item.nominee].name;
+          let tally = 0;
           if (item.upvoters != null) {
-            console.log(Object.keys(item.upvoters).length);
-          } else {
-            console.log(0);
+            tally = Object.keys(item.upvoters).length;
           }
+          this.csvLine(category, name, tally);
         });
+
+        const blob = new Blob(this.state.finalTally, {
+          type: "text/plain;charset=utf-8"
+        });
+        saveAs(blob, "Tally.csv");
       });
     });
-
-    const blob = new Blob(this.state.finalTally, {
-      type: "text/plain;charset=utf-8"
-    });
-    saveAs(blob, "Tally.csv");
   };
 
   private exportDatabase = () => {
