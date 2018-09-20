@@ -328,6 +328,11 @@ a:visited {
   padding-right: 2em;
 }
 
+#loginWrapper {
+  width: 100%;
+  background-color: #ffffff;
+}
+
 .feelix-card {
   padding: 1.6rem;
   background-color: #ffffff;

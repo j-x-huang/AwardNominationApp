@@ -5,9 +5,9 @@ import NominationForm from "./components/NominationForm";
 import Home from "./components/Home";
 import NominationComplete from "./components/NominationComplete";
 import Admin from "./components/Admin";
-import AwardsContent from "./Support/AwardsContent";
-import AwardCategories from "./Support/AwardCategories";
-import AwardMyNominations from "./Support/AwardMyNominations";
+import AwardsContent from "./awards-data/AwardsContent";
+import AwardCategories from "./awards-data/AwardCategories";
+import AwardMyNominations from "./awards-data/AwardMyNominations";
 import * as firebase from "firebase";
 
 import { getAdminStatus } from "./MicrosoftGraphClient";
