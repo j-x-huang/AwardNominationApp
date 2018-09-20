@@ -22,24 +22,18 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public allNominees = [{ value: "", name: "", label: "", isDisabled: false }];
-  public categories = [
-    "Being Purple",
-    "One Small Step",
-    "New Horizon",
-    "Sky High",
-    "Star Crew"
-  ];
-  public beingPurple = [] as any[];
-  public oneSmallStep = [] as any[];
-  public newHorizon = [] as any[];
-  public skyHigh = [] as any[];
-  public starCrew = [] as any[];
+  public cat0 = [] as any[];
+  public cat1 = [] as any[];
+  public cat2 = [] as any[];
+  public cat3 = [] as any[];
+  public cat4 = [] as any[];
 
   constructor(props: any) {
     super(props);
   }
 
   public state = {
+    categories: ["", "", "", "", ""],
     category: "",
     justification: "",
     nominator: "",
@@ -65,42 +59,62 @@ class NominationForm extends React.Component<any, any> {
     let neoNominees = [{ value: "", name: "", label: "", isDisabled: false }];
     let actualNominees = new Array<any>();
 
-    const selection = this.categories.indexOf(category);
+    const selection = this.state.categories.indexOf(category);
     console.log(selection);
     if (selection === 0) {
       neoNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat0.indexOf(staff.value) === -1 &&
+          staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat0.indexOf(staff.value) > -1 &&
+          staff.value !== getUser().profile.oid
       );
     } else if (selection === 1) {
       neoNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat1.indexOf(staff.value) === -1 &&
+          staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat1.indexOf(staff.value) > -1 &&
+          staff.value !== getUser().profile.oid
       );
     } else if (selection === 2) {
       neoNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat2.indexOf(staff.value) === -1 &&
+          staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat2.indexOf(staff.value) > -1 &&
+          staff.value !== getUser().profile.oid
       );
     } else if (selection === 3) {
       neoNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat3.indexOf(staff.value) === -1 &&
+          staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat3.indexOf(staff.value) > -1 &&
+          staff.value !== getUser().profile.oid
       );
     } else if (selection === 4) {
       neoNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat4.indexOf(staff.value) === -1 &&
+          staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.cat4.indexOf(staff.value) > -1 &&
+          staff.value !== getUser().profile.oid
       );
     }
 
@@ -152,12 +166,23 @@ class NominationForm extends React.Component<any, any> {
         this.setState({ nominees: [...this.allNominees] });
       }
     });
-    this.getNominationByCategory();
+    const defaultDatabase = firebase.database();
+    const catRef = defaultDatabase.ref("category");
+    catRef.once("value", snapshot => {
+      const cats = [] as any[];
+      snapshot.forEach(childSnapshot => {
+        const item = childSnapshot.val();
+        cats.push(item);
+      });
+      this.setState({ categories: cats });
+      console.log(this.state.categories);
+      this.getNominationByCategory();
+    });
   }
 
   public render() {
     const { category, nominee, nominees, completed } = this.state;
-    const options = this.categories.map((loan, key) => {
+    const options = this.state.categories.map((loan, key) => {
       const isCurrent = this.state.category === loan;
       return (
         <div key={key} className="radioPad">
@@ -269,6 +294,7 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public getNominationByCategory() {
+    console.log("GETNOMINATIONBYCATEGORY");
     const returnArr: object[] = [];
 
     const defaultDatabase = firebase.database();
@@ -278,29 +304,29 @@ class NominationForm extends React.Component<any, any> {
         snapshot.forEach(childSnapshot => {
           if (childSnapshot != null) {
             switch (childSnapshot.key) {
-              case "Being Purple":
+              case this.state.categories[0]:
                 Object.keys(childSnapshot.val()).forEach(key => {
-                  this.beingPurple.push(key);
+                  this.cat0.push(key);
                 });
                 break;
-              case "One Small Step":
+              case this.state.categories[1]:
                 Object.keys(childSnapshot.val()).forEach(key => {
-                  this.oneSmallStep.push(key);
+                  this.cat1.push(key);
                 });
                 break;
-              case "New Horizon":
+              case this.state.categories[2]:
                 Object.keys(childSnapshot.val()).forEach(key => {
-                  this.newHorizon.push(key);
+                  this.cat2.push(key);
                 });
                 break;
-              case "Sky High":
+              case this.state.categories[3]:
                 Object.keys(childSnapshot.val()).forEach(key => {
-                  this.skyHigh.push(key);
+                  this.cat3.push(key);
                 });
                 break;
-              case "Star Crew":
+              case this.state.categories[4]:
                 Object.keys(childSnapshot.val()).forEach(key => {
-                  this.starCrew.push(key);
+                  this.cat4.push(key);
                 });
                 break;
             }
