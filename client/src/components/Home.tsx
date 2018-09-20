@@ -14,7 +14,11 @@ class Home extends React.Component<any, any> {
           <div id="homeLabelText">Ignite Awards</div>{" "}
         </div>
         <img
-          style={{ width: "100%" }}
+          style={{
+            width: "100vw",
+            height: "calc(100vh - 80px)",
+            objectFit: "cover"
+          }}
           src="http://hdqwalls.com/download/purple-sunset-in-ocean-2560x1440.jpg"
         />
       </div>
