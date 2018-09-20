@@ -14,7 +14,7 @@ class LoginPage extends React.Component<any, any> {
       <div id="loginBg">
         <img
           id="loginBgPic"
-          src="https://i.pinimg.com/originals/d5/72/81/d572813cf22c060d8dd2c4bef95bb926.jpg"
+          src="https://orig00.deviantart.net/e641/f/2018/043/e/7/pretty_by_edgelordxxaqua-dc2zbp6.jpg"
         />
         <div className="loginContainer feelix-card">
           <img id="loginLogo" src={logo1} alt="logo" />
