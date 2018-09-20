@@ -59,6 +59,7 @@ class AwardMyNominations extends AwardsContent {
         console.log("Nominations fetch successful:");
         console.log(tab);
         console.log(snapshot);
+        console.log(snapshot.val());
         const data = snapshot.val();
 
         if (data != null) {
@@ -92,6 +93,9 @@ class AwardMyNominations extends AwardsContent {
                 }
               });
           });
+        } else {
+          const snapshots: any[] = [];
+          console.log(retrieveUserDetails(snapshots, tab));
         }
       }
     });

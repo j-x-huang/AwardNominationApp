@@ -183,51 +183,56 @@ class Awards extends React.Component<any, IAwardsStates> {
     const nominations: object[] = [];
     const nominees: string[] = [];
 
-    snapshot.forEach(childSnapshot => {
-      let item: any;
-      try {
-        item = childSnapshot.val();
-      } catch (err) {
-        item = childSnapshot;
-      }
+    if (snapshot.length <= 0) {
+      this.setState({ isLoading: false });
+    } else {
+      snapshot.forEach(childSnapshot => {
+        let item: any;
+        try {
+          item = childSnapshot.val();
+        } catch (err) {
+          item = childSnapshot;
+        }
 
-      console.log("Nomination details:");
-      console.log(category);
-      console.log(item);
-      if (nominees.indexOf(item.nominee) === -1) {
-        nominees.push(item.nominee);
-      }
-    });
+        console.log("Nomination details:");
+        console.log(category);
+        console.log(item);
+        if (nominees.indexOf(item.nominee) === -1) {
+          nominees.push(item.nominee);
+        }
+      });
 
-    getUsersByObjectId(nominees, (err, users) => {
-      if (err) {
-        // todo
-      } else {
-        snapshot.forEach(childSnapshot => {
-          let item: any;
-          try {
-            item = childSnapshot.val();
-          } catch (err) {
-            item = childSnapshot;
-          }
-          const name =
-            users[item.nominee] === undefined ? "" : users[item.nominee].name;
-          let nomination;
+      getUsersByObjectId(nominees, (err, users) => {
+        if (err) {
+          // todo
+        } else {
+          snapshot.forEach(childSnapshot => {
+            let item: any;
+            try {
+              item = childSnapshot.val();
+            } catch (err) {
+              item = childSnapshot;
+            }
+            const name =
+              users[item.nominee] === undefined ? "" : users[item.nominee].name;
+            let nomination;
 
-          nomination = {
-            img:
-              "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
-            id: item.key,
-            description: item.justification,
-            objectId: item.nominee,
-            title: name
-          };
-          nominations.push(nomination);
-        });
-        console.log(nominations);
-        this.updateAllNominations(category, nominations, nominees);
-      }
-    });
+            nomination = {
+              img:
+                "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+              id: item.key,
+              description: item.justification,
+              objectId: item.nominee,
+              title: name
+            };
+            nominations.push(nomination);
+          });
+          console.log(nominations);
+          this.updateAllNominations(category, nominations, nominees);
+        }
+      });
+    }
+
     return nominations;
   };
 
@@ -236,7 +241,7 @@ class Awards extends React.Component<any, IAwardsStates> {
     nominations: any[],
     nominees: any[]
   ) => {
-    console.log("updateAllNominations called");
+    console.log("updateAllNominations called, tab: " + category);
     const awards = [...this.state.awards];
 
     const index = awards.findIndex(c => {
