@@ -12,10 +12,7 @@ class LoginPage extends React.Component<any, any> {
   public render() {
     return (
       <div id="loginBg">
-        <img
-          id="loginBgPic"
-          src="https://i.pinimg.com/originals/01/e7/e2/01e7e206ff9a0b29fb4bac269140dda6.jpg"
-        />
+        <div id="login-border-top" />
         <div id="loginPage">
           <img id="loginLogo" src={logo1} alt="logo" />
           <p id="loginDesc">MYOB staff, come this way please.</p>

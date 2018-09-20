@@ -299,9 +299,18 @@ a:visited {
 }
 
 #loginBg {
-  background-color: #f3ffff;
+  background-color: #f5f5f5;
   height: 100vh;
   overflow: hidden;
+}
+
+#login-border-top {
+  /* background: -moz-linear-gradient(-45deg, #8241aa 35%, #a476c1 100%);
+  background: -webkit-linear-gradient(-45deg, #8241aa 35%, #a476c1 100%);
+  background: linear-gradient(135deg, #8241aa 35%, #a476c1 100%); */
+  background-color: #8241aa;
+  height: 3px;
+  width: 100%;
 }
 
 #loginBgPic {
