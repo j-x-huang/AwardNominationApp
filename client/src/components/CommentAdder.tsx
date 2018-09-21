@@ -34,6 +34,7 @@ class CommentAdder extends React.Component<any, any> {
           value={comment}
           onChange={onCommentChange}
           onKeyPress={this.handleEnterKeyPress}
+          disabled={this.state.isLocked}
         />
         <button
           type="button"
@@ -61,7 +62,7 @@ class CommentAdder extends React.Component<any, any> {
   };
 
   private readLockState = () => {
-    this.state.lockPath.on("value", snap => 
+    this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
     );
   };

@@ -15,7 +15,7 @@ class Home extends React.Component<any, any> {
         </div>
         <img
           style={{
-            width: "100vw",
+            width: "100%",
             height: "calc(100vh - 80px)",
             objectFit: "cover"
           }}
