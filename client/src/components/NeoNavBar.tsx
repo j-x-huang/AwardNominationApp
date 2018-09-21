@@ -1,16 +1,21 @@
 import * as React from "react";
 import logo1 from "../images/logo1.png";
 import { getUser, logOutUser } from "../auth";
-import { getMyImage } from "../MicrosoftGraphClient";
+import { getAdminStatus, getMyImage } from "../MicrosoftGraphClient";
 import { NavLink } from "react-router-dom";
+import * as firebase from "firebase";
 
 class NavBar extends React.Component<any, any> {
   public state = {
     profilePic:
-      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+      isLocked: false,
+      isAdmin: false,
+      lockPath: firebase.database().ref("/lockdown")
   };
 
   public componentDidMount() {
+    this.readLockState();
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -21,10 +26,25 @@ class NavBar extends React.Component<any, any> {
       }
       return;
     });
+    getAdminStatus((isAdmin, err) => {
+      if (err) {
+        // todo
+      } else {
+        this.setState({ isAdmin });
+      }
+    })
   }
+  private readLockState = () => {
+    this.state.lockPath.on("value", snap => 
+      this.setState({ isLocked: snap!.val().lockState })
+    );
+  };
 
   public render() {
     const user = getUser();
+
+    const isAdmin = this.state.isAdmin;
+
     const profileName = user.profile.name
       .split(" ")
       .slice(0, -1)
@@ -66,7 +86,7 @@ class NavBar extends React.Component<any, any> {
                 <span>AWARDS</span>
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li className="nav-item" style={this.state.isLocked ? { display: "none" } : {}}>
               <NavLink
                 activeClassName="activeLink"
                 to="/nominate"
@@ -84,6 +104,16 @@ class NavBar extends React.Component<any, any> {
                 <span>MY NOMINATIONS</span>
               </NavLink>
             </li>
+            {isAdmin ?
+              <li className="nav-item">
+                <NavLink
+                  activeClassName="activeLink"
+                  to="/admin"
+                  className="nav-link"
+                >
+                  <span>ADMIN</span>
+                </NavLink>
+              </li> : null}
           </ul>
           <ul className="nav navbar-nav ml-auto">
             <li className="dropdown links nav-item">

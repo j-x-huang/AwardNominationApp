@@ -6,6 +6,7 @@ import { getAllUserDetails } from "../MicrosoftGraphClient";
 import NominationComplete from "./NominationComplete";
 import Modal from "./NominationModal";
 import { Route } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
 
 class NominationForm extends React.Component<any, any> {
   public previousLocation = this.props.location;
@@ -20,7 +21,7 @@ class NominationForm extends React.Component<any, any> {
     }
   }
 
-  public allNominees = [{ value: "", label: "", isDisabled: false }];
+  public allNominees = [{ value: "", name: "", label: "", isDisabled: false }];
   public categories = [
     "Being Purple",
     "One Small Step",
@@ -42,61 +43,75 @@ class NominationForm extends React.Component<any, any> {
     category: "",
     justification: "",
     nominator: "",
-    nominee: { value: "", label: "", isDisabled: false },
-    nominationID: "-LM4wBg-yv0zNphsbcMz",
+    nominee: { value: "", name: "", label: "", isDisabled: false },
+    nominationID: "",
     score: 1,
     nominees: new Array<any>(),
-    completed: false
+    completed: false,
+    isLocked: false
+  };
+
+  private readLockState = () => {
+    const defaultDatabase = firebase.database();
+    const lockPath = defaultDatabase.ref("/lockdown");
+    lockPath.once("value").then(value => {
+      console.log(value.val().lockState);
+      this.setState({ isLocked: value.val().lockState });
+      return value.val().lockState;
+    });
   };
 
   public updateNomineeList = (category: string) => {
-    let neoNominees = [{ value: "", label: "", isDisabled: false }];
+    let neoNominees = [{ value: "", name: "", label: "", isDisabled: false }];
     let actualNominees = new Array<any>();
 
     const selection = this.categories.indexOf(category);
     console.log(selection);
     if (selection === 0) {
       neoNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) === -1
+        staff => this.beingPurple.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) > -1
+        staff => this.beingPurple.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 1) {
       neoNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) === -1
+        staff => this.oneSmallStep.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) > -1
+        staff => this.oneSmallStep.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 2) {
       neoNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) === -1
+        staff => this.newHorizon.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) > -1
+        staff => this.newHorizon.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 3) {
       neoNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) === -1
+        staff => this.skyHigh.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) > -1
+        staff => this.skyHigh.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     } else if (selection === 4) {
       neoNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) === -1
+        staff => this.starCrew.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
       );
       actualNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) > -1
+        staff => this.starCrew.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
       );
     }
 
     actualNominees.forEach(nom => {
-      nom.isDisabled = true;
+      console.log(nom);
+      nom.label = nom.name + " (nominated)";
+      nom.isDisabled = false;
     });
 
     neoNominees.forEach(nom => {
+      nom.label = nom.name;
       nom.isDisabled = false;
     });
 
@@ -108,7 +123,7 @@ class NominationForm extends React.Component<any, any> {
   public categoryChange = (event: any) => {
     const cat = event.target.value;
     this.setState({ category: cat });
-    this.setState({ nominee: { value: "", label: "" } });
+    this.setState({ nominee: { value: "", name: "", label: "" } });
     this.updateNomineeList(cat);
   };
 
@@ -122,12 +137,14 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public componentDidMount() {
+    this.readLockState();
     getAllUserDetails((err, usersDetails) => {
       if (err) {
         // TODO
       } else {
         this.allNominees = usersDetails.map((suggestion: any) => ({
           value: suggestion.id,
+          name: suggestion.name,
           label: suggestion.name,
           isDisabled: false
         }));
@@ -171,11 +188,15 @@ class NominationForm extends React.Component<any, any> {
         {completed ? (
           <NominationComplete
             category={category}
-            nominee={nominee.label}
+            nominee={
+              nominee.label.includes(" (nominated)")
+                ? nominee.label.replace(" (nominated)", "")
+                : nominee.label
+            }
             onClick={this.redirectToNomination}
           />
         ) : (
-          <form className="feelix-card">
+          <form className="feelix-card" id="nominateDiv">
             <h5> Nominate a deserving candidate </h5>
             <hr />
             <div id="categorySelect">{options}</div>
@@ -203,9 +224,10 @@ class NominationForm extends React.Component<any, any> {
             <div className="overflowHid">
               <button
                 type="button"
-                className="btn btn-primary float-right"
+                className="btn btn-primary btn-purple float-right"
                 disabled={this.checkFieldsFilled() ? false : true}
                 onClick={this.handleClick}
+                style={this.state.isLocked ? { display: "none" } : {}}
               >
                 Nominate
               </button>
@@ -234,14 +256,15 @@ class NominationForm extends React.Component<any, any> {
 
   private handleClick = () => {
     this.makeNomination();
-    this.setState({
-      completed: true
-    });
+    // console.log("SADFASDFSA");
+    // this.setState({
+    //   completed: true
+    // });
   };
 
-  private setNominationID = (id: string | null) => {
+  private setNominationID = (ID: string) => {
     this.setState({
-      nominationID: id
+      nominationID: ID
     });
   };
 
@@ -296,20 +319,18 @@ class NominationForm extends React.Component<any, any> {
   }
 
   private redirectToNomination = () => {
+    console.log(this.state.nominationID);
     this.props.history.push({
       pathname: "/nominate/nomination/" + this.state.nominationID,
       state: { modal: true }
     });
-  };
-
-  public goBack = () => {
-    this.props.history.push("/nominate");
+    console.log(this.state.nominationID);
   };
 
   public openModal = () => {
     return (
       <div>
-        <Modal nominationID={this.state.nominationID} onClose={this.goBack} />
+        <Modal nominationID={this.state.nominationID} />
       </div>
     );
   };
@@ -319,42 +340,106 @@ class NominationForm extends React.Component<any, any> {
     const category = this.state.category;
     const nominee = this.state.nominee.value;
 
+    let duplicateNomination = false;
+
     // Check if nomination exist
     defaultDatabase
       .ref("nominations/")
       .once("value")
       .then(snap => {
         const array = snap.val();
-        // console.log(array);
-        for (const existingNominationPostKey of Object.keys(array)) {
-          const existingNomination = array[existingNominationPostKey];
-          if (
-            existingNomination.category === category &&
-            existingNomination.nominee === nominee
-          ) {
-            console.log(existingNominationPostKey);
-            this.makeComment(
-              existingNominationPostKey,
-              this.state.justification
-            );
-            this.makeUpvote(existingNominationPostKey);
-            this.setNominationID(existingNominationPostKey);
-            this.redirectToNomination();
-            // TODO: redirect to comment page
+        if (array != null) {
+          for (const existingNominationPostKey of Object.keys(array)) {
+            const existingNomination = array[existingNominationPostKey];
+            if (
+              existingNomination.category === category &&
+              existingNomination.nominee === nominee
+            ) {
+              console.log(existingNominationPostKey);
+              this.setNominationID(existingNominationPostKey);
+              console.log(this.state.nominationID);
+              this.showDuplicateNominationConfirmationModal(
+                existingNominationPostKey
+              );
+              duplicateNomination = true;
+              break;
+            }
           }
         }
-        this.createNewNomination(defaultDatabase);
+        if (!duplicateNomination) {
+          const newPostKey = defaultDatabase
+            .ref()
+            .child("nominations")
+            .push().key;
+
+          if (newPostKey != null) {
+            this.setNominationID(newPostKey);
+            this.showNominationConfirmationModal(newPostKey);
+          }
+        }
       });
   };
 
+  private showNominationConfirmationModal = (newPostKey: string) => {
+    const defaultDatabase = firebase.database();
+    confirmAlert({
+      title: "Confirm your Nomination",
+      message: "Are you sure you want to nominate?",
+      buttons: [
+        {
+          label: "Nominate",
+          onClick: () => this.createNewNomination(defaultDatabase, newPostKey)
+        },
+        {
+          label: "Cancel"
+        }
+      ]
+    });
+  };
+
+  private showDuplicateNominationConfirmationModal = (
+    existingNominationPostKey: string
+  ) => {
+    confirmAlert({
+      title: "Nomination Already Exists!",
+      message: "Do you want to put your justification as a comment?",
+      buttons: [
+        {
+          label: "Comment",
+          onClick: () =>
+            this.duplicateNominationJustificationToComment(
+              existingNominationPostKey
+            )
+        },
+        {
+          label: "Cancel"
+        }
+      ]
+    });
+  };
+
+  private duplicateNominationJustificationToComment(
+    existingNominationPostKey: string
+  ) {
+    // console.log("existing: " + existingNominationPostKey);
+    // this.setNominationID(existingNominationPostKey);
+    this.makeComment(existingNominationPostKey, this.state.justification);
+    this.makeUpvote(existingNominationPostKey);
+    this.setState({
+      completed: true
+    });
+    this.redirectToNomination();
+  }
+
   private createNewNomination = (
-    defaultDatabase: firebase.database.Database
+    defaultDatabase: firebase.database.Database,
+    newPostKey: string
   ) => {
     // Get a key for a new Post.
-    const newPostKey = defaultDatabase
-      .ref()
-      .child("nominations")
-      .push().key;
+    // const newPostKey = defaultDatabase
+    //   .ref()
+    //   .child("nominations")
+    //   .push().key;
 
     const nomineeid = this.state.nominee.value;
     const user = getUser();
@@ -370,16 +455,20 @@ class NominationForm extends React.Component<any, any> {
       nominee: nomineeid,
       upvoters: {
         [userid]: true
-      }
+      },
+      key: newPostKey
     };
-    updates["/nominators/" + userid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominee: this.state.nominee.value
-    };
-    updates["/nominees/" + nomineeid + "/" + newPostKey] = {
-      nomination_id: newPostKey,
-      nominator: userid
-    };
+
+    if (newPostKey != null) {
+      const nomination = {
+        [newPostKey]: true
+      };
+      const nominatorPath = defaultDatabase.ref("nominators/" + userid);
+      const nomineePath = defaultDatabase.ref("nominees/" + nomineeid);
+
+      nominatorPath.update(nomination);
+      nomineePath.update(nomination);
+    }
 
     const nomCat = {
       [nomineeid]: true
@@ -390,9 +479,14 @@ class NominationForm extends React.Component<any, any> {
 
     nomCatPath.update(nomCat);
 
-    this.setNominationID(newPostKey);
+    // if (newPostKey != null) {
+    //   this.setNominationID(newPostKey);
+    // }
 
-    return defaultDatabase.ref().update(updates);
+    defaultDatabase.ref().update(updates);
+    this.setState({
+      completed: true
+    });
   };
 
   private makeComment = (nominationPostKey: string, justification: string) => {
@@ -432,6 +526,13 @@ class NominationForm extends React.Component<any, any> {
     const upvoterPath = defaultDatabase.ref(
       "/nominations/" + nominationid + "/upvoters/"
     );
+
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [nominationPostKey]: true
+    };
+
+    nominatorPath.update(nomination);
 
     return upvoterPath.update(upvoter);
   };

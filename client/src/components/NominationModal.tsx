@@ -1,5 +1,5 @@
 import * as React from "react";
-import Octicon, { ChevronLeft, Thumbsup } from "@githubprimer/octicons-react";
+import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
 import {
   getUsersByObjectId,
@@ -11,6 +11,7 @@ import CommentAdder from "./CommentAdder";
 import { Redirect } from "react-router-dom";
 import { getUser } from "../auth";
 import MDSpinner from "react-md-spinner";
+import { withRouter } from "react-router-dom";
 
 export interface INominationModalProps {
   nominationID: string;
@@ -29,8 +30,11 @@ class NominationModal extends React.Component<any, any> {
     hasBeenNominated: false,
     failed: false,
     isLoading: true,
+    isLocked: false,
     profilePic:
-      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg"
+      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+    lockPath: firebase.database().ref("/lockdown"),
+    nominationID: this.props.nominationID
   };
 
   public static defaultProps = {
@@ -42,7 +46,29 @@ class NominationModal extends React.Component<any, any> {
   };
 
   public componentDidMount() {
-    console.log("Modal mounted! Location: " + this.props.location);
+    this.readLockState();
+
+    if (
+      this.state.nominationID === "" ||
+      this.state.nominationID === undefined
+    ) {
+      const pathname = this.props.location.pathname;
+      const index = pathname.lastIndexOf("/");
+      const currentNominationID = pathname.substring(index + 1);
+      console.log(currentNominationID);
+
+      this.setState(
+        {
+          nominationID: currentNominationID
+        },
+        this.initModal
+      );
+    } else {
+      this.initModal();
+    }
+  }
+
+  private initModal = () => {
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -55,7 +81,7 @@ class NominationModal extends React.Component<any, any> {
       }
       return;
     });
-    this.getNominationDetails(this.props.nominationID);
+    this.getNominationDetails(this.state.nominationID);
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
@@ -66,18 +92,9 @@ class NominationModal extends React.Component<any, any> {
       }
       return;
     });
-  }
-
-  /* public componentWillReceiveProps() {
-    console.log("console will receive props");
-
-    this.getNominationDetails(this.props.nominationID);
-    // Get the nomination info and
-  } */
+  };
 
   public getNominationDetails(nominationID: string) {
-    console.log("Function called");
-
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
 
@@ -94,6 +111,12 @@ class NominationModal extends React.Component<any, any> {
       this.setState({ failed: true });
     }
   }
+
+  private readLockState = () => {
+    this.state.lockPath.on("value", snap =>
+      this.setState({ isLocked: snap!.val().lockState })
+    );
+  };
 
   public saveSnapshot = (snapshot: firebase.database.DataSnapshot) => {
     const data = snapshot.val();
@@ -268,6 +291,9 @@ class NominationModal extends React.Component<any, any> {
       comments
     } = this.state;
 
+    console.log("State ID:");
+    console.log(this.state.nominationID);
+
     return (
       <div
         className="modal award-modal"
@@ -285,7 +311,7 @@ class NominationModal extends React.Component<any, any> {
             <button
               type="button"
               className="btn btn-light bold-this"
-              onClick={this.props.onClose || this.onClose}
+              onClick={this.onClose}
             >
               <div className="div-centre">
                 <Octicon
@@ -314,7 +340,7 @@ class NominationModal extends React.Component<any, any> {
                     <div className="nomination-info wrap-text">
                       <h2>{nominee.name}</h2>
                       <h6>
-                        Nomination: <b>{category}</b>
+                        Category: <b>{category}</b>
                       </h6>
                       <p style={{ paddingTop: "0.25em" }}>{justification}</p>
                     </div>
@@ -335,15 +361,17 @@ class NominationModal extends React.Component<any, any> {
                       type="button"
                       className="btn btn-light float-right btn-top-round inline-components"
                       onClick={this.handleUpvoteClicked}
+                      style={this.state.isLocked ? { display: "none" } : {}}
                     >
-                      <Octicon
+                      <i
                         className={
                           this.state.hasBeenNominated
-                            ? "octiocti octism"
-                            : "octigrey octism"
+                            ? "material-icons octiocti octism"
+                            : "material-icons octigrey octism"
                         }
-                        icon={Thumbsup}
-                      />
+                      >
+                        thumb_up_alt
+                      </i>
                     </button>
                   </div>
                 </div>
@@ -391,6 +419,13 @@ class NominationModal extends React.Component<any, any> {
     if (this.state.newComment.trim() !== "") {
       this.makeComment(this.state.newComment);
       this.setState({ newComment: "" });
+
+      // scroll to the end of the modal
+      const awardModal = document.getElementsByClassName("award-modal")[0];
+      awardModal.scrollTo({
+        top: awardModal.scrollHeight,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -405,8 +440,15 @@ class NominationModal extends React.Component<any, any> {
     };
 
     const upvoterPath = defaultDatabase.ref(
-      "/nominations/" + this.props.nominationID + "/upvoters/"
+      "/nominations/" + this.state.nominationID + "/upvoters/"
     );
+
+    const nominatorPath = defaultDatabase.ref("nominators/" + uid);
+    const nomination = {
+      [this.state.nominationID]: true
+    };
+
+    nominatorPath.update(nomination);
 
     return upvoterPath.update(upvoter);
   };
@@ -418,8 +460,13 @@ class NominationModal extends React.Component<any, any> {
     const uid = user.profile.oid;
 
     const upvoterPath = defaultDatabase.ref(
-      "/nominations/" + this.props.nominationID + "/upvoters/" + uid
+      "/nominations/" + this.state.nominationID + "/upvoters/" + uid
     );
+
+    const nominatorPath = defaultDatabase.ref(
+      "nominators/" + uid + "/" + this.state.nominationID
+    );
+    nominatorPath.remove();
 
     return upvoterPath.remove();
   };
@@ -429,7 +476,7 @@ class NominationModal extends React.Component<any, any> {
 
     const newPostKey = defaultDatabase
       .ref()
-      .child("/nominations/" + this.props.nominationID + "/comments/")
+      .child("/nominations/" + this.state.nominationID + "/comments/")
       .push().key;
 
     const user = getUser();
@@ -449,7 +496,7 @@ class NominationModal extends React.Component<any, any> {
     this.setState({ comments: commentsArray });
     const updates = {};
     updates[
-      "/nominations/" + this.props.nominationID + "/comments/" + newPostKey
+      "/nominations/" + this.state.nominationID + "/comments/" + newPostKey
     ] = comment;
     return defaultDatabase.ref().update(updates);
   };
@@ -459,4 +506,4 @@ class NominationModal extends React.Component<any, any> {
   };
 }
 
-export default NominationModal;
+export default withRouter(NominationModal);

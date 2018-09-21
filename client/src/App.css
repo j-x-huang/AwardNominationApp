@@ -44,6 +44,13 @@ body {
   color: #8241aa;
 }
 
+.feelix-card {
+  padding: 1.6rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  border-radius: 0.4rem;
+}
+
 a:link {
   color: #8241aa;
   text-decoration: underline;
@@ -55,15 +62,15 @@ a:visited {
   color: #8241aa;
 }
 
-.btn-primary,
-.btn-primary:focus {
+.btn-purple,
+.btn-purple:focus {
   background-color: #8241aa !important;
   border-color: #a476c1 !important;
   box-shadow: none !important;
 }
 
-.btn-primary:hover,
-.btn-primary:active {
+.btn-purple:hover,
+.btn-purple:active {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #8241aa !important;
 }
 
@@ -111,6 +118,12 @@ a:visited {
 
 .navbar-brand {
   margin-right: 5%;
+}
+
+.navbar-collapse {
+  background-color: white !important;
+  z-index: 999;
+  border-radius: 0.2em;
 }
 
 .nav-link,
@@ -273,53 +286,60 @@ a:visited {
   }
 }
 
-#loginPage {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
+.loginContainer {
   margin: auto;
-  display: inline-block;
+  margin-top: 10%;
   text-align: center;
-  width: 60%;
-  height: 50%;
+  width: 22.4em;
+  padding: 2.2em;
+  padding-top: 1.6em;
+  z-index: 999;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 #loginLogo {
-  width: 36%;
-  margin: 20px;
+  width: 85%;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 #loginBg {
-  background-color: #f3ffff;
+  background-color: #fff;
   height: 100vh;
   overflow: hidden;
 }
 
+#login-border-top {
+  /* background: -moz-linear-gradient(-45deg, #8241aa 35%, #a476c1 100%);
+  background: -webkit-linear-gradient(-45deg, #8241aa 35%, #a476c1 100%);
+  background: linear-gradient(135deg, #8241aa 35%, #a476c1 100%); */
+  background-color: #8241aa;
+  height: 3px;
+  width: 100%;
+}
+
 #loginBgPic {
-  height: 100%;
-  float: right;
+  position: absolute;
+  z-index: 2;
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
 }
 
 #loginDesc {
   font-family: NeutroMYOB-Med;
-  font-size: 1.05em;
+  font-size: 1em;
 }
 
 #loginButton {
-  padding-left: 2em;
-  padding-right: 2em;
+  padding-left: 1.8em;
+  padding-right: 1.8em;
 }
 
-.feelix-card {
-  padding: 1.6rem;
-  background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
-  border-radius: 0.4rem;
-  margin-left: 20%;
+#nominateDiv {
   width: 60%;
+  margin-left: 20%;
   margin-right: 20%;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -330,41 +350,72 @@ a:visited {
 }
 
 #nominationComplete {
-  display: inline-block;
   text-align: center;
   background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  box-shadow: 0 1px 8px 0 rgba(46, 62, 79, 0.1);
   border-radius: 0.4rem;
-  margin-left: 25%;
-  width: 50%;
-  margin-right: 25%;
+  width: 400px;
+  margin: auto;
   margin-top: 1.5em;
   margin-bottom: 1.5em;
   overflow: hidden;
 }
 
+#nominationComplete h3 {
+  font-size: 1.5rem;
+}
+
 .complete-card-top {
+  font-family: "PT Sans" !important;
   background-color: #8241aa;
   color: white;
-  font-family: "Unica One";
   padding: 1.2em;
 }
 
 .complete-card-bottom {
-  font-family: "Unica One";
+  font-family: "PT Sans" !important;
   padding: 1em;
   padding-bottom: 2.6em;
 }
 
+.complete-card-bottom button {
+  margin: 1.2em;
+  margin-bottom: 1.4em;
+}
+
+.complete-card-bottom > button:nth-last-child(2) {
+  margin-left: 1.5em;
+  margin-right: 0.9em;
+}
+
+.complete-card-bottom > button:last-child {
+  margin-left: 0.9em;
+  margin-right: 1.5em;
+}
+
+#nominationComplete > h2 {
+  padding: 0.6em;
+}
+
+#nominationComplete > h2 > i {
+  font-size: 2.6em;
+}
+
+#nominationCompleteLogo {
+  padding: 0.5em;
+  width: 6.5em;
+}
+
 #nominationComplete p {
+  font-family: "PT Sans" !important;
   padding-left: 15%;
   padding-right: 15%;
-  margin-top: 0.8em;
-  margin-bottom: 0.8em;
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
 }
 
 #nominationComplete p span {
-  font-family: NeutroMYOB-Med;
+  font-weight: bold;
 }
 
 #spinner {
@@ -563,8 +614,8 @@ a:visited {
 }
 
 .octism {
-  width: 24px;
-  height: 24px;
+  padding-top: 6px;
+  font-size: 2.2em;
 }
 
 .octiocti {
@@ -615,4 +666,198 @@ a:visited {
   font-size: 5em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
+}
+
+#adminDiv {
+  margin-left: 15%;
+  width: 70%;
+  margin-right: 15%;
+  margin-top: 1.2em;
+  margin-bottom: 1em;
+  font-family: "PT Sans", sans-serif;
+}
+
+#adminDiv h4 {
+  padding-left: 0.4em;
+  margin-top: 32px;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+#adminDiv #adminTitle {
+  padding-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 1.3px #d1d5da solid;
+}
+
+.adminOptions {
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+  border-radius: 0.2rem;
+  border: 1.6px solid #d1d5da;
+}
+
+.adminOptionsDanger {
+  border: 1.6px solid #d73a49;
+}
+
+.adminOption {
+  overflow: hidden;
+  padding: 1.6rem;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.adminOptionTitle {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.1em;
+}
+
+.adminOptionDesc {
+  font-size: 0.95em;
+  color: #586069;
+}
+
+.adminOptionDisabled .adminOptionTitle {
+  color: #929497;
+}
+
+.adminOptionDisabled .adminOptionDesc {
+  color: #b5b9be;
+}
+
+.adminOptionDisabled .adminButton {
+  color: #929497;
+  border-color: #929497;
+}
+
+.adminButton {
+  margin-top: 0.2em;
+}
+
+.adminHr {
+  margin: 0;
+  border: none;
+  height: 1.5px;
+  color: #d1d5da;
+  background-color: #d1d5da;
+}
+
+#awardsContainer {
+  width: 1496px;
+}
+
+.react-confirm-alert-body {
+  font-family: "PT Sans";
+  font-size: 14px;
+}
+
+.react-confirm-alert-body h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* .react-confirm-alert-button-group > button:first-child {
+  background: #8241aa !important;
+} */
+
+#filterBar {
+  margin-top: 0.4em;
+  overflow: visible;
+}
+
+.formControl {
+  min-width: 120px !important;
+  font-family: "PT Sans" !important;
+  margin-right: 0.4em !important;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.searchBar {
+  position: relative;
+  margin-left: 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 4px;
+  padding: 0.25em;
+  color: #586069;
+  box-shadow: 0 1px 2px 0 rgba(46, 62, 79, 0.1);
+}
+
+.searchIcon {
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #586069;
+  margin-left: 1em;
+  margin-top: -3px;
+}
+
+@media (min-width: 1496px) {
+  #nominateDiv,
+  #adminDiv {
+    width: 1000px;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .radioPad__wrapper {
+    height: 4rem;
+  }
+}
+
+@media (max-width: 1496px) {
+  #awardsContainer {
+    width: 1114px;
+  }
+}
+
+@media (max-width: 1114px) {
+  #awardsContainer {
+    width: 732px;
+  }
+}
+
+@media (max-width: 732px) {
+  #nominateDiv,
+  #adminDiv {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  #awardsContainer {
+    width: 350px;
+  }
+
+  #homeLabelText {
+    font-size: 3em;
+  }
+}
+
+#noNominations {
+  font-size: 3vw;
+  text-align: center;
+  display: inline-block;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100px;
+  margin: auto;
+  color: #929497;
 }

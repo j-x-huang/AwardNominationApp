@@ -8,6 +8,7 @@ const adalConfig = {
   postLogoutRedirectUri: window.location.origin,
   redirectUri: 'http://localhost:3000/auth/openid/return',
   tenant: 'ignitewards.onmicrosoft.com',
+  cacheLocation: 'localStorage' as 'localStorage',
 };
 
 export const authContext = new AuthenticationContext(adalConfig);
