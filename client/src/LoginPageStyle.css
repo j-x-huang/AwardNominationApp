@@ -9,7 +9,7 @@ main {
   background: url("https://wallpaper.wiki/wp-content/uploads/2017/05/Anime-Background-1.jpg")
     fixed no-repeat;
   background-size: cover;
-  /* background-position: center; */
+  background-position: center;
 }
 #container {
   /* width: 350px; */
