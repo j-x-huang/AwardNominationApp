@@ -18,7 +18,7 @@ main {
   top: 50%;
   left: 50%;
   margin-left: -175px;
-  margin-top: -250px;
+  margin-top: -175px;
   border-radius: 8px;
 }
 #container:before {
