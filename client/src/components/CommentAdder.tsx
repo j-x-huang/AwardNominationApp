@@ -53,7 +53,7 @@ class CommentAdder extends React.Component<any, any> {
   }
 
   private handleEnterKeyPress = (event: any) => {
-    if (event.charCode === 13) {
+    if (event.charCode === 13 && !this.state.isLocked) {
       event.preventDefault();
       const commentBtn = document.getElementById("commentBtn")!;
       commentBtn.click();
