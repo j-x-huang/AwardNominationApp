@@ -5,12 +5,14 @@
 }
 main {
   height: 100vh;
-  background: url("https://images6.alphacoders.com/933/thumb-1920-933949.jpg")
+  width: 100vw;
+  background: url("https://wallpaper.wiki/wp-content/uploads/2017/05/Anime-Background-1.jpg")
     fixed no-repeat;
   background-size: cover;
+  /* background-position: center; */
 }
 #container {
-  width: 350px;
+  /* width: 350px; */
   height: 210px;
   background: inherit;
   position: absolute;
@@ -24,6 +26,11 @@ main {
   left: 0;
   bottom: 0;
   right: 0;
+  text-align: center;
+  z-index: 999;
+  width: 22.4em;
+  padding: 2.2em;
+  padding-top: 1.6em;
   border-radius: 8px;
 }
 #container:before {
@@ -35,6 +42,7 @@ main {
   left: -25px;
   bottom: 0;
   right: 0;
+  z-index: 999;
   background: inherit;
   box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.2);
   filter: blur(10px);
