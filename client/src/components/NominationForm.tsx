@@ -33,7 +33,7 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public state = {
-    categories: ["", "", "", "", ""],
+    categories: [] as any[],
     category: "",
     justification: "",
     nominator: "",
@@ -171,7 +171,7 @@ class NominationForm extends React.Component<any, any> {
     catRef.once("value", snapshot => {
       const cats = [] as any[];
       snapshot.forEach(childSnapshot => {
-        const item = childSnapshot.val();
+        const item = childSnapshot.val().name;
         cats.push(item);
       });
       this.setState({ categories: cats });
