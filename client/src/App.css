@@ -816,19 +816,19 @@ a:visited {
   }
 }
 
-@media (max-width: 1496px) {
+@media (max-width: 1566px) {
   #awardsContainer {
     width: 1114px;
   }
 }
 
-@media (max-width: 1114px) {
+@media (max-width: 1184px) {
   #awardsContainer {
     width: 732px;
   }
 }
 
-@media (max-width: 732px) {
+@media (max-width: 802px) {
   #nominateDiv,
   #adminDiv {
     width: 90%;
