@@ -6,10 +6,9 @@
 main {
   height: 100vh;
   width: 100vw;
-  background: url("https://wallpaper.wiki/wp-content/uploads/2017/05/Anime-Background-1.jpg")
-    fixed no-repeat;
+  background: url("./images/background.jpg") fixed no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: 50% 25%;
 }
 #container {
   /* width: 350px; */
@@ -47,43 +46,54 @@ main {
   box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.2);
   filter: blur(10px);
 }
-form img {
-  width: 120px;
-  height: 120px;
-  border-radius: 100%;
-}
-form {
+
+.loginContainer {
+  margin: auto;
+  /* margin-top: 10%; */
   text-align: center;
+  /* width: 22.4em;
+  padding: 2.2em;
+  padding-top: 1.6em; */
+  z-index: 999;
+  position: relative;
+  /* background-color: rgba(255, 255, 255, 0.3); */
+}
+
+#loginLogo {
+  width: 85%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#loginBg {
+  /* background-color: #fff; */
+  height: 100vh;
+  overflow: hidden;
+}
+
+#login-border-top {
+  /* background: -moz-linear-gradient(-45deg, #8241aa 35%, #a476c1 100%);
+  background: -webkit-linear-gradient(-45deg, #8241aa 35%, #a476c1 100%);
+  background: linear-gradient(135deg, #8241aa 35%, #a476c1 100%); */
+  background-color: #8241aa;
+  height: 3px;
+  width: 100%;
+}
+
+#loginBgPic {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  z-index: 2;
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
 }
-input {
-  background: 0;
-  width: 200px;
-  outline: 0;
-  border: 0;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  margin: 20px 0;
-  padding-bottom: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.8);
+
+#loginDesc {
+  font-family: NeutroMYOB-Med;
+  font-size: 1em;
 }
-input[type="submit"] {
-  border: 0;
-  border-radius: 8px;
-  padding-bottom: 0;
-  height: 60px;
-  background: #df2359;
-  color: white;
-  cursor: pointer;
-  transition: all 600ms ease-in-out;
-}
-input[type="submit"]:hover {
-  background: #c0392b;
-}
-span a {
-  color: rgba(255, 255, 255, 0.8);
+
+#loginButton {
+  padding-left: 1.8em;
+  padding-right: 1.8em;
 }
