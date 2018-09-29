@@ -3,7 +3,8 @@ import "../App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
-import { saveAs } from "file-saver/FileSaver";
+import AdminResetDialog from "./AdminResetDialog/AdminResetDialog";
+import { saveAs } from "file-saver";
 import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
 class Admin extends React.Component<any, any> {
@@ -83,10 +84,14 @@ class Admin extends React.Component<any, any> {
   }
 
   private showResetConfirmation = () => {
-    this.showConfirmationModal(
-      "Are you sure you want to reset the state of award nominations?",
-      this.resetDatabase
-    );
+    confirmAlert({
+      customUI: ({ title, onClose }: { title: any; onClose: any }) => {
+        console.log(title);
+        return (
+          <AdminResetDialog onClose={onClose} onReset={this.resetDatabase} />
+        );
+      }
+    });
   };
 
   private resetDatabase = () => {
@@ -180,28 +185,28 @@ class Admin extends React.Component<any, any> {
     });
   };
 
-  private sortByTally(a: string,b: string) {
-    const aArr = a.split(',');
-    const bArr = b.split(',');
+  private sortByTally(a: string, b: string) {
+    const aArr = a.split(",");
+    const bArr = b.split(",");
     // Sorting by tally number
     if (aArr[2] < bArr[2]) {
-        return 1;
-    } else if (aArr[2] > bArr[2] ){
-        return -1;
-    // Sorting by Category in Alphabetical order
-    } else if (aArr[2] === bArr[2] && aArr[0] < bArr[0]){
-        return -1;
-    } else if (aArr[2] === bArr[2] && aArr[0] > bArr[0]){
       return 1;
-    // Sorting by Name in Alphabetical order 
-  } else if (aArr[2] === bArr[2] && aArr[1] < bArr[1]){
-    return -1;
-  } else if (aArr[2] === bArr[2] && aArr[1] > bArr[1]){
+    } else if (aArr[2] > bArr[2]) {
+      return -1;
+      // Sorting by Category in Alphabetical order
+    } else if (aArr[2] === bArr[2] && aArr[0] < bArr[0]) {
+      return -1;
+    } else if (aArr[2] === bArr[2] && aArr[0] > bArr[0]) {
       return 1;
-  } else {
-    return 0;
+      // Sorting by Name in Alphabetical order
+    } else if (aArr[2] === bArr[2] && aArr[1] < bArr[1]) {
+      return -1;
+    } else if (aArr[2] === bArr[2] && aArr[1] > bArr[1]) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
-}
 
   private exportDatabase = () => {
     const defaultDatabase = firebase.database();
