@@ -1,4 +1,5 @@
 import * as React from "react";
+import "./../css/ModalStyle.css";
 import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
 import {
