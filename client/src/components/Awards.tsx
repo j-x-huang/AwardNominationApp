@@ -394,23 +394,11 @@ class Awards extends React.Component<any, IAwardsStates> {
     }
   };
 
-  // private updateAppBarWidth = (contentRect: any) => {
-  //   this.setState({ appBarWidth: contentRect.bounds.width });
-  // };
-
   public render() {
     const { classes } = this.props;
     const { value, awards, appBarWidth, tabsWidth } = this.state;
     const updateAppBarWidth = () => (contentRect: any) =>
       this.setState({ appBarWidth: contentRect.bounds.width });
-
-    // const { location } = this.props;
-
-    /* const isModal = !!(
-      location.state &&
-      location.state.modal &&
-      this.previousLocation !== location
-    ); */
 
     return (
       <div>
