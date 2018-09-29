@@ -3,7 +3,7 @@ import "../App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
-import { saveAs } from "file-saver/FileSaver";
+import { saveAs } from "file-saver";
 import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
 class Admin extends React.Component<any, any> {
