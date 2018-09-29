@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hbao448.github.io/AwardNominationApp/",
   "dependencies": {
     "@githubprimer/octicons-react": "^8.0.0",
     "@material-ui/core": "latest",
