@@ -153,13 +153,18 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   public componentDidMount() {
-    const awardCategories = this.props.awardsContent.getAwardTabs();
+    const awardsCont = this.props.awardsContent;
+      awardsCont.getAwardTabs((awardCategories: any) => {
+        this.createAwardCategories(awardCategories);
+  
+        awardCategories.forEach((c: string) => {
+          this.getCategoryNomination(c);
+  
+      })
+      });
 
-    this.createAwardCategories(awardCategories);
 
-    awardCategories.forEach((c: string) => {
-      this.getCategoryNomination(c);
-    });
+
   }
 
   public createAwardCategories = (categories: string[]) => {

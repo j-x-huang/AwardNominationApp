@@ -6,8 +6,14 @@ abstract class AwardsContent {
     return this.url;
   }
 
-  public getAwardTabs() {
-    return this.awardTabs;
+  public getAwardTabs(callback: (awardTabs: any) => void) {
+    this.updateAwardTabs((tabNames) => {
+      callback(tabNames)
+    });
+  }
+
+  public updateAwardTabs(callback: (tabNames: any) => void) {
+    // TODO
   }
 
   // public getTabNomination(tab: string, retrieveUserDetails: any) {}
