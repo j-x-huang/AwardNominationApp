@@ -9,9 +9,9 @@ class NavBar extends React.Component<any, any> {
   public state = {
     profilePic:
       "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
-      isLocked: false,
-      isAdmin: false,
-      lockPath: firebase.database().ref("/lockdown")
+    isLocked: false,
+    isAdmin: false,
+    lockPath: firebase.database().ref("/lockdown")
   };
 
   public componentDidMount() {
@@ -32,10 +32,10 @@ class NavBar extends React.Component<any, any> {
       } else {
         this.setState({ isAdmin });
       }
-    })
+    });
   }
   private readLockState = () => {
-    this.state.lockPath.on("value", snap => 
+    this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
     );
   };
@@ -51,7 +51,7 @@ class NavBar extends React.Component<any, any> {
       .join(" ");
 
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-xl navbar-light bg-light">
         <NavLink className="navbar-brand" to="/home">
           <img src={logo1} height="24" alt="" />
         </NavLink>
@@ -68,7 +68,11 @@ class NavBar extends React.Component<any, any> {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav">
-            <li className="nav-item">
+            <li
+              className="nav-item"
+              data-toggle="collapse"
+              data-target=".navbar-collapse.show"
+            >
               <NavLink
                 activeClassName="activeLink"
                 to="/home"
@@ -77,7 +81,11 @@ class NavBar extends React.Component<any, any> {
                 <span>HOME</span>
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li
+              className="nav-item"
+              data-toggle="collapse"
+              data-target=".navbar-collapse.show"
+            >
               <NavLink
                 activeClassName="activeLink"
                 to="/awards"
@@ -86,7 +94,12 @@ class NavBar extends React.Component<any, any> {
                 <span>AWARDS</span>
               </NavLink>
             </li>
-            <li className="nav-item" style={this.state.isLocked ? { display: "none" } : {}}>
+            <li
+              className="nav-item"
+              data-toggle="collapse"
+              data-target=".navbar-collapse.show"
+              style={this.state.isLocked ? { display: "none" } : {}}
+            >
               <NavLink
                 activeClassName="activeLink"
                 to="/nominate"
@@ -95,7 +108,13 @@ class NavBar extends React.Component<any, any> {
                 <span>NOMINATE</span>
               </NavLink>
             </li>
-            <li className="nav-item">
+
+            <li
+              className="nav-item"
+              data-toggle="collapse"
+              data-target=".navbar-collapse.show"
+            >
+              {" "}
               <NavLink
                 activeClassName="activeLink"
                 to="/mynominations"
@@ -104,8 +123,12 @@ class NavBar extends React.Component<any, any> {
                 <span>MY NOMINATIONS</span>
               </NavLink>
             </li>
-            {isAdmin ?
-              <li className="nav-item">
+            {isAdmin ? (
+              <li
+                className="nav-item"
+                data-toggle="collapse"
+                data-target=".navbar-collapse.show"
+              >
                 <NavLink
                   activeClassName="activeLink"
                   to="/admin"
@@ -113,7 +136,8 @@ class NavBar extends React.Component<any, any> {
                 >
                   <span>ADMIN</span>
                 </NavLink>
-              </li> : null}
+              </li>
+            ) : null}
           </ul>
           <ul className="nav navbar-nav ml-auto">
             <li className="dropdown links nav-item">
