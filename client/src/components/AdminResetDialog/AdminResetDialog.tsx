@@ -1,8 +1,14 @@
 import * as React from "react";
 import "./AdminResetDialog.css";
 import CategoryTile from "./CategoryTile";
+import * as firebase from "firebase";
 
-class AdminResetDialog extends React.Component<any, any> {
+export interface IAdminResetDialog {
+  // the function to call to close the dialog
+  onClose: any;
+}
+
+class AdminResetDialog extends React.Component<IAdminResetDialog, any> {
   public state = {
     newCategory: "",
     // TODO populate this at launch
@@ -15,8 +21,8 @@ class AdminResetDialog extends React.Component<any, any> {
     ]
   };
 
+  // change the color for a specific category
   private handleColorChange = (cat: any) => {
-    // cloning below
     const dCategories = [...this.state.categories];
     const index = dCategories.indexOf(cat);
     dCategories[index] = { ...cat };
@@ -24,17 +30,24 @@ class AdminResetDialog extends React.Component<any, any> {
     this.setState({ categories: dCategories });
   };
 
+  // handle deletion of a specific category
   private handleDelete = (cat: any) => {
     const dCategories = this.state.categories.filter(c => c.name !== cat.name);
     this.setState({ categories: dCategories });
   };
 
+  // handle change in "Add New Category" field
   private handleNewCategoryChange = (event: any) => {
     this.setState({ newCategory: event.target.value });
   };
 
+  // Listen to enter key for addition of new category and assign it a random color,
+  // existing category names and "" are not allowed
   private handleEnterKeyPress = (event: any) => {
-    if (event.keyCode === 13 || event.charCode === 13) {
+    if (
+      (event.keyCode === 13 || event.charCode === 13) &&
+      this.state.newCategory !== ""
+    ) {
       if (
         this.state.categories.filter(c => c.name === this.state.newCategory)
           .length === 0
@@ -52,6 +65,21 @@ class AdminResetDialog extends React.Component<any, any> {
         this.setState({ newCategory: "" });
       }
     }
+  };
+
+  // reset the databsase with new categories
+  private resetDatabase = () => {
+    // TODO set the new categories and colors too
+    const data = {
+      lockdown: {
+        lockState: false
+      }
+    };
+    firebase
+      .database()
+      .ref()
+      .set(data);
+    this.props.onClose();
   };
 
   public render() {
@@ -83,7 +111,7 @@ class AdminResetDialog extends React.Component<any, any> {
           onKeyPress={this.handleEnterKeyPress}
         />
         <div className="react-confirm-alert-button-group">
-          <button className="reset-btn" onClick={this.props.onClose}>
+          <button className="reset-btn" onClick={this.resetDatabase}>
             Confirm
           </button>
           <button className="reset-btn" onClick={this.props.onClose}>

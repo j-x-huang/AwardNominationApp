@@ -85,25 +85,10 @@ class Admin extends React.Component<any, any> {
 
   private showResetConfirmation = () => {
     confirmAlert({
-      customUI: ({ title, onClose }: { title: any; onClose: any }) => {
-        console.log(title);
-        return (
-          <AdminResetDialog onClose={onClose} onReset={this.resetDatabase} />
-        );
+      customUI: ({ onClose }: { onClose: any }) => {
+        return <AdminResetDialog onClose={onClose} />;
       }
     });
-  };
-
-  private resetDatabase = () => {
-    const data = {
-      lockdown: {
-        lockState: false
-      }
-    };
-    firebase
-      .database()
-      .ref()
-      .set(data);
   };
 
   private showLockdownConfirmation = () => {

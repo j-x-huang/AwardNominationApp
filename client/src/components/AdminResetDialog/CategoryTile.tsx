@@ -3,24 +3,23 @@ import reactCSS from "reactcss";
 import { BlockPicker } from "react-color";
 import Octicon, { X } from "@githubprimer/octicons-react";
 
-// export interface ICategoryTileProps {
+export interface ICategoryTileProps {
+  category: any;
+  onColorChange: any;
+  onDelete: any;
+}
 
-// }
-
-// export interface ICategoryTileState {
-
-// }
-
-class CategoryTile extends React.Component<any, any> {
+class CategoryTile extends React.Component<ICategoryTileProps, any> {
   public state = {
+    // whether the color picker pop up is displayed
     displayColorPicker: false
   };
 
-  private handleClick = () => {
+  private handlePickerClick = () => {
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   };
 
-  private handleClose = () => {
+  private handlePickerClose = () => {
     this.setState({ displayColorPicker: false });
   };
 
@@ -68,13 +67,14 @@ class CategoryTile extends React.Component<any, any> {
         <div className="category-tile">
           <span>{this.props.category.name}</span>
           <div style={{ float: "right", width: "1.5em", height: "1.5em" }}>
-            <div style={styles.color} onClick={this.handleClick} />
+            <div style={styles.color} onClick={this.handlePickerClick} />
             {this.state.displayColorPicker ? (
               <div style={styles.popover}>
-                <div style={styles.cover} onClick={this.handleClose} />
+                <div style={styles.cover} onClick={this.handlePickerClose} />
                 <BlockPicker
                   triangle="hide"
                   width="200"
+                  // default color choices, can be tweaked
                   colors={[
                     "#f44336",
                     "#e91e63",
