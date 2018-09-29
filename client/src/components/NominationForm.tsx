@@ -196,44 +196,44 @@ class NominationForm extends React.Component<any, any> {
             onClick={this.redirectToNomination}
           />
         ) : (
-          <form className="feelix-card" id="nominateDiv">
-            <h5> Nominate a deserving candidate </h5>
-            <hr />
-            <div id="categorySelect">{options}</div>
-            <div className="form-group">
-              <label htmlFor="nomineeeSelect">Select a fellow staff</label>
-              <Select
-                isDisabled={category === ""}
-                isSearchable={true}
-                onChange={this.nomineeChange}
-                options={nominees}
-                value={this.state.nominee}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="justificationSelect">Justify your decision</label>
-              <textarea
-                className="form-control"
-                style={{ resize: "none" }}
-                id="justificationSelect"
-                rows={5}
-                value={this.state.justification}
-                onChange={this.justificationChange}
-              />
-            </div>
-            <div className="overflowHid">
-              <button
-                type="button"
-                className="btn btn-primary btn-purple float-right"
-                disabled={this.checkFieldsFilled() ? false : true}
-                onClick={this.handleClick}
-                style={this.state.isLocked ? { display: "none" } : {}}
-              >
-                Nominate
+            <form className="feelix-card" id="nominateDiv">
+              <h5> Nominate a deserving candidate </h5>
+              <hr />
+              <div id="categorySelect">{options}</div>
+              <div className="form-group">
+                <label htmlFor="nomineeeSelect">Select a fellow staff</label>
+                <Select
+                  isDisabled={category === ""}
+                  isSearchable={true}
+                  onChange={this.nomineeChange}
+                  options={nominees}
+                  value={this.state.nominee}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="justificationSelect">Justify your decision</label>
+                <textarea
+                  className="form-control"
+                  style={{ resize: "none" }}
+                  id="justificationSelect"
+                  rows={5}
+                  value={this.state.justification}
+                  onChange={this.justificationChange}
+                />
+              </div>
+              <div className="overflowHid">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-purple float-right"
+                  disabled={this.checkFieldsFilled() ? false : true}
+                  onClick={this.handleClick}
+                  style={this.state.isLocked ? { display: "none" } : {}}
+                >
+                  Nominate
               </button>
-            </div>
-          </form>
-        )}
+              </div>
+            </form>
+          )}
         <Route
           path={"/nominate/nomination/" + this.state.nominationID}
           render={this.openModal}
@@ -342,7 +342,7 @@ class NominationForm extends React.Component<any, any> {
 
     let duplicateNomination = false;
 
-    // Check if nomination exist
+    // Check if nomination exists
     defaultDatabase
       .ref("nominations/")
       .once("value")
@@ -421,8 +421,6 @@ class NominationForm extends React.Component<any, any> {
   private duplicateNominationJustificationToComment(
     existingNominationPostKey: string
   ) {
-    // console.log("existing: " + existingNominationPostKey);
-    // this.setNominationID(existingNominationPostKey);
     this.makeComment(existingNominationPostKey, this.state.justification);
     this.makeUpvote(existingNominationPostKey);
     this.setState({
@@ -435,11 +433,6 @@ class NominationForm extends React.Component<any, any> {
     defaultDatabase: firebase.database.Database,
     newPostKey: string
   ) => {
-    // Get a key for a new Post.
-    // const newPostKey = defaultDatabase
-    //   .ref()
-    //   .child("nominations")
-    //   .push().key;
 
     const nomineeid = this.state.nominee.value;
     const user = getUser();
@@ -478,10 +471,6 @@ class NominationForm extends React.Component<any, any> {
     );
 
     nomCatPath.update(nomCat);
-
-    // if (newPostKey != null) {
-    //   this.setNominationID(newPostKey);
-    // }
 
     defaultDatabase.ref().update(updates);
     this.setState({
@@ -536,20 +525,6 @@ class NominationForm extends React.Component<any, any> {
 
     return upvoterPath.update(upvoter);
   };
-  /*
-    private removeUpvote = (nominationPostKey: string) => {
-      const defaultDatabase = firebase.database();
-  
-      const nominationid = nominationPostKey;
-      const user = getUser();
-      const uid = user.profile.oid;
-  
-      const upvoterPath = defaultDatabase.ref(
-        "/nominations/" + nominationid + "/upvoters/" + uid
-      );
-  
-      return upvoterPath.remove();
-    };*/
 }
 
 export default NominationForm;
