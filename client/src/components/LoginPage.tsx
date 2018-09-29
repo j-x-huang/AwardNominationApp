@@ -1,6 +1,6 @@
 import * as React from "react";
 import "../App.css";
-import "../LoginPageStyle.css";
+import "./../css/LoginPageStyle.css";
 import logo1 from "../images/logo1.png";
 import { logInUser } from "./../auth";
 import { Redirect } from "react-router-dom";
