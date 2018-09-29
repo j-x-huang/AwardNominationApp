@@ -420,8 +420,10 @@ class Awards extends React.Component<any, IAwardsStates> {
               <Tabs
                 value={value}
                 onChange={this.handleChange}
-                centered={true}
+                // centered={true}
                 classes={{ indicator: classes.tabsIndicator }}
+                scrollable={true}
+                scrollButtons="auto"
               >
                 {awards.map((award, i) => (
                   <Tab
