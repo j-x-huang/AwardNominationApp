@@ -21,6 +21,7 @@ import {
   getUsersByObjectId
 } from "../MicrosoftGraphClient";
 import MDSpinner from "react-md-spinner";
+import Measure from "react-measure";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -111,6 +112,7 @@ export interface IAwardsStates {
   filterText: string;
   sortBy: string;
   isLoading: boolean;
+  appBarWidth: number;
 }
 
 class Awards extends React.Component<any, IAwardsStates> {
@@ -133,7 +135,9 @@ class Awards extends React.Component<any, IAwardsStates> {
     awards: [] as any[],
     filterText: "",
     sortBy: "",
-    isLoading: true
+    isLoading: true,
+    appBarWidth: 160 * this.props.awardsContent.getAwardTabs().length,
+    tabsWidth: 160 * this.props.awardsContent.getAwardTabs().length
   };
 
   private handleChange = (
@@ -390,9 +394,16 @@ class Awards extends React.Component<any, IAwardsStates> {
     }
   };
 
+  // private updateAppBarWidth = (contentRect: any) => {
+  //   this.setState({ appBarWidth: contentRect.bounds.width });
+  // };
+
   public render() {
     const { classes } = this.props;
-    const { value, awards } = this.state;
+    const { value, awards, appBarWidth, tabsWidth } = this.state;
+    const updateAppBarWidth = () => (contentRect: any) =>
+      this.setState({ appBarWidth: contentRect.bounds.width });
+
     // const { location } = this.props;
 
     /* const isModal = !!(
@@ -400,9 +411,6 @@ class Awards extends React.Component<any, IAwardsStates> {
       location.state.modal &&
       this.previousLocation !== location
     ); */
-
-    console.log("Award state:");
-    console.log(this.state.awards);
 
     return (
       <div>
@@ -412,31 +420,39 @@ class Awards extends React.Component<any, IAwardsStates> {
           </div>
         ) : (
           <div className={classes.root} id="awardsContainer">
-            <AppBar
-              position="static"
-              color="default"
-              className={classes.tabBar}
-            >
-              <Tabs
-                value={value}
-                onChange={this.handleChange}
-                // centered={true}
-                classes={{ indicator: classes.tabsIndicator }}
-                scrollable={true}
-                scrollButtons="auto"
-              >
-                {awards.map((award, i) => (
-                  <Tab
-                    key={i}
-                    label={award.award}
-                    classes={{
-                      root: classes.tabRoot,
-                      selected: classes.tabSelected
-                    }}
-                  />
-                ))}
-              </Tabs>
-            </AppBar>
+            <Measure bounds={true} onResize={updateAppBarWidth()}>
+              {({ measureRef }: any) => (
+                <div ref={measureRef}>
+                  <AppBar
+                    position="static"
+                    color="default"
+                    className={classes.tabBar}
+                  >
+                    <Tabs
+                      value={value}
+                      onChange={this.handleChange}
+                      // centered={true}
+                      classes={{ indicator: classes.tabsIndicator }}
+                      // scrollable={true}
+                      // scrollButtons="auto"
+                      centered={appBarWidth >= tabsWidth}
+                      scrollable={appBarWidth < tabsWidth}
+                    >
+                      {awards.map((award, i) => (
+                        <Tab
+                          key={i}
+                          label={award.award}
+                          classes={{
+                            root: classes.tabRoot,
+                            selected: classes.tabSelected
+                          }}
+                        />
+                      ))}
+                    </Tabs>
+                  </AppBar>
+                </div>
+              )}
+            </Measure>
             <form
               autoComplete="off"
               id="filterBar"
