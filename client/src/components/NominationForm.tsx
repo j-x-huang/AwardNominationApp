@@ -22,24 +22,15 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public allNominees = [{ value: "", name: "", label: "", isDisabled: false }];
-  public categories = [
-    "Being Purple",
-    "One Small Step",
-    "New Horizon",
-    "Sky High",
-    "Star Crew"
-  ];
-  public beingPurple = [] as any[];
-  public oneSmallStep = [] as any[];
-  public newHorizon = [] as any[];
-  public skyHigh = [] as any[];
-  public starCrew = [] as any[];
+
+  public nomsByCat = {}
 
   constructor(props: any) {
     super(props);
   }
 
   public state = {
+    categories: [] as any[],
     category: "",
     justification: "",
     nominator: "",
@@ -65,42 +56,16 @@ class NominationForm extends React.Component<any, any> {
     let neoNominees = [{ value: "", name: "", label: "", isDisabled: false }];
     let actualNominees = new Array<any>();
 
-    const selection = this.categories.indexOf(category);
-    console.log(selection);
-    if (selection === 0) {
+    if (this.nomsByCat.hasOwnProperty(category)) {
       neoNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
-      );
+        staff =>
+        this.nomsByCat[category].indexOf(staff.value) === -1 &&
+        staff.value !== getUser().profile.oid
+      )
       actualNominees = this.allNominees.filter(
-        staff => this.beingPurple.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 1) {
-      neoNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff => this.oneSmallStep.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 2) {
-      neoNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff => this.newHorizon.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 3) {
-      neoNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff => this.skyHigh.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 4) {
-      neoNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) === -1 && staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff => this.starCrew.indexOf(staff.value) > -1 && staff.value !== getUser().profile.oid
+        staff =>
+          this.nomsByCat[category].indexOf(staff.value) > -1 &&
+          staff.value !== getUser().profile.oid
       );
     }
 
@@ -152,12 +117,28 @@ class NominationForm extends React.Component<any, any> {
         this.setState({ nominees: [...this.allNominees] });
       }
     });
-    this.getNominationByCategory();
+    const defaultDatabase = firebase.database();
+    const catRef = defaultDatabase.ref("category");
+    catRef.once("value", snapshot => {
+      const cats = [] as any[];
+      snapshot.forEach(childSnapshot => {
+        const item = childSnapshot.val().name;
+        cats.push(item);
+      });
+      this.setState({ categories: cats });
+      
+      cats.map((data)=> {
+        this.nomsByCat[data] = []
+      })
+      console.log(this.nomsByCat)
+      console.log(this.state.categories);
+      this.getNominationByCategory();
+    });
   }
 
   public render() {
     const { category, nominee, nominees, completed } = this.state;
-    const options = this.categories.map((loan, key) => {
+    const options = this.state.categories.map((loan, key) => {
       const isCurrent = this.state.category === loan;
       return (
         <div key={key} className="radioPad">
@@ -269,7 +250,8 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public getNominationByCategory() {
-    const returnArr: object[] = [];
+    console.log("GETNOMINATIONBYCATEGORY");
+    // const returnArr: object[] = [];
 
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
@@ -277,44 +259,16 @@ class NominationForm extends React.Component<any, any> {
       if (snapshot != null) {
         snapshot.forEach(childSnapshot => {
           if (childSnapshot != null) {
-            switch (childSnapshot.key) {
-              case "Being Purple":
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.beingPurple.push(key);
-                });
-                break;
-              case "One Small Step":
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.oneSmallStep.push(key);
-                });
-                break;
-              case "New Horizon":
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.newHorizon.push(key);
-                });
-                break;
-              case "Sky High":
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.skyHigh.push(key);
-                });
-                break;
-              case "Star Crew":
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.starCrew.push(key);
-                });
-                break;
+            const categoryName : string = "" + childSnapshot.key 
+            if (this.nomsByCat.hasOwnProperty(categoryName)){
+              Object.keys(childSnapshot.val()).forEach(key => {
+                this.nomsByCat[categoryName].push(key)
+              });
             }
-
-            const cat = {
-              category: childSnapshot.key,
-              nominees: childSnapshot.val()
-            };
-            returnArr.push(cat);
           }
         });
-        console.log(returnArr);
+        console.log(this.nomsByCat)
       }
-      return returnArr;
     });
   }
 

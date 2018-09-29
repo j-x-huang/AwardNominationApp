@@ -5,25 +5,13 @@ import { getUser } from "../auth";
 class AwardMyNominations extends AwardsContent {
   protected url = "mynominations";
   protected awardTabs = ["My Nominations", "Nominations For Me"];
-  // private myNomiationsSnapshot: any[] = [];
-  // private nominationsForMeSnapshot: any[] = [];
-  // private snapshots: any[] = [];
-  // private size = 0;
-  // private numChildren = 0;
+
+  public updateAwardTabs(callback: (awardTabs: any) => void) {
+    callback(this.awardTabs);
+  }
 
   public getTabNomination(tab: string, retrieveUserDetails: any) {
     this.getNominations(tab, retrieveUserDetails);
-    // const defaultDatabase = firebase.database();
-    // const nomRef = defaultDatabase.ref();
-    // nomRef
-    //   .child("nominations")
-    //   .orderByChild("category")
-    //   .equalTo("Sky High")
-    //   .once("value", snapshot => {
-    //     if (snapshot != null) {
-    //       console.log(retrieveUserDetails(snapshot));
-    //     }
-    //   });
   }
 
   public getNominations = (tab: string, retrieveUserDetails: any) => {

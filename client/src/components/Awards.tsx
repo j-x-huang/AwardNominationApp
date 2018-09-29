@@ -101,7 +101,7 @@ const StyledInputLabel = withStyles({
   }
 })(InputLabel);
 
-export interface IAwardsProps extends WithStyles<typeof styles> { }
+export interface IAwardsProps extends WithStyles<typeof styles> {}
 
 export interface IAwardsStates {
   value: number;
@@ -112,6 +112,7 @@ export interface IAwardsStates {
   sortBy: string;
   isLoading: boolean;
   appBarWidth: number;
+  tabsWidth: number;
 }
 
 class Awards extends React.Component<any, IAwardsStates> {
@@ -135,8 +136,8 @@ class Awards extends React.Component<any, IAwardsStates> {
     filterText: "",
     sortBy: "",
     isLoading: true,
-    appBarWidth: 160 * this.props.awardsContent.getAwardTabs().length,
-    tabsWidth: 160 * this.props.awardsContent.getAwardTabs().length
+    appBarWidth: 1496,
+    tabsWidth: 0
   };
 
   private handleChange = (
@@ -156,12 +157,15 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   public componentDidMount() {
-    const awardCategories = this.props.awardsContent.getAwardTabs();
+    const awardsCont = this.props.awardsContent;
+    awardsCont.getAwardTabs((awardCategories: any) => {
+      this.createAwardCategories(awardCategories);
 
-    this.createAwardCategories(awardCategories);
+      awardCategories.forEach((c: string) => {
+        this.getCategoryNomination(c);
+      });
 
-    awardCategories.forEach((c: string) => {
-      this.getCategoryNomination(c);
+      this.setState({ tabsWidth: 160 * awardCategories.length });
     });
   }
 
