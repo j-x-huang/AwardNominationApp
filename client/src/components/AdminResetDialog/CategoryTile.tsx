@@ -13,8 +13,7 @@ import Octicon, { X } from "@githubprimer/octicons-react";
 
 class CategoryTile extends React.Component<any, any> {
   public state = {
-    displayColorPicker: false,
-    color: "#673AB7"
+    displayColorPicker: false
   };
 
   private handleClick = () => {
@@ -25,8 +24,13 @@ class CategoryTile extends React.Component<any, any> {
     this.setState({ displayColorPicker: false });
   };
 
-  private handleChange = (dColor: any) => {
-    this.setState({ color: dColor.hex });
+  private handleColorChange = (dColor: any) => {
+    this.props.category.color = dColor.hex;
+    this.props.onColorChange(this.props.category);
+  };
+
+  private handleDelete = () => {
+    this.props.onDelete(this.props.category);
   };
 
   public render() {
@@ -36,7 +40,7 @@ class CategoryTile extends React.Component<any, any> {
           width: "1.5em",
           height: "1.5em",
           borderRadius: "2px",
-          background: `${this.state.color}`,
+          background: `${this.props.category.color}`,
           display: "inline-block",
           boxShadow: "0 0 0 1px rgba(0,0,0,.1)",
           cursor: "pointer"
@@ -62,14 +66,8 @@ class CategoryTile extends React.Component<any, any> {
     return (
       <div className="category-tile-wrapper div-centre">
         <div className="category-tile">
-          <span>Being Purple</span>
-          <div
-            style={{
-              float: "right",
-              width: "1.5em",
-              height: "1.5em"
-            }}
-          >
+          <span>{this.props.category.name}</span>
+          <div style={{ float: "right", width: "1.5em", height: "1.5em" }}>
             <div style={styles.color} onClick={this.handleClick} />
             {this.state.displayColorPicker ? (
               <div style={styles.popover}>
@@ -84,8 +82,8 @@ class CategoryTile extends React.Component<any, any> {
                     "#673ab7",
                     "#3f51b5"
                   ]}
-                  color={this.state.color}
-                  onChange={this.handleChange}
+                  color={this.props.category.color}
+                  onChange={this.handleColorChange}
                 />
               </div>
             ) : null}
@@ -94,6 +92,7 @@ class CategoryTile extends React.Component<any, any> {
         <button
           type="button"
           className="btn btn-light float-right btn-top-round"
+          onClick={this.handleDelete}
         >
           <Octicon className="octigrey" size="small" icon={X} />
         </button>
