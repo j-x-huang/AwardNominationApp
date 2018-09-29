@@ -80,7 +80,6 @@ const styles = (theme: Theme) =>
     },
     tabSelected: {},
     select: {
-      // I hate material-ui ahhhh
       "&:hover:not(.dummy):not(.dummy):not(.dummy):before": {
         borderBottom: "2px solid #8241aa"
       },
@@ -102,7 +101,7 @@ const StyledInputLabel = withStyles({
   }
 })(InputLabel);
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 export interface IAwardsStates {
   value: number;
@@ -359,9 +358,6 @@ class Awards extends React.Component<any, IAwardsStates> {
     }
   }
 
-  /**
-   * Filters the awards by name
-   */
   private filterNominationsByName = (name: string) => {
     const awards = this.state.allAwards;
 
@@ -388,6 +384,8 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.setState({ awards: filteredAwards, filterText: name });
   };
 
+  // Prevents the use of the 'enter' key
+  // Similar handling done in handleEnterKeyPress from CommentAdder component
   private preventEnter = (event: any) => {
     if (event.keyCode === 13 || event.charCode === 13) {
       event.preventDefault();

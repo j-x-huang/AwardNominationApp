@@ -53,9 +53,10 @@ class CommentAdder extends React.Component<any, any> {
     );
   }
 
+  // Enables use of 'enter' key, prevents use of 'enter' key in lockdown
+  // Similar handling done in preventEnter from Awards component
   private handleEnterKeyPress = (event: any) => {
-    // charCode 13 is for the enter key, only enabled when not in lockdown
-    if (event.charCode === 13 && !this.state.isLocked) {
+    if (event.keyCode === 13 || event.charCode === 13 && !this.state.isLocked) {
       event.preventDefault();
       const commentBtn = document.getElementById("commentBtn")!;
       commentBtn.click();
