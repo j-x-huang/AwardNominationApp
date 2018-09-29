@@ -334,72 +334,72 @@ class NominationModal extends React.Component<any, any> {
                 <MDSpinner singleColor="#8241aa" size="200%" />
               </div>
             ) : (
-              <div className="award-modal-body">
-                <div className="nomination-info-container">
-                  <div className="modal-element-padding">
-                    <img className="nominee-image" src={nominee.img} />
-                    <div className="nomination-info wrap-text">
-                      <h2>{nominee.name}</h2>
-                      <h6>
-                        Category: <b>{category}</b>
-                      </h6>
-                      <p style={{ paddingTop: "0.25em" }}>{justification}</p>
+                <div className="award-modal-body">
+                  <div className="nomination-info-container">
+                    <div className="modal-element-padding">
+                      <img className="nominee-image" src={nominee.img} />
+                      <div className="nomination-info wrap-text">
+                        <h2>{nominee.name}</h2>
+                        <h6>
+                          Category: <b>{category}</b>
+                        </h6>
+                        <p style={{ paddingTop: "0.25em" }}>{justification}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="div-centre div-space-between modal-element-left-padding">
-                    <div className="nominator-info inline-components">
-                      <p className="inline-components wrap-text">
-                        Nominated by{" "}
-                        <span className="bold-this">{nominator.name}</span>
-                      </p>
-                      <img
-                        className="profilePic inline-components"
-                        src={nominator.img}
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className="btn btn-light float-right btn-top-round inline-components"
-                      onClick={this.handleUpvoteClicked}
-                      style={this.state.isLocked ? { display: "none" } : {}}
-                    >
-                      <i
-                        className={
-                          this.state.hasBeenNominated
-                            ? "material-icons octiocti octism"
-                            : "material-icons octigrey octism"
-                        }
+                    <div className="div-centre div-space-between modal-element-left-padding">
+                      <div className="nominator-info inline-components">
+                        <p className="inline-components wrap-text">
+                          Nominated by{" "}
+                          <span className="bold-this">{nominator.name}</span>
+                        </p>
+                        <img
+                          className="profilePic inline-components"
+                          src={nominator.img}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn-light float-right btn-top-round inline-components"
+                        onClick={this.handleUpvoteClicked}
+                        style={this.state.isLocked ? { display: "none" } : {}}
                       >
-                        thumb_up_alt
+                        <i
+                          className={
+                            this.state.hasBeenNominated
+                              ? "material-icons octiocti octism"
+                              : "material-icons octigrey octism"
+                          }
+                        >
+                          thumb_up_alt
                       </i>
-                    </button>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <hr />
-                <p className="modal-element-padding">
-                  {comments.length}{" "}
-                  {comments.length === 1 ? "Comment" : "Comments"}
-                </p>
-                <CommentAdder
-                  comment={this.state.newComment}
-                  nominatorPic={this.state.profilePic}
-                  onCommentAdd={this.handleCommentAdd}
-                  onCommentChange={this.handleCommentChange}
-                />
-                {comments.map((
-                  comment,
-                  i // Place holder for now
-                ) => (
-                  <Comment
-                    key={i}
-                    nominator={comment.name}
-                    nominatorPic={comment.img}
-                    comment={comment.comment}
+                  <hr />
+                  <p className="modal-element-padding">
+                    {comments.length}{" "}
+                    {comments.length === 1 ? "Comment" : "Comments"}
+                  </p>
+                  <CommentAdder
+                    comment={this.state.newComment}
+                    nominatorPic={this.state.profilePic}
+                    onCommentAdd={this.handleCommentAdd}
+                    onCommentChange={this.handleCommentChange}
                   />
-                ))}
-              </div>
-            )}
+                  {comments.map((
+                    comment,
+                    i // Place holder for now
+                  ) => (
+                      <Comment
+                        key={i}
+                        nominator={comment.name}
+                        nominatorPic={comment.img}
+                        comment={comment.comment}
+                      />
+                    ))}
+                </div>
+              )}
           </div>
         </div>
       </div>

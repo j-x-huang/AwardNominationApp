@@ -1,6 +1,5 @@
 import * as React from "react";
 import logo1white from "../images/logo1white.png";
-// import { Route } from "react-router-dom";
 
 export interface INominationCompleteProps {
   category: string;

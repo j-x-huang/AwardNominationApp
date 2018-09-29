@@ -9,7 +9,6 @@ import MaterialCard from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
-// import { getUserDetails } from "../MicrosoftGraphClient";
 
 const styles = (theme: Theme) =>
   createStyles({

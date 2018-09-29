@@ -101,7 +101,7 @@ const StyledInputLabel = withStyles({
   }
 })(InputLabel);
 
-export interface IAwardsProps extends WithStyles<typeof styles> {}
+export interface IAwardsProps extends WithStyles<typeof styles> { }
 
 export interface IAwardsStates {
   value: number;
@@ -393,13 +393,6 @@ class Awards extends React.Component<any, IAwardsStates> {
   public render() {
     const { classes } = this.props;
     const { value, awards } = this.state;
-    // const { location } = this.props;
-
-    /* const isModal = !!(
-      location.state &&
-      location.state.modal &&
-      this.previousLocation !== location
-    ); */
 
     console.log("Award state:");
     console.log(this.state.awards);
@@ -411,97 +404,97 @@ class Awards extends React.Component<any, IAwardsStates> {
             <MDSpinner singleColor="#8241aa" size="50%" />
           </div>
         ) : (
-          <div className={classes.root} id="awardsContainer">
-            <AppBar
-              position="static"
-              color="default"
-              className={classes.tabBar}
-            >
-              <Tabs
-                value={value}
-                onChange={this.handleChange}
-                // centered={true}
-                classes={{ indicator: classes.tabsIndicator }}
-                scrollable={true}
-                scrollButtons="auto"
+            <div className={classes.root} id="awardsContainer">
+              <AppBar
+                position="static"
+                color="default"
+                className={classes.tabBar}
               >
-                {awards.map((award, i) => (
-                  <Tab
-                    key={i}
-                    label={award.award}
-                    classes={{
-                      root: classes.tabRoot,
-                      selected: classes.tabSelected
-                    }}
-                  />
-                ))}
-              </Tabs>
-            </AppBar>
-            <form
-              autoComplete="off"
-              id="filterBar"
-              onKeyPress={this.preventEnter}
-            >
-              <FormControl className="formControl">
-                <div className="grow" />
-                <div className="searchBar">
-                  <div className="searchIcon">
-                    <SearchIcon />
+                <Tabs
+                  value={value}
+                  onChange={this.handleChange}
+                  // centered={true}
+                  classes={{ indicator: classes.tabsIndicator }}
+                  scrollable={true}
+                  scrollButtons="auto"
+                >
+                  {awards.map((award, i) => (
+                    <Tab
+                      key={i}
+                      label={award.award}
+                      classes={{
+                        root: classes.tabRoot,
+                        selected: classes.tabSelected
+                      }}
+                    />
+                  ))}
+                </Tabs>
+              </AppBar>
+              <form
+                autoComplete="off"
+                id="filterBar"
+                onKeyPress={this.preventEnter}
+              >
+                <FormControl className="formControl">
+                  <div className="grow" />
+                  <div className="searchBar">
+                    <div className="searchIcon">
+                      <SearchIcon />
+                    </div>
+                    <Input
+                      placeholder="Search…"
+                      disableUnderline={true}
+                      onChange={this.handleSearch}
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput
+                      }}
+                    />
                   </div>
-                  <Input
-                    placeholder="Search…"
-                    disableUnderline={true}
-                    onChange={this.handleSearch}
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput
-                    }}
-                  />
-                </div>
-              </FormControl>
-              <FormControl className="formControl" style={{ float: "right" }}>
-                <StyledInputLabel
-                  style={{ fontFamily: "PT Sans" }}
-                  className={classes.select}
-                >
-                  Sort By
+                </FormControl>
+                <FormControl className="formControl" style={{ float: "right" }}>
+                  <StyledInputLabel
+                    style={{ fontFamily: "PT Sans" }}
+                    className={classes.select}
+                  >
+                    Sort By
                 </StyledInputLabel>
-                <Select
-                  className={classes.select}
-                  value={this.state.sortBy}
-                  onChange={this.handleSort}
-                  inputProps={{ name: "sortBy" }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Firstname">First Name</MenuItem>
-                  <MenuItem value="Lastname">Last Name</MenuItem>
-                </Select>
-              </FormControl>
-            </form>
-            {awards.map(
-              (award, i) =>
-                value === i && (
-                  <CardContainer
-                    key={i}
-                    cards={award.nominations}
-                    onSelect={this.handleSelect}
-                    category={award.award}
-                  />
-                )
-            )}
-            <Route
-              path={
-                "/" +
-                this.props.awardsContent.getReturnURL() +
-                "/nomination/" +
-                this.state.selectedNomination
-              }
-              render={this.openModal}
-            />
-          </div>
-        )}
+                  <Select
+                    className={classes.select}
+                    value={this.state.sortBy}
+                    onChange={this.handleSort}
+                    inputProps={{ name: "sortBy" }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="Firstname">First Name</MenuItem>
+                    <MenuItem value="Lastname">Last Name</MenuItem>
+                  </Select>
+                </FormControl>
+              </form>
+              {awards.map(
+                (award, i) =>
+                  value === i && (
+                    <CardContainer
+                      key={i}
+                      cards={award.nominations}
+                      onSelect={this.handleSelect}
+                      category={award.award}
+                    />
+                  )
+              )}
+              <Route
+                path={
+                  "/" +
+                  this.props.awardsContent.getReturnURL() +
+                  "/nomination/" +
+                  this.state.selectedNomination
+                }
+                render={this.openModal}
+              />
+            </div>
+          )}
       </div>
     );
   }
