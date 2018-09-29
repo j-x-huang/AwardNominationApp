@@ -22,11 +22,8 @@ class NominationForm extends React.Component<any, any> {
   }
 
   public allNominees = [{ value: "", name: "", label: "", isDisabled: false }];
-  public cat0 = [] as any[];
-  public cat1 = [] as any[];
-  public cat2 = [] as any[];
-  public cat3 = [] as any[];
-  public cat4 = [] as any[];
+
+  public nomsByCat = {}
 
   constructor(props: any) {
     super(props);
@@ -59,61 +56,15 @@ class NominationForm extends React.Component<any, any> {
     let neoNominees = [{ value: "", name: "", label: "", isDisabled: false }];
     let actualNominees = new Array<any>();
 
-    const selection = this.state.categories.indexOf(category);
-    console.log(selection);
-    if (selection === 0) {
+    if (this.nomsByCat.hasOwnProperty(category)) {
       neoNominees = this.allNominees.filter(
         staff =>
-          this.cat0.indexOf(staff.value) === -1 &&
-          staff.value !== getUser().profile.oid
-      );
+        this.nomsByCat[category].indexOf(staff.value) === -1 &&
+        staff.value !== getUser().profile.oid
+      )
       actualNominees = this.allNominees.filter(
         staff =>
-          this.cat0.indexOf(staff.value) > -1 &&
-          staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 1) {
-      neoNominees = this.allNominees.filter(
-        staff =>
-          this.cat1.indexOf(staff.value) === -1 &&
-          staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff =>
-          this.cat1.indexOf(staff.value) > -1 &&
-          staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 2) {
-      neoNominees = this.allNominees.filter(
-        staff =>
-          this.cat2.indexOf(staff.value) === -1 &&
-          staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff =>
-          this.cat2.indexOf(staff.value) > -1 &&
-          staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 3) {
-      neoNominees = this.allNominees.filter(
-        staff =>
-          this.cat3.indexOf(staff.value) === -1 &&
-          staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff =>
-          this.cat3.indexOf(staff.value) > -1 &&
-          staff.value !== getUser().profile.oid
-      );
-    } else if (selection === 4) {
-      neoNominees = this.allNominees.filter(
-        staff =>
-          this.cat4.indexOf(staff.value) === -1 &&
-          staff.value !== getUser().profile.oid
-      );
-      actualNominees = this.allNominees.filter(
-        staff =>
-          this.cat4.indexOf(staff.value) > -1 &&
+          this.nomsByCat[category].indexOf(staff.value) > -1 &&
           staff.value !== getUser().profile.oid
       );
     }
@@ -175,6 +126,11 @@ class NominationForm extends React.Component<any, any> {
         cats.push(item);
       });
       this.setState({ categories: cats });
+      
+      cats.map((data)=> {
+        this.nomsByCat[data] = []
+      })
+      console.log(this.nomsByCat)
       console.log(this.state.categories);
       this.getNominationByCategory();
     });
@@ -295,7 +251,7 @@ class NominationForm extends React.Component<any, any> {
 
   public getNominationByCategory() {
     console.log("GETNOMINATIONBYCATEGORY");
-    const returnArr: object[] = [];
+    // const returnArr: object[] = [];
 
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
@@ -303,44 +259,16 @@ class NominationForm extends React.Component<any, any> {
       if (snapshot != null) {
         snapshot.forEach(childSnapshot => {
           if (childSnapshot != null) {
-            switch (childSnapshot.key) {
-              case this.state.categories[0]:
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.cat0.push(key);
-                });
-                break;
-              case this.state.categories[1]:
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.cat1.push(key);
-                });
-                break;
-              case this.state.categories[2]:
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.cat2.push(key);
-                });
-                break;
-              case this.state.categories[3]:
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.cat3.push(key);
-                });
-                break;
-              case this.state.categories[4]:
-                Object.keys(childSnapshot.val()).forEach(key => {
-                  this.cat4.push(key);
-                });
-                break;
+            const categoryName : string = "" + childSnapshot.key 
+            if (this.nomsByCat.hasOwnProperty(categoryName)){
+              Object.keys(childSnapshot.val()).forEach(key => {
+                this.nomsByCat[categoryName].push(key)
+              });
             }
-
-            const cat = {
-              category: childSnapshot.key,
-              nominees: childSnapshot.val()
-            };
-            returnArr.push(cat);
           }
         });
-        console.log(returnArr);
+        console.log(this.nomsByCat)
       }
-      return returnArr;
     });
   }
 
