@@ -3,6 +3,7 @@ import "../App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
+import AdminResetDialog from "./AdminResetDialog/AdminResetDialog";
 import { saveAs } from "file-saver";
 import { getUsersByObjectId } from "../MicrosoftGraphClient";
 
@@ -16,12 +17,12 @@ class Admin extends React.Component<any, any> {
   public state = {
     isLocked: false,
     lockPath: firebase.database().ref("/lockdown"),
+    // finalTally is an array of csv rows
     finalTally: ["Category,Name,Tally\n"] as any
   };
 
   public csvLine(category: string, name: string, tally: number) {
     const data = category + "," + name + "," + tally + "\n";
-
     this.state.finalTally.push(data);
   }
 
@@ -83,10 +84,14 @@ class Admin extends React.Component<any, any> {
   }
 
   private showResetConfirmation = () => {
-    this.showConfirmationModal(
-      "Are you sure you want to reset the state of award nominations?",
-      this.resetDatabase
-    );
+    confirmAlert({
+      customUI: ({ title, onClose }: { title: any; onClose: any }) => {
+        console.log(title);
+        return (
+          <AdminResetDialog onClose={onClose} onReset={this.resetDatabase} />
+        );
+      }
+    });
   };
 
   private resetDatabase = () => {
@@ -125,6 +130,7 @@ class Admin extends React.Component<any, any> {
     });
   };
 
+  // Sets Firebase boolean lockState to true/false
   private lockDown = () => {
     this.state.isLocked = !this.state.isLocked;
     console.log("Lock down " + this.state.isLocked);
@@ -132,12 +138,14 @@ class Admin extends React.Component<any, any> {
     this.writeLockState(this.state.isLocked);
   };
 
+  // Reads Firebase boolean lockState
   private readLockState = () => {
     this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
     );
   };
 
+  // Writes Firebase boolean lockState after lockdown is called
   private writeLockState = (lockState: boolean) => {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
@@ -180,28 +188,28 @@ class Admin extends React.Component<any, any> {
     });
   };
 
-  private sortByTally(a: string,b: string) {
-    const aArr = a.split(',');
-    const bArr = b.split(',');
+  private sortByTally(a: string, b: string) {
+    const aArr = a.split(",");
+    const bArr = b.split(",");
     // Sorting by tally number
     if (aArr[2] < bArr[2]) {
-        return 1;
-    } else if (aArr[2] > bArr[2] ){
-        return -1;
-    // Sorting by Category in Alphabetical order
-    } else if (aArr[2] === bArr[2] && aArr[0] < bArr[0]){
-        return -1;
-    } else if (aArr[2] === bArr[2] && aArr[0] > bArr[0]){
       return 1;
-    // Sorting by Name in Alphabetical order 
-  } else if (aArr[2] === bArr[2] && aArr[1] < bArr[1]){
-    return -1;
-  } else if (aArr[2] === bArr[2] && aArr[1] > bArr[1]){
+    } else if (aArr[2] > bArr[2]) {
+      return -1;
+      // Sorting by Category in Alphabetical order
+    } else if (aArr[2] === bArr[2] && aArr[0] < bArr[0]) {
+      return -1;
+    } else if (aArr[2] === bArr[2] && aArr[0] > bArr[0]) {
       return 1;
-  } else {
-    return 0;
+      // Sorting by Name in Alphabetical order
+    } else if (aArr[2] === bArr[2] && aArr[1] < bArr[1]) {
+      return -1;
+    } else if (aArr[2] === bArr[2] && aArr[1] > bArr[1]) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
-}
 
   private exportDatabase = () => {
     const defaultDatabase = firebase.database();

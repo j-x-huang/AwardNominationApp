@@ -21,6 +21,7 @@ import {
   getUsersByObjectId
 } from "../MicrosoftGraphClient";
 import MDSpinner from "react-md-spinner";
+import Measure from "react-measure";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -79,7 +80,6 @@ const styles = (theme: Theme) =>
     },
     tabSelected: {},
     select: {
-      // I hate material-ui ahhhh
       "&:hover:not(.dummy):not(.dummy):not(.dummy):before": {
         borderBottom: "2px solid #8241aa"
       },
@@ -111,6 +111,8 @@ export interface IAwardsStates {
   filterText: string;
   sortBy: string;
   isLoading: boolean;
+  appBarWidth: number;
+  tabsWidth: number;
 }
 
 class Awards extends React.Component<any, IAwardsStates> {
@@ -133,7 +135,9 @@ class Awards extends React.Component<any, IAwardsStates> {
     awards: [] as any[],
     filterText: "",
     sortBy: "",
-    isLoading: true
+    isLoading: true,
+    appBarWidth: 1496,
+    tabsWidth: 0
   };
 
   private handleChange = (
@@ -154,17 +158,15 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   public componentDidMount() {
     const awardsCont = this.props.awardsContent;
-      awardsCont.getAwardTabs((awardCategories: any) => {
-        this.createAwardCategories(awardCategories);
-  
-        awardCategories.forEach((c: string) => {
-          this.getCategoryNomination(c);
-  
-      })
+    awardsCont.getAwardTabs((awardCategories: any) => {
+      this.createAwardCategories(awardCategories);
+
+      awardCategories.forEach((c: string) => {
+        this.getCategoryNomination(c);
       });
 
-
-
+      this.setState({ tabsWidth: 160 * awardCategories.length });
+    });
   }
 
   public createAwardCategories = (categories: string[]) => {
@@ -360,9 +362,6 @@ class Awards extends React.Component<any, IAwardsStates> {
     }
   }
 
-  /**
-   * Filters the awards by name
-   */
   private filterNominationsByName = (name: string) => {
     const awards = this.state.allAwards;
 
@@ -389,6 +388,8 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.setState({ awards: filteredAwards, filterText: name });
   };
 
+  // Prevents the use of the 'enter' key
+  // Similar handling done in handleEnterKeyPress from CommentAdder component
   private preventEnter = (event: any) => {
     if (event.keyCode === 13 || event.charCode === 13) {
       event.preventDefault();
@@ -397,17 +398,9 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   public render() {
     const { classes } = this.props;
-    const { value, awards } = this.state;
-    // const { location } = this.props;
-
-    /* const isModal = !!(
-      location.state &&
-      location.state.modal &&
-      this.previousLocation !== location
-    ); */
-
-    console.log("Award state:");
-    console.log(this.state.awards);
+    const { value, awards, appBarWidth, tabsWidth } = this.state;
+    const updateAppBarWidth = () => (contentRect: any) =>
+      this.setState({ appBarWidth: contentRect.bounds.width });
 
     return (
       <div>
@@ -417,29 +410,39 @@ class Awards extends React.Component<any, IAwardsStates> {
           </div>
         ) : (
           <div className={classes.root} id="awardsContainer">
-            <AppBar
-              position="static"
-              color="default"
-              className={classes.tabBar}
-            >
-              <Tabs
-                value={value}
-                onChange={this.handleChange}
-                centered={true}
-                classes={{ indicator: classes.tabsIndicator }}
-              >
-                {awards.map((award, i) => (
-                  <Tab
-                    key={i}
-                    label={award.award}
-                    classes={{
-                      root: classes.tabRoot,
-                      selected: classes.tabSelected
-                    }}
-                  />
-                ))}
-              </Tabs>
-            </AppBar>
+            <Measure bounds={true} onResize={updateAppBarWidth()}>
+              {({ measureRef }: any) => (
+                <div ref={measureRef}>
+                  <AppBar
+                    position="static"
+                    color="default"
+                    className={classes.tabBar}
+                  >
+                    <Tabs
+                      value={value}
+                      onChange={this.handleChange}
+                      // centered={true}
+                      classes={{ indicator: classes.tabsIndicator }}
+                      // scrollable={true}
+                      // scrollButtons="auto"
+                      centered={appBarWidth >= tabsWidth}
+                      scrollable={appBarWidth < tabsWidth}
+                    >
+                      {awards.map((award, i) => (
+                        <Tab
+                          key={i}
+                          label={award.award}
+                          classes={{
+                            root: classes.tabRoot,
+                            selected: classes.tabSelected
+                          }}
+                        />
+                      ))}
+                    </Tabs>
+                  </AppBar>
+                </div>
+              )}
+            </Measure>
             <form
               autoComplete="off"
               id="filterBar"

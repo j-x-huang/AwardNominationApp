@@ -34,6 +34,7 @@ class CommentAdder extends React.Component<any, any> {
           value={comment}
           onChange={onCommentChange}
           onKeyPress={this.handleEnterKeyPress}
+          disabled={this.state.isLocked}
         />
         <button
           type="button"
@@ -52,8 +53,10 @@ class CommentAdder extends React.Component<any, any> {
     );
   }
 
+  // Enables use of 'enter' key, prevents use of 'enter' key in lockdown
+  // Similar handling done in preventEnter from Awards component
   private handleEnterKeyPress = (event: any) => {
-    if (event.charCode === 13) {
+    if (event.keyCode === 13 || event.charCode === 13 && !this.state.isLocked) {
       event.preventDefault();
       const commentBtn = document.getElementById("commentBtn")!;
       commentBtn.click();
@@ -61,7 +64,7 @@ class CommentAdder extends React.Component<any, any> {
   };
 
   private readLockState = () => {
-    this.state.lockPath.on("value", snap => 
+    this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
     );
   };

@@ -29,7 +29,7 @@
 }
 
 * {
-  font-family: NeutroMYOB-Reg;
+  font-family: NeutroMYOB-Reg, sans-serif;
 }
 
 body {
@@ -288,14 +288,14 @@ a:visited {
 
 .loginContainer {
   margin: auto;
-  margin-top: 10%;
+  /* margin-top: 10%; */
   text-align: center;
-  width: 22.4em;
+  /* width: 22.4em;
   padding: 2.2em;
-  padding-top: 1.6em;
+  padding-top: 1.6em; */
   z-index: 999;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.3);
+  /* background-color: rgba(255, 255, 255, 0.3); */
 }
 
 #loginLogo {
@@ -305,7 +305,7 @@ a:visited {
 }
 
 #loginBg {
-  background-color: #fff;
+  /* background-color: #fff; */
   height: 100vh;
   overflow: hidden;
 }
@@ -480,41 +480,6 @@ a:visited {
   height: 0;
   width: 0;
   opacity: 0;
-}
-
-.award-modal {
-  background-color: #eeeeee;
-  overflow-y: auto;
-
-  width: 100%;
-  height: 100%;
-  padding-right: 1.1em;
-  box-sizing: content-box;
-}
-
-.award-modal-dialog {
-  margin-top: 2em;
-  margin-bottom: 2em;
-
-  margin-left: auto;
-  margin-right: auto;
-  width: 900px;
-}
-
-.award-modal-content {
-  background-color: white;
-  border-radius: 8px;
-  padding: 24px;
-}
-
-#award-modal-back-container {
-  position: fixed;
-  top: 2em;
-  left: 2em;
-}
-
-.back-octicon {
-  margin-right: 0.5em;
 }
 
 .bold-this {
@@ -735,6 +700,7 @@ a:visited {
 
 .adminButton {
   margin-top: 0.2em;
+  width: 10em;
 }
 
 .adminHr {
@@ -816,19 +782,19 @@ a:visited {
   }
 }
 
-@media (max-width: 1496px) {
+@media (max-width: 1566px) {
   #awardsContainer {
     width: 1114px;
   }
 }
 
-@media (max-width: 1114px) {
+@media (max-width: 1184px) {
   #awardsContainer {
     width: 732px;
   }
 }
 
-@media (max-width: 732px) {
+@media (max-width: 802px) {
   #nominateDiv,
   #adminDiv {
     width: 90%;
