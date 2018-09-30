@@ -11,7 +11,7 @@ class Home extends React.Component<any, any> {
       <div>
         <div id="homeLabel">
           {" "}
-          <div id="homeLabelText">Ignite Awards</div>{" "}
+          <div id="homeLabelText">Ignition Awards</div>{" "}
         </div>
         <img
           style={{

@@ -1,5 +1,5 @@
 import * as React from "react";
-import logo1 from "../images/logo1.png";
+import ilogo from "../images/ilogo.png";
 import { getUser, logOutUser } from "../auth";
 import { getAdminStatus, getMyImage } from "../MicrosoftGraphClient";
 import { NavLink } from "react-router-dom";
@@ -53,7 +53,7 @@ class NavBar extends React.Component<any, any> {
     return (
       <nav className="navbar navbar-expand-xl navbar-light bg-light">
         <NavLink className="navbar-brand" to="/home">
-          <img src={logo1} height="24" alt="" />
+          <img src={ilogo} height="24" alt="" />
         </NavLink>
         <button
           className="navbar-toggler"

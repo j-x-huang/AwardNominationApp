@@ -1,5 +1,5 @@
 import * as React from "react";
-import logo1white from "../images/logo1white.png";
+import ilogowhite from "../images/ilogowhite.png";
 
 export interface INominationCompleteProps {
   category: string;
@@ -20,7 +20,7 @@ class NominationComplete extends React.Component<
     return (
       <div id="nominationComplete">
         <h2 className="complete-card-top">
-          <img id="nominationCompleteLogo" src={logo1white} alt="logo" />
+          <img id="nominationCompleteLogo" src={ilogowhite} alt="logo" />
         </h2>
         <div className="complete-card-bottom">
           <h3> Thanks for the Nomination </h3>
