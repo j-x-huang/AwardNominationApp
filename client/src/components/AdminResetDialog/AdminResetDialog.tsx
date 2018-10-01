@@ -73,7 +73,8 @@ class AdminResetDialog extends React.Component<IAdminResetDialog, any> {
     const data = {
       lockdown: {
         lockState: false
-      }
+      },
+      category: this.state.categories
     };
     firebase
       .database()
