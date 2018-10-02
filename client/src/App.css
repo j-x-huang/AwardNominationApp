@@ -457,7 +457,7 @@ a:visited {
 .radioPad__wrapper {
   display: flex;
   cursor: pointer;
-  background: #a476c1;
+  /* background: #a476c1; */
   border-color: #a476c1 !important;
   border-radius: 0.25rem;
   color: #fff;

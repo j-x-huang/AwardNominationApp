@@ -39,7 +39,8 @@ class NominationForm extends React.Component<any, any> {
     score: 1,
     nominees: new Array<any>(),
     completed: false,
-    isLocked: false
+    isLocked: false,
+    colours: [] as string[],
   };
 
   private readLockState = () => {
@@ -125,7 +126,9 @@ class NominationForm extends React.Component<any, any> {
         const item = childSnapshot.val().name;
         cats.push(item);
       });
-      this.setState({ categories: cats });
+      this.setState({ categories: cats,
+        colours : ["red", "orange","yellow", "green","blue", "indigo"] }
+        );
       
       cats.map((data)=> {
         this.nomsByCat[data] = []
@@ -138,8 +141,10 @@ class NominationForm extends React.Component<any, any> {
 
   public render() {
     const { category, nominee, nominees, completed } = this.state;
+    let index = -1;
     const options = this.state.categories.map((loan, key) => {
       const isCurrent = this.state.category === loan;
+      index++;
       return (
         <div key={key} className="radioPad">
           <div>
@@ -149,6 +154,7 @@ class NominationForm extends React.Component<any, any> {
                   ? "radioPad__wrapper radioPad__wrapper--selected"
                   : "radioPad__wrapper"
               }
+              style={{background: this.state.colours[index]}}
             >
               <input
                 className="radioPad__radio"
@@ -157,11 +163,12 @@ class NominationForm extends React.Component<any, any> {
                 id={loan}
                 value={loan}
                 onChange={this.categoryChange}
+                style={{background: this.state.colours[index]}}
               />
               {loan}
             </label>
           </div>
-        </div>
+        </div>        
       );
     });
     return (
