@@ -145,10 +145,8 @@ class NominationForm extends React.Component<any, any> {
 
   public render() {
     const { category, nominee, nominees, completed } = this.state;
-    let index = -1;
     const options = this.state.categories.map((loan, key) => {
       const isCurrent = this.state.category === loan;
-      index++;
       return (
         <div key={key} className="radioPad">
           <div>
@@ -158,7 +156,7 @@ class NominationForm extends React.Component<any, any> {
                   ? "radioPad__wrapper radioPad__wrapper--selected"
                   : "radioPad__wrapper"
               }
-              style={{ background: this.state.colours[index] }}
+              style={{ background: this.state.colours[key] }}
             >
               <input
                 className="radioPad__radio"
