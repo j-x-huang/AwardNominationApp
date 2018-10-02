@@ -60,8 +60,8 @@ class NominationForm extends React.Component<any, any> {
     if (this.nomsByCat.hasOwnProperty(category)) {
       neoNominees = this.allNominees.filter(
         staff =>
-        this.nomsByCat[category].indexOf(staff.value) === -1 &&
-        staff.value !== getUser().profile.oid
+          this.nomsByCat[category].indexOf(staff.value) === -1 &&
+          staff.value !== getUser().profile.oid
       )
       actualNominees = this.allNominees.filter(
         staff =>
@@ -122,15 +122,19 @@ class NominationForm extends React.Component<any, any> {
     const catRef = defaultDatabase.ref("category");
     catRef.once("value", snapshot => {
       const cats = [] as any[];
+      const tempColours = [] as string[];
       snapshot.forEach(childSnapshot => {
         const item = childSnapshot.val().name;
+        const colour = childSnapshot.val().color;
         cats.push(item);
+        tempColours.push(colour);
       });
-      this.setState({ categories: cats,
-        colours : ["red", "orange","yellow", "green","blue", "indigo"] }
-        );
-      
-      cats.map((data)=> {
+      this.setState({
+        categories: cats,
+        colours: tempColours
+      }
+      );
+      cats.map((data) => {
         this.nomsByCat[data] = []
       })
       console.log(this.nomsByCat)
@@ -154,7 +158,7 @@ class NominationForm extends React.Component<any, any> {
                   ? "radioPad__wrapper radioPad__wrapper--selected"
                   : "radioPad__wrapper"
               }
-              style={{background: this.state.colours[index]}}
+              style={{ background: this.state.colours[index] }}
             >
               <input
                 className="radioPad__radio"
@@ -163,12 +167,11 @@ class NominationForm extends React.Component<any, any> {
                 id={loan}
                 value={loan}
                 onChange={this.categoryChange}
-                style={{background: this.state.colours[index]}}
               />
               {loan}
             </label>
           </div>
-        </div>        
+        </div>
       );
     });
     return (
@@ -266,8 +269,8 @@ class NominationForm extends React.Component<any, any> {
       if (snapshot != null) {
         snapshot.forEach(childSnapshot => {
           if (childSnapshot != null) {
-            const categoryName : string = "" + childSnapshot.key 
-            if (this.nomsByCat.hasOwnProperty(categoryName)){
+            const categoryName: string = "" + childSnapshot.key
+            if (this.nomsByCat.hasOwnProperty(categoryName)) {
               Object.keys(childSnapshot.val()).forEach(key => {
                 this.nomsByCat[categoryName].push(key)
               });
