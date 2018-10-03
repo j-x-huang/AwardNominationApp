@@ -10,6 +10,16 @@ import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 
+export interface ICardProps extends WithStyles<typeof styles> {
+  id: number;
+  img: string;
+  title: string;
+  objectId: string;
+  description: string;
+  color: string;
+  onSelect: (...args: any[]) => void;
+}
+
 const styles = (theme: Theme) =>
   createStyles({
     card: {
@@ -43,20 +53,19 @@ const styles = (theme: Theme) =>
     }
   });
 
-export interface ICardProps extends WithStyles<typeof styles> {
-  id: number;
-  img: string;
-  title: string;
-  objectId: string;
-  description: string;
-  onSelect: (...args: any[]) => void;
-}
-
 // export interface ICardState {}
 
 class Card extends React.Component<ICardProps> {
   public render() {
-    const { classes, id, img, title, description, onSelect } = this.props;
+    const {
+      classes,
+      id,
+      img,
+      title,
+      description,
+      onSelect,
+      color
+    } = this.props;
     const handleSelect = () => onSelect(id, title);
 
     return (
@@ -73,7 +82,10 @@ class Card extends React.Component<ICardProps> {
                 >
                   {title}
                 </Typography>
-                <Divider className={classes.divider} />
+                <Divider
+                  className={classes.divider}
+                  style={{ backgroundColor: color }}
+                />
                 <Typography component="p" className="cardMainContent">
                   {description}
                 </Typography>

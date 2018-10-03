@@ -25,6 +25,7 @@ export interface ICardContent {
   objectId: string;
   description: string;
   category: string;
+  color: string;
 }
 
 export interface ICardContainerProps extends WithStyles<typeof styles> {
@@ -38,11 +39,7 @@ class CardContainer extends React.Component<ICardContainerProps> {
     const { classes, cards, onSelect } = this.props;
 
     return (
-      <Grid
-        container={true}
-        className={classes.root}
-        spacing={32}
-      >
+      <Grid container={true} className={classes.root} spacing={32}>
         <Grid item={true} xs={12}>
           <Grid
             container={true}
@@ -60,13 +57,19 @@ class CardContainer extends React.Component<ICardContainerProps> {
                     title={card.title}
                     description={card.description}
                     objectId={card.objectId}
+                    color={card.color}
                     onSelect={onSelect}
                   />
                 </Grid>
               ))
             ) : (
-                <div id="noNominations"> There are currently no nominations for {this.props.category} </div>
-              )}
+              <div id="noNominations">
+                {" "}
+                There are currently no nominations for {
+                  this.props.category
+                }{" "}
+              </div>
+            )}
           </Grid>
         </Grid>
       </Grid>
