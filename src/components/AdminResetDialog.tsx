@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./AdminResetDialog.css";
+import "../css/AdminResetDialogStyles.css";
 import CategoryTile from "./CategoryTile";
 import * as firebase from "firebase";
 
@@ -127,7 +127,14 @@ class AdminResetDialog extends React.Component<IAdminResetDialog, any> {
           onKeyPress={this.handleEnterKeyPress}
         />
         <div className="react-confirm-alert-button-group">
-          <button className="reset-btn" onClick={this.resetDatabase}>
+          <button
+            className="reset-btn"
+            onClick={this.resetDatabase}
+            disabled={
+              this.state.categories === undefined ||
+              this.state.categories.length === 0
+            }
+          >
             Confirm
           </button>
           <button className="reset-btn" onClick={this.props.onClose}>
