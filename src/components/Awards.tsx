@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./../App.css";
+import "./../css/App.css";
 import defaultProfilePic from "../images/default-profile-pic.jpg";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
