@@ -319,7 +319,9 @@ class Awards extends React.Component<any, IAwardsStates> {
 
   private handleSort = (event: any) => {
     this.setState({ sortBy: event.target.value });
-    this.sortNominationsByName(event.target.value);
+    if (this.state.allAwards.length !== 0) {
+      this.sortNominationsByName(event.target.value);
+    }
   };
 
   private sortNominationsByName(nameType: string) {
