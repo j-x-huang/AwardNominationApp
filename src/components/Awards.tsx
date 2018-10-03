@@ -190,8 +190,20 @@ class Awards extends React.Component<any, IAwardsStates> {
   public retrieveUserDetails = (snapshot: any[], category: string) => {
     const nominations: object[] = [];
     const nominees: string[] = [];
+    let noAwards: boolean = false;
+    try {
+      let firebaseSnapshot: any;
+      firebaseSnapshot = snapshot;
+      noAwards = firebaseSnapshot.val() === null;
+      console.log("fb snapshot");
+      console.log(firebaseSnapshot.val());
+    } catch (err) {
+      console.log("snapshot");
+      console.log(snapshot.length);
+      noAwards = snapshot.length <= 0;
+    }
 
-    if (snapshot.length <= 0) {
+    if (noAwards) {
       this.setState({ isLoading: false });
     } else {
       snapshot.forEach(childSnapshot => {
