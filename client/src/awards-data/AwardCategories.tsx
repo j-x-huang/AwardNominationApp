@@ -25,28 +25,40 @@ class AwardCategories extends AwardsContent {
   public getTabNomination(tab: string, retrieveUserDetails: any) {
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
+    const catRef = defaultDatabase.ref("category");
 
-    if (tab === "All") {
-      nomRef
-        .child("nominations")
-        .orderByChild("category")
-        .once("value", snapshot => {
-          if (snapshot != null) {
-            console.log(snapshot.val());
-            console.log(retrieveUserDetails(snapshot, tab));
-          }
+    catRef.once("value", snapshot => {
+      const categoryColors = [] as any[];
+
+      snapshot.forEach(childSnapshot => {
+        const item = childSnapshot.val().name;
+        const color = childSnapshot.val().color;
+        categoryColors[item] = color;
+      });
+
+      if (tab === "All") {
+        nomRef
+          .child("nominations")
+          .orderByChild("category")
+          .once("value", nomSnapshot => {
+            if (nomSnapshot != null) {
+              console.log(nomSnapshot.val());
+              console.log(retrieveUserDetails(nomSnapshot, tab));
+            }
         });
-    } else {
-      nomRef
-        .child("nominations")
-        .orderByChild("category")
-        .equalTo(tab)
-        .once("value", snapshot => {
-          if (snapshot != null) {
-            console.log(retrieveUserDetails(snapshot, tab));
-          }
-        });
-    }
+        console.log(categoryColors);
+      } else {
+        nomRef
+          .child("nominations")
+          .orderByChild("category")
+          .equalTo(tab)
+          .once("value", nomSnapshot => {
+            if (nomSnapshot != null) {
+              console.log(retrieveUserDetails(nomSnapshot, tab));
+            }
+          });
+      }
+    });
   }
 }
 
