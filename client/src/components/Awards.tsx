@@ -1,5 +1,6 @@
 import * as React from "react";
 import "./../App.css";
+import defaultProfilePic from "../images/default-profile-pic.jpg";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -225,8 +226,7 @@ class Awards extends React.Component<any, IAwardsStates> {
             let nomination;
 
             nomination = {
-              img:
-                "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+              img: defaultProfilePic,
               id: item.key,
               description: item.justification,
               objectId: item.nominee,
