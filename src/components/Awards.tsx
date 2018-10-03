@@ -195,11 +195,7 @@ class Awards extends React.Component<any, IAwardsStates> {
       let firebaseSnapshot: any;
       firebaseSnapshot = snapshot;
       noAwards = firebaseSnapshot.val() === null;
-      console.log("fb snapshot");
-      console.log(firebaseSnapshot.val());
     } catch (err) {
-      console.log("snapshot");
-      console.log(snapshot.length);
       noAwards = snapshot.length <= 0;
     }
 
@@ -213,10 +209,6 @@ class Awards extends React.Component<any, IAwardsStates> {
         } catch (err) {
           item = childSnapshot;
         }
-
-        console.log("Nomination details:");
-        console.log(category);
-        console.log(item);
         if (nominees.indexOf(item.nominee) === -1) {
           nominees.push(item.nominee);
         }
@@ -247,7 +239,6 @@ class Awards extends React.Component<any, IAwardsStates> {
             };
             nominations.push(nomination);
           });
-          console.log(nominations);
           this.updateAllNominations(category, nominations, nominees);
         }
       });
@@ -261,7 +252,6 @@ class Awards extends React.Component<any, IAwardsStates> {
     nominations: any[],
     nominees: any[]
   ) => {
-    console.log("updateAllNominations called, tab: " + category);
     const awards = [...this.state.awards];
 
     const index = awards.findIndex(c => {
@@ -290,7 +280,6 @@ class Awards extends React.Component<any, IAwardsStates> {
           });
 
           newAwards[categoryIndex].nominations = nominationsWithPhoto;
-          console.log(newAwards);
           this.setState({ awards: newAwards, allAwards: newAwards }, () => {
             // this ensures that the loading of pictures doesn't affect the filtering and sorting
             this.sortNominationsByName(this.state.sortBy);
@@ -365,7 +354,6 @@ class Awards extends React.Component<any, IAwardsStates> {
         newAwardCategory.nominations = newNominations;
         sortedAwards.push(newAwardCategory);
       });
-      console.log(sortedAwards);
       this.setState({ allAwards: sortedAwards, awards: sortedAwards }, () => {
         this.filterNominationsByName(this.state.filterText);
       });

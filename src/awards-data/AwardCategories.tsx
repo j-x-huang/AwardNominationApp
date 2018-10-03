@@ -9,13 +9,10 @@ class AwardCategories extends AwardsContent {
 
   public updateAwardTabs(callback: (awardTabs: any) => void) {
     const defaultDatabase = firebase.database()
-    console.log("1")
     const catRef = defaultDatabase.ref("category");
-    console.log("2")
     catRef.once("value", snapshot => {
       snapshot.forEach(childSnapshot => {
         const item = childSnapshot.val().name;
-        console.log("ITEM------" + item)
         this.awardTabs.push(item);
       });
       callback(this.awardTabs)
@@ -46,7 +43,6 @@ class AwardCategories extends AwardsContent {
               console.log(retrieveUserDetails(nomSnapshot, tab, categoryColors));
             }
         });
-        console.log(categoryColors);
       } else {
         nomRef
           .child("nominations")

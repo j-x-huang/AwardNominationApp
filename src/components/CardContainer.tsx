@@ -47,7 +47,6 @@ class CardContainer extends React.Component<ICardContainerProps> {
             justify="flex-start"
             spacing={32}
           >
-            {console.log("HELLO ", this.props.cards)}
             {this.props.cards.length ? (
               cards.map((card, i) => (
                 <Grid key={card.id} item={true}>

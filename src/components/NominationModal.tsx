@@ -57,8 +57,6 @@ class NominationModal extends React.Component<any, any> {
       const pathname = this.props.location.pathname;
       const index = pathname.lastIndexOf("/");
       const currentNominationID = pathname.substring(index + 1);
-      console.log(currentNominationID);
-
       this.setState(
         {
           nominationID: currentNominationID
@@ -174,10 +172,7 @@ class NominationModal extends React.Component<any, any> {
       }
     });
 
-    console.log(data.comments != null);
     if (data.comments != null) {
-      console.log("Comments:");
-      console.log(data.comments);
 
       const allComments = data.comments;
       const previousComments = [...this.state.comments];
@@ -200,7 +195,6 @@ class NominationModal extends React.Component<any, any> {
         }
       }
 
-      console.log(previousComments);
       this.setState({
         comments: previousComments,
         commenters: commentersArray
@@ -212,16 +206,13 @@ class NominationModal extends React.Component<any, any> {
 
       getUsersByObjectId(commenters, (err, users) => {
         if (err) {
-          console.log("error");
           // todo
         } else {
           comments.forEach(commentInfo => {
-            console.log(commentInfo.commenter);
             const fullname =
               users[commentInfo.commenter] === undefined
                 ? ""
                 : users[commentInfo.commenter].name;
-            console.log(name);
             let comment1;
 
             comment1 = {
@@ -239,16 +230,13 @@ class NominationModal extends React.Component<any, any> {
 
           getPhotosByObjectId(commenters, (err2, photos) => {
             if (err) {
-              console.log("error");
               // todo
             } else {
               newComments.forEach(commentInfo => {
-                console.log(commentInfo.commenter);
                 const picture =
                   photos[commentInfo.commenter] === undefined
                     ? ""
                     : photos[commentInfo.commenter];
-                console.log(picture);
                 let comment1;
 
                 comment1 = {
@@ -270,10 +258,7 @@ class NominationModal extends React.Component<any, any> {
         upvoters: data.upvoters
       });
 
-      console.log(this.state.upvoters);
       Object.keys(this.state.upvoters).forEach(key => {
-        console.log(key);
-        console.log(getUser().profile.oid);
         if (key === getUser().profile.oid) {
           this.setState({ hasBeenNominated: true });
         }
@@ -289,9 +274,6 @@ class NominationModal extends React.Component<any, any> {
       justification,
       comments
     } = this.state;
-
-    console.log("State ID:");
-    console.log(this.state.nominationID);
 
     return (
       <div
@@ -406,7 +388,6 @@ class NominationModal extends React.Component<any, any> {
 
   private handleUpvoteClicked = () => {
     this.setState({ hasBeenNominated: !this.state.hasBeenNominated });
-    console.log(this.state.hasBeenNominated);
     if (!this.state.hasBeenNominated) {
       this.makeUpvote();
     } else {

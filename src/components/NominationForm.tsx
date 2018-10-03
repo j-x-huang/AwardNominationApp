@@ -47,7 +47,6 @@ class NominationForm extends React.Component<any, any> {
     const defaultDatabase = firebase.database();
     const lockPath = defaultDatabase.ref("/lockdown");
     lockPath.once("value").then(value => {
-      console.log(value.val().lockState);
       this.setState({ isLocked: value.val().lockState });
       return value.val().lockState;
     });
@@ -71,7 +70,6 @@ class NominationForm extends React.Component<any, any> {
     }
 
     actualNominees.forEach(nom => {
-      console.log(nom);
       nom.label = nom.name + " (nominated)";
       nom.isDisabled = false;
     });
@@ -82,7 +80,6 @@ class NominationForm extends React.Component<any, any> {
     });
 
     const superNominees = actualNominees.concat(neoNominees);
-    console.log(superNominees);
     this.setState({ nominees: superNominees });
   };
 
@@ -94,7 +91,6 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public nomineeChange = (nominee: any) => {
-    console.log(nominee);
     this.setState({ nominee });
   };
 
@@ -114,7 +110,6 @@ class NominationForm extends React.Component<any, any> {
           label: suggestion.name,
           isDisabled: false
         }));
-        console.log([...this.allNominees]);
         this.setState({ nominees: [...this.allNominees] });
       }
     });
@@ -137,8 +132,6 @@ class NominationForm extends React.Component<any, any> {
       cats.map((data) => {
         this.nomsByCat[data] = []
       })
-      console.log(this.nomsByCat)
-      console.log(this.state.categories);
       this.getNominationByCategory();
     });
   }
@@ -261,9 +254,6 @@ class NominationForm extends React.Component<any, any> {
   };
 
   public getNominationByCategory() {
-    console.log("GETNOMINATIONBYCATEGORY");
-    // const returnArr: object[] = [];
-
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase.ref();
     nomRef.child("categories").once("value", snapshot => {
@@ -278,18 +268,15 @@ class NominationForm extends React.Component<any, any> {
             }
           }
         });
-        console.log(this.nomsByCat)
       }
     });
   }
 
   private redirectToNomination = () => {
-    console.log(this.state.nominationID);
     this.props.history.push({
       pathname: "/nominate/nomination/" + this.state.nominationID,
       state: { modal: true }
     });
-    console.log(this.state.nominationID);
   };
 
   public openModal = () => {
@@ -320,9 +307,7 @@ class NominationForm extends React.Component<any, any> {
               existingNomination.category === category &&
               existingNomination.nominee === nominee
             ) {
-              console.log(existingNominationPostKey);
               this.setNominationID(existingNominationPostKey);
-              console.log(this.state.nominationID);
               this.showDuplicateNominationConfirmationModal(
                 existingNominationPostKey
               );
