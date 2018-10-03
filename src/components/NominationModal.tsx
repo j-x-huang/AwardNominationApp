@@ -1,5 +1,7 @@
 import * as React from "react";
 import "./../css/ModalStyle.css";
+import defaultProfilePic from "../images/default-profile-pic.jpg";
+import defaultProfilePicComments from "../images/default-profile-pic-comments.jpg";
 import Octicon, { ChevronLeft } from "@githubprimer/octicons-react";
 import * as firebase from "firebase";
 import {
@@ -32,8 +34,7 @@ class NominationModal extends React.Component<any, any> {
     failed: false,
     isLoading: true,
     isLocked: false,
-    profilePic:
-      "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+    profilePic: defaultProfilePic,
     lockPath: firebase.database().ref("/lockdown"),
     nominationID: this.props.nominationID
   };
@@ -127,14 +128,12 @@ class NominationModal extends React.Component<any, any> {
         // TODO
       } else {
         let retrievedNominee = {
-          img:
-            "https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg",
+          img: defaultProfilePicComments,
           name: users[data.nominee].name
         };
 
         let retrievedNominator = {
-          img:
-            "https://img.clipartxtras.com/176206ef830dd6d8b43b99daeff86f9b_facebook-profile-clipart-clipground-facebook-profile-clipart_1290-1290.jpeg",
+          img: defaultProfilePicComments,
           name: users[data.nominator].name
         };
 
@@ -226,8 +225,7 @@ class NominationModal extends React.Component<any, any> {
             let comment1;
 
             comment1 = {
-              img:
-                "http://www.your-pass.co.uk/wp-content/uploads/2013/09/Facebook-no-profile-picture-icon-620x389.jpg",
+              img: defaultProfilePic,
               commenter: commentInfo.commenter,
               comment: commentInfo.comment,
               name: fullname
@@ -334,72 +332,72 @@ class NominationModal extends React.Component<any, any> {
                 <MDSpinner singleColor="#8241aa" size="200%" />
               </div>
             ) : (
-                <div className="award-modal-body">
-                  <div className="nomination-info-container">
-                    <div className="modal-element-padding">
-                      <img className="nominee-image" src={nominee.img} />
-                      <div className="nomination-info wrap-text">
-                        <h2>{nominee.name}</h2>
-                        <h6>
-                          Category: <b>{category}</b>
-                        </h6>
-                        <p style={{ paddingTop: "0.25em" }}>{justification}</p>
-                      </div>
-                    </div>
-
-                    <div className="div-centre div-space-between modal-element-left-padding">
-                      <div className="nominator-info inline-components">
-                        <p className="inline-components wrap-text">
-                          Nominated by{" "}
-                          <span className="bold-this">{nominator.name}</span>
-                        </p>
-                        <img
-                          className="profilePic inline-components"
-                          src={nominator.img}
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        className="btn btn-light float-right btn-top-round inline-components"
-                        onClick={this.handleUpvoteClicked}
-                        style={this.state.isLocked ? { display: "none" } : {}}
-                      >
-                        <i
-                          className={
-                            this.state.hasBeenNominated
-                              ? "material-icons octiocti octism"
-                              : "material-icons octigrey octism"
-                          }
-                        >
-                          thumb_up_alt
-                      </i>
-                      </button>
+              <div className="award-modal-body">
+                <div className="nomination-info-container">
+                  <div className="modal-element-padding">
+                    <img className="nominee-image" src={nominee.img} />
+                    <div className="nomination-info wrap-text">
+                      <h2>{nominee.name}</h2>
+                      <h6>
+                        Category: <b>{category}</b>
+                      </h6>
+                      <p style={{ paddingTop: "0.25em" }}>{justification}</p>
                     </div>
                   </div>
-                  <hr />
-                  <p className="modal-element-padding">
-                    {comments.length}{" "}
-                    {comments.length === 1 ? "Comment" : "Comments"}
-                  </p>
-                  <CommentAdder
-                    comment={this.state.newComment}
-                    nominatorPic={this.state.profilePic}
-                    onCommentAdd={this.handleCommentAdd}
-                    onCommentChange={this.handleCommentChange}
-                  />
-                  {comments.map((
-                    comment,
-                    i // Place holder for now
-                  ) => (
-                      <Comment
-                        key={i}
-                        nominator={comment.name}
-                        nominatorPic={comment.img}
-                        comment={comment.comment}
+
+                  <div className="div-centre div-space-between modal-element-left-padding">
+                    <div className="nominator-info inline-components">
+                      <p className="inline-components wrap-text">
+                        Nominated by{" "}
+                        <span className="bold-this">{nominator.name}</span>
+                      </p>
+                      <img
+                        className="profilePic inline-components"
+                        src={nominator.img}
                       />
-                    ))}
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-light float-right btn-top-round inline-components"
+                      onClick={this.handleUpvoteClicked}
+                      style={this.state.isLocked ? { display: "none" } : {}}
+                    >
+                      <i
+                        className={
+                          this.state.hasBeenNominated
+                            ? "material-icons octiocti octism"
+                            : "material-icons octigrey octism"
+                        }
+                      >
+                        thumb_up_alt
+                      </i>
+                    </button>
+                  </div>
                 </div>
-              )}
+                <hr />
+                <p className="modal-element-padding">
+                  {comments.length}{" "}
+                  {comments.length === 1 ? "Comment" : "Comments"}
+                </p>
+                <CommentAdder
+                  comment={this.state.newComment}
+                  nominatorPic={this.state.profilePic}
+                  onCommentAdd={this.handleCommentAdd}
+                  onCommentChange={this.handleCommentChange}
+                />
+                {comments.map((
+                  comment,
+                  i // Place holder for now
+                ) => (
+                  <Comment
+                    key={i}
+                    nominator={comment.name}
+                    nominatorPic={comment.img}
+                    comment={comment.comment}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
