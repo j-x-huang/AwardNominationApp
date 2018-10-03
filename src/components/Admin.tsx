@@ -1,5 +1,5 @@
 import * as React from "react";
-import "../App.css";
+import "../css/App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
