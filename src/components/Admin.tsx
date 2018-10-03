@@ -1,9 +1,9 @@
 import * as React from "react";
-import "../App.css";
+import "../css/App.css";
 import * as firebase from "firebase";
 import { confirmAlert } from "react-confirm-alert";
 import AdminOption from "./AdminOption";
-import AdminResetDialog from "./AdminResetDialog/AdminResetDialog";
+import AdminResetDialog from "./AdminResetDialog";
 import { saveAs } from "file-saver";
 import { getUsersByObjectId } from "../MicrosoftGraphClient";
 

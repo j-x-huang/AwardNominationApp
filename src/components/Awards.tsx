@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./../App.css";
+import "./../css/App.css";
 import defaultProfilePic from "../images/default-profile-pic.jpg";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -187,7 +187,7 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.props.awardsContent.getTabNomination(str, this.retrieveUserDetails);
   }
 
-  public retrieveUserDetails = (snapshot: any[], category: string) => {
+  public retrieveUserDetails = (snapshot: any[], category: string, categoryColors: any[]) => {
     const nominations: object[] = [];
     const nominees: string[] = [];
     let noAwards: boolean = false;
@@ -242,7 +242,8 @@ class Awards extends React.Component<any, IAwardsStates> {
               id: item.key,
               description: item.justification,
               objectId: item.nominee,
-              title: name
+              title: name,
+              color: categoryColors[item.category]
             };
             nominations.push(nomination);
           });

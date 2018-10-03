@@ -1,7 +1,7 @@
 import * as React from "react";
 import "../css/App.css";
 
-class Home extends React.Component<any, any> {
+class PageDoesNotExist extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
   }
@@ -11,19 +11,19 @@ class Home extends React.Component<any, any> {
       <div>
         <div id="homeLabel">
           {" "}
-          <div id="homeLabelText">Ignition Awards</div>{" "}
+          <div id="homeLabelText">Page Does Not Exist</div>{" "}
         </div>
         <img
           style={{
             width: "100%",
             height: "calc(100vh - 80px)",
-            objectFit: "cover"
+            objectFit: "cover",
           }}
-          src="http://hdqwalls.com/download/purple-sunset-in-ocean-2560x1440.jpg"
+          src="https://orig00.deviantart.net/e641/f/2018/043/e/7/pretty_by_edgelordxxaqua-dc2zbp6.jpg"
         />
       </div>
     );
   }
 }
 
-export default Home;
+export default PageDoesNotExist;
