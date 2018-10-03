@@ -72,7 +72,12 @@ class Card extends React.Component<ICardProps> {
       <div>
         <MaterialCard className={classes.card} key={id}>
           <ButtonBase className={classes.cardButton} onClick={handleSelect}>
-            <CardMedia className={classes.cover} image={img} title={title} />
+            <CardMedia
+              className={classes.cover}
+              image={img}
+              title={title}
+              style={{ borderBottom: "3px solid " + color }}
+            />
             <div className={classes.details}>
               <CardContent className={classes.content}>
                 <Typography

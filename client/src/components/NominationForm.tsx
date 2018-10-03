@@ -156,7 +156,10 @@ class NominationForm extends React.Component<any, any> {
                   ? "radioPad__wrapper radioPad__wrapper--selected"
                   : "radioPad__wrapper"
               }
-              style={{ background: this.state.colours[key] }}
+              style={isCurrent ? 
+                { background: this.state.colours[key], borderColor: this.state.colours[key], opacity: 1} :
+                { background: this.state.colours[key], borderColor: this.state.colours[key], opacity: 0.8}
+              }
             >
               <input
                 className="radioPad__radio"

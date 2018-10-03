@@ -11,14 +11,29 @@ export interface IAdminResetDialog {
 class AdminResetDialog extends React.Component<IAdminResetDialog, any> {
   public state = {
     newCategory: "",
-    // TODO populate this at launch
     categories: [
-      { name: "Being Purple", color: "#D0DB97" },
-      { name: "One Small Step", color: "#69B578" },
-      { name: "New Horizon", color: "#3A7D44" },
-      { name: "Sky High", color: "#254D32" },
-      { name: "Star Crew", color: "#181D27" }
+      { name: "Being Purple", color: "#8241AA" },
+      { name: "One Small Step", color: "#CE2554" },
+      { name: "New Horizon", color: "#E6C543" },
+      { name: "Sky High", color: "#2B74DF" },
+      { name: "Star Crew", color: "#2E3E4F" }
     ]
+  };
+
+  public componentDidMount() {
+    this.populateCategories();
+  }
+
+  private populateCategories = () => {
+    const defaultDatabase = firebase.database();
+    const ref = defaultDatabase.ref("category");
+    ref.once("value", snapshot => {
+      const categorylist: string[] = [];
+      snapshot.forEach(category => {
+        categorylist.push(category.val());
+      });
+      this.setState({ categories: categorylist });
+    });
   };
 
   // change the color for a specific category
