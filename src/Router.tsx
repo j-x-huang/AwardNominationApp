@@ -8,6 +8,7 @@ import Admin from "./components/Admin";
 import AwardsContent from "./awards-data/AwardsContent";
 import AwardCategories from "./awards-data/AwardCategories";
 import AwardMyNominations from "./awards-data/AwardMyNominations";
+import PageDoesNotExist from "./components/PageDoesNotExist";
 import * as firebase from "firebase";
 
 import { getAdminStatus } from "./MicrosoftGraphClient";
@@ -49,7 +50,8 @@ class Router extends React.Component {
 
     return (
       <Switch>
-        <Route exact={true} path="/home" component={Home} />
+        <Route exact={true} path="/" component={Home} />
+        <Route path="/home" component={Home} />
         <Route
           path="/awards"
           render={getAwardComponent(new AwardCategories())}
@@ -65,7 +67,7 @@ class Router extends React.Component {
         {this.state.isAdmin && <Route path="/admin" component={Admin} />}
 
         {/* Default page when all the other links fail */}
-        <Route component={Home} />
+        <Route component={PageDoesNotExist} />
         <Redirect to="/home" />
       </Switch>
     );

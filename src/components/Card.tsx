@@ -53,8 +53,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-// export interface ICardState {}
-
 class Card extends React.Component<ICardProps> {
   public render() {
     const {

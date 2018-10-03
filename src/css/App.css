@@ -722,9 +722,10 @@ a:visited {
   margin-bottom: 16px;
 }
 
-/* .react-confirm-alert-button-group > button:first-child {
-  background: #8241aa !important;
-} */
+.react-confirm-alert-button-group > button:disabled {
+  background: #757575;
+  cursor: default;
+}
 
 #filterBar {
   margin-top: 0.4em;
@@ -743,6 +744,7 @@ a:visited {
 
 .searchBar {
   position: relative;
+  margin-top: 18px;
   margin-left: 0;
   width: 100%;
   background-color: white;

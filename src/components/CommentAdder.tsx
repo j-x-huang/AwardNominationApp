@@ -63,6 +63,7 @@ class CommentAdder extends React.Component<any, any> {
     }
   };
 
+  // Checks to see whether the user can actually comment (locked)
   private readLockState = () => {
     this.state.lockPath.on("value", snap =>
       this.setState({ isLocked: snap!.val().lockState })
