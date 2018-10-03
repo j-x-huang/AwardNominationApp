@@ -63,7 +63,7 @@ class Card extends React.Component<ICardProps> {
       <div>
         <MaterialCard className={classes.card} key={id}>
           <ButtonBase className={classes.cardButton} onClick={handleSelect}>
-            <CardMedia className={classes.cover} image={img} title={title} />
+            <CardMedia className={classes.cover} image={img} title={title} style = {{borderBottom : "3px solid red "}}/>
             <div className={classes.details}>
               <CardContent className={classes.content}>
                 <Typography
@@ -73,7 +73,7 @@ class Card extends React.Component<ICardProps> {
                 >
                   {title}
                 </Typography>
-                <Divider className={classes.divider} />
+                <Divider className={classes.divider} style={{backgroundColor : "red"}}/>
                 <Typography component="p" className="cardMainContent">
                   {description}
                 </Typography>
