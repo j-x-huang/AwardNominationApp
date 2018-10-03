@@ -6,7 +6,7 @@ const adalConfig = {
     api: 'https://ignitewards.onmicrosoft.com/Ignition_Awards'
   },
   postLogoutRedirectUri: window.location.origin,
-  redirectUri: 'window.location.origin' + '/auth/openid/return',
+  redirectUri: window.location.origin + '/auth/openid/return',
   tenant: 'ignitewards.onmicrosoft.com',
   cacheLocation: 'localStorage' as 'localStorage',
 };
