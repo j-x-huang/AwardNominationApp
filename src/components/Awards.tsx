@@ -187,7 +187,7 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.props.awardsContent.getTabNomination(str, this.retrieveUserDetails);
   }
 
-  public retrieveUserDetails = (snapshot: any[], category: string) => {
+  public retrieveUserDetails = (snapshot: any[], category: string, categoryColors: any[]) => {
     const nominations: object[] = [];
     const nominees: string[] = [];
 
@@ -230,7 +230,8 @@ class Awards extends React.Component<any, IAwardsStates> {
               id: item.key,
               description: item.justification,
               objectId: item.nominee,
-              title: name
+              title: name,
+              color: categoryColors[item.category]
             };
             nominations.push(nomination);
           });

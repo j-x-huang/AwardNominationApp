@@ -34,13 +34,24 @@ class AwardMyNominations extends AwardsContent {
       .ref()
       .child(path)
       .child(getUser().profile.oid);
-    this.getMyNominations(nomRef, tab, retrieveUserDetails);
+    const catRef = defaultDatabase.ref("category");
+    catRef.once("value", snapshot => {
+      const categoryColors = [] as any[];
+
+      snapshot.forEach(childSnapshot => {
+        const item = childSnapshot.val().name;
+        const color = childSnapshot.val().color;
+        categoryColors[item] = color;
+      });
+      this.getMyNominations(nomRef, tab, retrieveUserDetails, categoryColors);
+    });
   };
 
   public getMyNominations = (
     nomRef: firebase.database.Reference,
     tab: string,
-    retrieveUserDetails: any
+    retrieveUserDetails: any,
+    categoryColors: any[]
   ) => {
     nomRef.once("value", snapshot => {
       if (snapshot != null) {
@@ -75,7 +86,7 @@ class AwardMyNominations extends AwardsContent {
                       console.log(tab);
                       console.log(snapshotChild.val());
                       console.log(snapshots);
-                      console.log(retrieveUserDetails(snapshots, tab));
+                      console.log(retrieveUserDetails(snapshots, tab, categoryColors));
                     }
                   }
                 }

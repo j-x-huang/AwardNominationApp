@@ -43,7 +43,7 @@ class AwardCategories extends AwardsContent {
           .once("value", nomSnapshot => {
             if (nomSnapshot != null) {
               console.log(nomSnapshot.val());
-              console.log(retrieveUserDetails(nomSnapshot, tab));
+              console.log(retrieveUserDetails(nomSnapshot, tab, categoryColors));
             }
         });
         console.log(categoryColors);
@@ -54,7 +54,7 @@ class AwardCategories extends AwardsContent {
           .equalTo(tab)
           .once("value", nomSnapshot => {
             if (nomSnapshot != null) {
-              console.log(retrieveUserDetails(nomSnapshot, tab));
+              console.log(retrieveUserDetails(nomSnapshot, tab, categoryColors));
             }
           });
       }
