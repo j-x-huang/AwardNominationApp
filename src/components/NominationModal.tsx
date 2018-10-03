@@ -69,19 +69,8 @@ class NominationModal extends React.Component<any, any> {
   }
 
   private initModal = () => {
-    getMyImage((picUrl, err) => {
-      if (err) {
-        // nothing
-      } else {
-        const url = window.URL;
-        const imageUrl = url.createObjectURL(picUrl);
-        this.setState({
-          profilePic: imageUrl
-        });
-      }
-      return;
-    });
     this.getNominationDetails(this.state.nominationID);
+    // Image for the current user
     getMyImage((picUrl, err) => {
       if (err) {
         // nothing
