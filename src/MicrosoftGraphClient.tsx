@@ -314,8 +314,6 @@ export const getAdminStatus = (callback: (isAdmin: boolean, err: any) => void) =
           callback(false, err)
           return;
         }
-        console.log(err)
-        console.log(res)
         const roles = res.value 
 
         roles.forEach((data: any) => {

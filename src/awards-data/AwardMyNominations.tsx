@@ -17,8 +17,6 @@ class AwardMyNominations extends AwardsContent {
   public getNominations = (tab: string, retrieveUserDetails: any) => {
     let path = "nominees";
 
-    console.log("Tab:");
-    console.log(tab);
     switch (tab) {
       case "My Nominations":
         path = "nominators";
@@ -27,8 +25,6 @@ class AwardMyNominations extends AwardsContent {
         path = "nominees";
         break;
     }
-    console.log("path:");
-    console.log(path);
     const defaultDatabase = firebase.database();
     const nomRef = defaultDatabase
       .ref()
@@ -55,10 +51,6 @@ class AwardMyNominations extends AwardsContent {
   ) => {
     nomRef.once("value", snapshot => {
       if (snapshot != null) {
-        console.log("Nominations fetch successful:");
-        console.log(tab);
-        console.log(snapshot);
-        console.log(snapshot.val());
         const data = snapshot.val();
 
         if (data != null) {
@@ -66,7 +58,6 @@ class AwardMyNominations extends AwardsContent {
           const numChildren = snapshot.numChildren();
           let size = 0;
           Object.keys(data).forEach(key => {
-            console.log(key);
             // this.getNominationDetails(key, tab, retrieveUserDetails);
             const defaultDatabase = firebase.database();
             const nomRef2 = defaultDatabase.ref();
@@ -77,15 +68,8 @@ class AwardMyNominations extends AwardsContent {
                 if (snapshotChild != null) {
                   if (retrieveUserDetails != null) {
                     snapshots.push(snapshotChild.val());
-                    console.log("Snapshots:");
-                    console.log(snapshots);
                     size++;
-                    console.log(size);
                     if (size === numChildren) {
-                      console.log("Getting nomination details:");
-                      console.log(tab);
-                      console.log(snapshotChild.val());
-                      console.log(snapshots);
                       console.log(retrieveUserDetails(snapshots, tab, categoryColors));
                     }
                   }
@@ -99,32 +83,6 @@ class AwardMyNominations extends AwardsContent {
       }
     });
   };
-
-  // public getNominationDetails(
-  //   nominationID: string,
-  //   tab: string,
-  //   retrieveUserDetails: any
-  // ) {
-  //   const defaultDatabase = firebase.database();
-  //   const nomRef = defaultDatabase.ref();
-  //   nomRef
-  //     .child("nominations")
-  //     .child(nominationID)
-  //     .once("value", snapshot => {
-  //       if (snapshot != null) {
-  //         if (retrieveUserDetails != null) {
-  //           this.snapshots.push(snapshot.val());
-  //           this.size++;
-  //         }
-  //         if (this.size === this.numChildren) {
-  //           console.log("Getting nomination details:");
-  //           console.log(tab);
-  //           console.log(this.snapshots);
-  //           console.log(retrieveUserDetails(this.snapshots, tab));
-  //         }
-  //       }
-  //     });
-  // }
 }
 
 export default AwardMyNominations;

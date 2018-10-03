@@ -118,7 +118,6 @@ class Admin extends React.Component<any, any> {
   // Sets Firebase boolean lockState to true/false
   private lockDown = () => {
     this.state.isLocked = !this.state.isLocked;
-    console.log("Lock down " + this.state.isLocked);
     this.setState({ isLockDown: this.state.isLocked });
     this.writeLockState(this.state.isLocked);
   };
@@ -152,7 +151,6 @@ class Admin extends React.Component<any, any> {
       });
 
       getUsersByObjectId(nominees, (err, users) => {
-        console.log(users);
         snapshot.forEach(nomination => {
           const item = nomination.val();
           const category = item.category;
