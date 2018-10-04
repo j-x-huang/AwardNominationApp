@@ -18,19 +18,17 @@ The web application has been deployed using netlify. To access the site, visit h
 ## Execution Instructions
 1. First clone this GitHub repository
 2. Install npm [here](https://www.npmjs.com/get-npm)
-3. Use command line to navigate to the client folder of the cloned repository
-```sh
-$ cd client
-```
-4. Execute the following command in the client folder to install the required dependencies
+3. Execute the following command to install the required dependencies
 ```sh
 $ npm install
 ```
-5. To start the web application, execute this:
+4. To start the web application, execute this:
 ```sh
 $ npm start
 ```
-6. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
+5. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
+
+6. Markers, please use the email bob@ignitewards.onmicrosoft.com and the password Softeng761 to enter the application.
 
 ## Contributors
 **GitHub username** > **Official name** > **UPI**
