@@ -187,7 +187,11 @@ class Awards extends React.Component<any, IAwardsStates> {
     this.props.awardsContent.getTabNomination(str, this.retrieveUserDetails);
   }
 
-  public retrieveUserDetails = (snapshot: any[], category: string, categoryColors: any[]) => {
+  public retrieveUserDetails = (
+    snapshot: any[],
+    category: string,
+    categoryColors: any[]
+  ) => {
     const nominations: object[] = [];
     const nominees: string[] = [];
     let noAwards: boolean = false;
@@ -308,12 +312,16 @@ class Awards extends React.Component<any, IAwardsStates> {
   };
 
   private handleSearch = (event: any) => {
-    this.filterNominationsByName(event.target.value);
+    if (this.state.allAwards.length !== 0) {
+      this.filterNominationsByName(event.target.value);
+    }
   };
 
   private handleSort = (event: any) => {
     this.setState({ sortBy: event.target.value });
-    this.sortNominationsByName(event.target.value);
+    if (this.state.allAwards.length !== 0) {
+      this.sortNominationsByName(event.target.value);
+    }
   };
 
   private sortNominationsByName(nameType: string) {

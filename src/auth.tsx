@@ -6,7 +6,7 @@ const adalConfig = {
     api: 'https://ignitewards.onmicrosoft.com/Ignition_Awards'
   },
   postLogoutRedirectUri: window.location.origin,
-  redirectUri: 'http://localhost:3000/auth/openid/return',
+  redirectUri: 'https://objective-hugle-ad6bf0.netlify.com/auth/openid/return',
   tenant: 'ignitewards.onmicrosoft.com',
   cacheLocation: 'localStorage' as 'localStorage',
 };
