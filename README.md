@@ -12,23 +12,9 @@ This is an award nomination application that allows all MYOB staff to nominate e
 3. Filter votes of award nominations
 4. Identification of MYOB staff.
 
-## Website
+## Web Implementation
 The web application has been deployed using netlify. To access the site, visit https://objective-hugle-ad6bf0.netlify.com.
-
-## Execution Instructions
-1. First clone this GitHub repository
-2. Install npm [here](https://www.npmjs.com/get-npm)
-3. Execute the following command to install the required dependencies
-```sh
-$ npm install
-```
-4. To start the web application, execute this:
-```sh
-$ npm start
-```
-5. To access the functionalities of the application beyond the login page, you will need to be a "MYOB staff". You will have to request for special arrangements to log in from any of the contributors, if you are not a "MYOB staff".
-
-6. Markers, please use the email bob@ignitewards.onmicrosoft.com and the password Softeng761 to enter the application.
+Markers, please use the email bob@ignitewards.onmicrosoft.com and the password Softeng761 to enter the application.
 
 ## Contributors
 **GitHub username** > **Official name** > **UPI**
